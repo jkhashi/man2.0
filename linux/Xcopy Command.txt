@@ -1,0 +1,122 @@
+Xcopy Command
+
+The xcopy command is a Command Prompt command used to copy one or more files and/or folders from one location to another location.
+
+The xcopy command is also a DOS command available in MS-DOS.
+
+The xcopy command, with its many options and ability to copy entire directories, is similar to, but much more powerful than, the traditional copy command.
+
+The robocopy command is also similar to the xcopy command but has even more options.
+
+Xcopy Command Syntax
+xcopy source [destination] [/a] [/b] [/c] [/d [:date]] [/e] [/f] [/g] [/h] [/i] [/j] [/k] [/l] [/m] [/n] [/o] [/p] [/q] [/r] [/s] [/t] [/u] [/v] [/w] [/x] [/y] [/-y] [/z] [/exclude:file1[+file2][+file3]...] [/?]
+
+Tip: See How To Read Command Syntax if you're not sure how to read the xcopy command syntax above.
+
+source = This defines the files or top level folder that you want to copy from. The source is the only required parameter in the xcopy command. Use quotes around source if it contains spaces.
+
+destination = This option specifies the location where the source files or folders should be copied to. If no destination is listed, the files or folders will be copied to the same folder you run the xcopy command from. Use quotes around destination if it contains spaces.
+
+/a = Using this option will only copy archive files found in source. You can not use /a and /m together.
+
+/b = Use this option to copy the symbolic link itself instead of the link target.
+
+This option was first available in Windows Vista.
+
+/c = This option forces xcopy to continue even if it encounters an error.
+
+/d [:date] = Use the xcopy command with /d option and a specific date, in MM-DD-YYYY format, to copy files changed on or after that date. You can also use this option without specifying a specific date to copy only those files in source that are newer than the same files that already exist in destination.
+
+This is helpful when using the xcopy command to perform regular file backups.
+
+/e = When used alone or with /s, this option is the same as /s but will also create empty folders in destination that were also empty in source. The /e option can also be used together with the /t option to include empty directories and subdirectories found in source in the directory structure created in destination.
+
+/f = This option will display the full path and file name of both the source and destination files being copied.
+
+/g = Using the xcopy command with this option allows you to copy encrypted files in source to a destination that does not support encryption. This option will not work when copying files from an EFS encrypted drive to a non-EFS encrypted drive.
+
+/h = The xcopy command does not copy hidden files or system files by default but will when using this option.
+
+/i = Use the /i option to force xcopy to assume that destination is a directory. If you don't use this option, and you're copying from source that is a directory or group of files and copying to destination that doesn't exist, the xcopy command will prompt you enter whether destination is a file or directory.
+
+/j = This option copies files without buffering, a feature useful for very big files.
+
+This xcopy command option was first available in Windows 7.
+
+/k = Use this option when copying read-only files to retain that file attribute in destination.
+
+/l = Use this option to show a list of the files and folders to copied... but no copying is actually done. The /l option is useful if you're building a complicated xcopy command with several options and you'd like to see how it would function hypothetically.
+
+/m = This option is identical to the /a option but the xcopy command will turn off the archive attribute after copying the file. You can not use /m and /a together.
+
+/n = This option creates files and folders in destination using short file names.
+
+This option is only useful when you're using the xcopy command to copy files to a destination that exists on an drive formatted to an older file system like FAT that does not support long file names.
+
+/o = Retains ownership and Access Control List (ACL) information in the files written in destination.
+
+/p = When using this option, you'll be prompted before the creation of each file in destination.
+
+/q = A kind of opposite of the /f option, the /q switch will put xcopy into "quiet" mode, skipping the on-screen display of each file being copied.
+
+/r = Use this option to overwrite read-only files in destination. If you don't use this option when you want to overwrite a read-only file in destination, you'll be prompted with an "Access denied" message and the xcopy command will stop running.
+
+/s = Use this option to copy directories, subdirectories, and the files contained within them, in addition to the files in the root of source. Empty folders will not be recreated.
+
+/t = This option forces the xcopy command to create a directory structure in destination but not to copy any of the files. In other words, the folders and subfolders found in source will be created but there we be no files. Empty folders will not be created.
+
+/u = This option will only copy files in source that are already in destination.
+
+/v = This option verifies each file as its written, based on its size, to make sure they're identical. Verification was built in to the xcopy command beginning in Windows XP so this option does nothing in later versions of Windows and is only included for compatibility with older MS-DOS files.
+
+/w = Use the /w option to present a "Press any key when ready to being copying file(s)" message. The xcopy command will begin copying files as instructed after you confirm with a key press. This option is not the same as the /p option which asks for verification before each file copy.
+
+/x = This option copies file audit settings and System Access Control List (SACL) information. You imply /o when you use the /x option.
+
+/y = Use this option to stop the xcopy command from prompting you about overwriting files from source that already exist in destination.
+
+/-y = Use this option to force the xcopy command to prompt you about overwriting files. This might seem a strange option to exist since this is the default behavior of xcopy but the /y option may be preset in the COPYCMD environment variable on some computers, making this option necessary.
+
+/z = This option allows the xcopy command to safely stop copying files when a network connection is lost and then resume copying from where it left off once the connection is reestablished. This option also shows the percentage copied for each file during the copy process.
+
+/exclude:file1[+file2][+file3]... = This option allows you to specify one or more file names containing a list of search strings you want the xcopy command to to use to determine files and/or folders to skip when copying.
+
+/? = Use the help switch with the xcopy command to show detailed help about the command. Executing xcopy /? is the same as using the help command to execute help xcopy.
+
+Note: The xcopy command will add the archive attribute to files in destination no matter if the attribute was on or off on the file in source.
+
+Tip: You can save the sometimes lengthy output of the xcopy command to a file using a redirection operator. See How To Redirect Command Output to a File for instructions or check out Command Prompt Tricks for more tips.
+
+Xcopy Command Examples
+xcopy C:\Files E:\Files /i
+In the above example, the files contained in the source directory of C:\Files are copied to destination, a new directory [/i] on the E drive called Files.
+
+No subdirectories, nor any files contained within them, will be copied because I did not use the /s option.
+
+xcopy "C:\Important Files" D:\Backup /c /d /e /h /i /k /q /r /s /x /y
+In this example, the xcopy command is designed to function as a backup solution. Try this if you would like to use xcopy to backup your files instead of a backup software program. Put the xcopy command as shown above in a script and schedule it to run nightly.
+
+As shown above, the xcopy command is used to copy all the files and folders [/s] newer than those already copied [/d], including empty folders [/e] and hidden files [/h], from source of C:\Important Files to the destination of D:\Backup, which is a directory [/i]. I have some read-only files I want to keep updated in destination [/r] and I want to keep that attribute after being copied [/k]. I also want to make sure I maintain any ownership and audit settings in the files I'm copying [/x]. Finally, since I'm running xcopy in a script, I don't need to see any information about the files as they're copied [/q], I don't want to prompted to overwrite each one [/y], nor do I want xcopy to stop if it runs into an error [/c].
+
+xcopy C:\Videos "\\SERVER\Media Backup" /f /j /s /w /z
+Here, the xcopy command is used to copy all the files, subfolders, and files contained in the subfolders [/s] from source of C:\Videos to the destination folder Media Backup located on a computer on the network by the name of SERVER. I'm copying some really large video files so I want to disable buffering to improve the copy process [/j] and since I'm copying over the network, I want to be able to resume copying if I lose my network connection [/z]. Being paranoid, I want to be prompted to start the xcopy process before it actually does anything [/w] and I also want to see every detail about what files are being copied as they're being copied [/f].
+
+xcopy C:\Client032 C:\Client033 /t /e
+In this final example, I have a source full of well organized files and folders in C:\Client032 for a current client of mine. I've already created an empty destination folder, Client033, for a new client but I don't want any files copied - just the empty folder structure [/t] so I'm organized and prepared. I have some empty folders in C:\Client032 that might apply to my new client so I want to make sure those are copied as well [/e].
+
+Xcopy Command Availability
+The xcopy command is available from within the Command Prompt in all Windows operating systems including Windows 8, Windows 7, Windows Vista, Windows XP, Windows 98, etc.
+
+The xcopy command is also available in MS-DOS.
+
+Note: The availability of certain xcopy command switches and other xcopy command syntax may differ from operating system to operating system.
+
+Xcopy & Xcopy32
+In Windows 98 and Windows 95, two versions of the xcopy command were available: xcopy and xcopy32. However, the xcopy32 command was never intended to be run directly.
+
+When you execute xcopy in Windows 95 or 98, either the original 16-bit version is automatically executed (when in MS-DOS mode) or the newer 32-bit version is automatically executed (when in Windows).
+
+So to be clear, no matter what version of Windows or MS-DOS you have, always run the xcopy command, not xcopy32, even if it's available. When you execute xcopy, you're always running the most appropriate version of the command.
+
+Xcopy Related Commands
+The xcopy command is similar in many ways to the copy command but with significantly more options. The xcopy command is also very much like the robocopy command except that robocopy has more flexibility than even xcopy.

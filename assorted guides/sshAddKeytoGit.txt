@@ -1,0 +1,62 @@
+Adding a new SSH key to your GitHub account
+MAC WINDOWS LINUX
+To configure your GitHub account to use your new (or existing) SSH key, you'll also need to add it to your GitHub account.
+
+Before adding a new SSH key to your GitHub account, you should have:
+
+Checked for existing SSH keys
+Generated a new SSH key and added it to the ssh-agent
+Note: DSA keys were deprecated in OpenSSH 7.0. If your operating system uses OpenSSH, you'll need to use an alternate type of key when setting up SSH, such as an RSA key. For instance, if your operating system is MacOS Sierra, you can set up SSH using an RSA key.
+Copy the SSH key to your clipboard.
+
+If your SSH key file has a different name than the example code, modify the filename to match your current setup. When copying your key, don't add any newlines or whitespace.
+
+$ clip < ~/.ssh/id_rsa.pub
+# Copies the contents of the id_rsa.pub file to your clipboard
+Tip: If clip isn't working, you can locate the hidden .ssh folder, open the file in your favorite text editor, and copy it to your clipboard.
+Settings icon in the user barIn the upper-right corner of any page, click your profile photo, then click Settings.
+
+Authentication keysIn the user settings sidebar, click SSH and GPG keys.
+
+SSH Key buttonClick New SSH key or Add SSH key.
+
+In the "Title" field, add a descriptive label for the new key. For example, if you're using a personal Mac, you might call this key "Personal MacBook Air".
+The key fieldPaste your key into the "Key" field.
+The Add key buttonClick Add SSH key.
+Sudo mode dialogIf prompted, confirm your GitHub password.
+
+Testing your SSH connection
+MAC WINDOWS LINUX
+After you've set up your SSH key and added it to your GitHub account, you can test your connection.
+
+Before testing your SSH connection, you should have:
+
+Checked for existing SSH keys
+Generated a new SSH key
+Added a new SSH key to your GitHub account
+When you test your connection, you'll need to authenticate this action using your password, which is the SSH key passphrase you created earlier. For more information on working with SSH key passphrases, see "Working with SSH key passphrases".
+
+Open Git Bash.
+
+Enter the following:
+
+ssh -T git@github.com
+# Attempts to ssh to GitHub
+You may see one of these warnings:
+
+The authenticity of host 'github.com (192.30.252.1)' can't be established.
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+Are you sure you want to continue connecting (yes/no)?
+The authenticity of host 'github.com (192.30.252.1)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no)?
+Note: The example above lists the GitHub IP address as 192.30.252.1. When pinging GitHub, you may see a range of IP addresses. For more information, see "What IP addresses does GitHub use that I should whitelist?"
+Verify that the fingerprint in the message you see matches one of the messages in step 2, then type yes:
+
+Hi username! You've successfully authenticated, but GitHub does not
+provide shell access.
+Verify that the resulting message contains your username. If you see a message that contains "access denied," see "Error: Permission denied (publickey)".
+
+If you receive a message about "access denied," you can read these instructions for diagnosing the issue.
+
+If you're switching from HTTPS to SSH, you'll need to update your remote repository URLs.

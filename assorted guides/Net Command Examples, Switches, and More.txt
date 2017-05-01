@@ -1,0 +1,137 @@
+Net Command Examples, Switches, and More
+
+What is the Net Command?
+The net command is a Command Prompt command that can be used to manage almost every aspect of a network and its settings including managing network shares, network print jobs, network users, and much more.
+
+Net Command Syntax
+net [accounts | computer | config | continue | file | group | help | helpmsg | localgroup | name | pause | print | send | session | share | start | statistics | stop | time | use | user | view]
+
+Tip: See How To Read Command Syntax if you're not sure how to interpret the net command syntax shown above.
+
+Execute the net command alone to show information about how to use the command which, in this case, is simply a list of the net subset commands.
+
+Net Commands
+The other options for the net command listed above act as commands in and of themselves, with several unique options:
+
+Net Accounts
+
+The net accounts command is used to set password and logon requirements for users.
+
+For example, the net accounts command can be used to set the minimum number of characters that users can set their password to.
+
+Net Computer
+
+The net computer command is used to add or remove a computer from a domain.
+
+Net Config
+
+Use the net config command to show information about the configuration of the Server or Workstation service.
+
+Net Continue
+
+The net continue command is used to restart a service that was put on hold by the net pause command.
+
+Net File
+
+Net file is used to show a list of open files on a server. The command can also be used to close a shared file and remove a file lock.
+
+Net Group
+
+The net group command is used to add, delete, and manage global groups on servers.
+
+Net Help
+
+The net help command is used to get detailed help on each of the net subset commands.
+
+For example, executing net help user shows detailed information about how to use the net user command. Executing net user /help or net user /h accomplishes the same thing.
+
+The standard /? help switch is also available for each net subset command but doesn't provide near the information that /help does.
+
+Net Helpmsg
+
+The net helpmsg is used to display more information about the numerical network messages you might receive when using net commands.
+
+For example, when executing net group on a standard Windows workstation, you'll receive a 3515 help message. To decode this message, type net helpmsg 3515 which displays "This command can be used only on a Windows Domain Controller." on screen.
+
+Net Localgroup
+
+The net localgroup command is used to add, delete, and manage local groups on computers.
+
+Net Name
+
+Net name is used to add or delete a messaging alias at a computer.
+
+The net name command was removed in conjunction with the removal of net send beginning in Windows Vista. See the net send command for more information.
+
+Net Pause
+
+The net pause command puts on hold a Windows resource or service.
+
+Net Print
+
+Net print is used to display and manage network print jobs.
+
+The net print command was removed beginning in Windows 7.
+
+According to Microsoft, the tasks performed with net print can be performed in Windows 10, Windows 8, and Windows 7 using the prnjobs.vbs and other cscript commands, Windows PowerShell cmdlets, or Windows Management Instrumentation (WMI).
+
+Net Send
+
+Net send is used to send messages to other users, computers, or net name created messaging aliases.
+
+The net send command is not available in Windows 10, Windows 8, Windows 7, or Windows Vista but the msg command accomplishes the same thing.
+
+Net Session
+
+The net session command is used to list or disconnect sessions between the computer and others on the network.
+
+Net Share
+
+The net share command is used to create, remove, and otherwise manage shared resources on the computer.
+
+Net Start
+
+The net start command is used to start a network service or list running network services.
+
+Net Statistics
+
+Use the net statistics command to show the network statistics log for the Server or Workstation service.
+
+Net Stop
+
+The net stop command is used to stop a network service.
+
+Net Time
+
+Net time can be used to display the current time and date of another computer on the network.
+
+Net Use
+
+The net use command is used to display information about shared resources on the network that you're currently connected to, as well as connect to new resources and disconnect from connected ones.
+
+In other words, the net use command can be used to show the shared drives you've mapped to as well as allow you to manage those mapped drives.
+
+Net User
+
+The net user command is used to add, delete, and otherwise manage the users on a computer.
+
+Net View
+
+Net view is used to show a list of computers and network devices on the network.
+
+Tip: You can save to a file whatever a net command shows on screen using a redirection operator with the command. See How To Redirect Command Output to a File for instructions or see Command Prompt Tricks for more tips.
+
+Net Command Availability
+The net command is available from within the Command Prompt in all Windows operating systems including Windows 10, Windows 8, Windows 7, Windows Vista, Windows XP, and more.
+
+Note: The availability of certain net command switches and other net command syntax may differ from operating system to operating system.
+
+Net & Net1
+You may have come across the net1 command and wondered what it was, maybe even more baffled that it seems to function exactly like the net command. The reason it seems to act just like the net command is because it is the net command.
+
+Only in Windows NT and Windows 2000 was there a difference in the net command and the net1 command. The net1 command was made available in these two operating systems as a temporary fix for a Y2K issue the net command experienced.
+
+This Y2K issue with the net command was corrected before Windows XP was even released but you'll still find net1 in Windows XP, Vista, 7, 8, and 10 to maintain compatibility with older programs and scripts that used net1 when it was necessary to do so.
+
+Net Related Commands
+The net commands are network related commands and so may often be used for troubleshooting or management alongside commands like ping, tracert, ipconfig, netstat, nslookup, and others.

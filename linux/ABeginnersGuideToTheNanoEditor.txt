@@ -1,0 +1,151 @@
+A Beginners Guide To The Nano Editor
+
+Introduction
+There is a long-running battle between Linux users about which command line editor is the best. In one camp vi is the editor that rules the roost but in another, it is all about emacs.
+
+For the rest of us who just need something simple to use to edit files there is nano. Don't get me wrong vi and emacs are very powerful editors but sometimes you just need to open, amend and save a file without remembering the keyboard shortcuts.
+
+The nano editor has its own set of keyboard shortcuts of course and in this guide I aim to help you to understand the meaning of all those special keystrokes you can use to make your life easier when using nano.
+
+How To Get Nano
+The nano editor is available by default in all the most popular Linux distributions and you can run it with one simple command:
+
+na​no
+
+The above command will simply open a new file. You can type into the window, save the file and exit.
+
+How To Open A New File And Give It A Name Using Nano
+Whilst simply running nano is ok you might want to give your document a name before starting. To do this simply give the filename after the nano command.
+
+nano myfile.txt
+
+You can, of course, supply a complete path to open a file anywhere on your Linux system (as long as you have the permissions to do so).
+
+na​no /path/to/myfile.txt
+
+How To Open An Existing File Using Nano
+You can use the same command as the one above to open an existing file.
+
+Simply run nano with the path to the file you wish to open.
+
+To be able to edit the file you must have permissions to edit the file otherwise, it will open as a readonly file (assuming you have read permissions).
+
+na​no /path/to/myfile.txt
+
+ 
+
+You can, of course, use the sudo command to elevate your permissions to enable editing of any file.
+
+How To Save A File Using Nano
+You can add text to the nano editor simply by typing the contents directly into the editor. Saving the file, however, requires the use of a keyboard shortcut.
+
+To save a file in nano press ctrl and at the same time.
+
+If your file already has a name you just need to press enter to confirm the name otherwise you will need to enter the filename that you wish to save the file as.
+
+How To Save A File In DOS Format Using Nano
+To save the file in DOS format press ctrl and o to bring up the filename box. Now press alt and d for DOS format.
+
+How To Save A File In MAC Format Using Nano
+To save the file in MAC format press ctrl and o to bring up the filename box. Now press alt and m for MAC format.
+
+How To Append The Text From Nano Onto The End Of Another File
+You can append the text in the file you are editing to the end of another file. To do so press ctrl and o to bring up the filename box and enter the name of the file you wish to append to.
+
+The next bit is very important:
+
+Press alt and a
+
+This will change the save filename text to filename to append to.
+
+Now when you press return the text in the open editor will be appended to the filename you have entered.
+
+How To Prefix The Text From Nano To The Beginning Of Another File
+If you don't want to append the text to another file but you want the text to appear at the beginning of another file then you need to prefix it.
+
+To prefix a file press ctrl and o to bring up the filename box and enter the path to the file you wish to append to.
+
+Again very important:
+
+Press alt and p
+
+This will change the save filename text to filename to prefix to.
+
+How To Backup A File Before Saving It In Nano
+If you want to save the changes to a file that you are editing but you want to keep a backup of the original press ctrl and o to bring up the save window and then press alt and B.
+
+The word [backup] will appear in the filename box.
+
+How To Exit Nano
+
+After you have finished editing your file you will want to leave the nano editor.
+
+To exit nano simply press ctrl and x at the same time.
+
+If the file hasn't been saved you will be prompted to do so. If you select "Y" then you will be prompted to enter a file name.
+
+How To Cut Text Using Nano
+To cut a line of text in nano press ctrl and k at the same time.
+
+If you press ctrl and k again before making any other changes then the line of text is appended to the virtual clipboard.
+
+When you start typing more text or delete text and press ctrl and k then the clipboard is cleared and only the last line you cut will be available for pasting.
+
+If you wish to cut just part of a line press ctrl and 6 at the beginning of the text you wish to cut and then press ctrl and k to cut the text.
+
+How To Paste Text Using Nano
+To paste text using nano simply press ctrl and u. You can use that keyboard shortcut multiple times to continually paste the lines again and again.
+
+How To Justify And Unjustify The Text In Nano
+Generally you won't be using nano as a word processor and so I'm not overly sure why you would want to justify the text but to do so in nano press ctrl and j.
+
+You can unjustify the text by pressing ctrl and u. Yes I know this is the same shortcut for pasting text and as there are many more shortcuts available I don't know why the developers didn't choosing a different shortcut.
+
+Displaying Cursor Position Using Nano
+If you wish to know how far down a document you are within nano you can press the ctrl and c keys at the same time.
+
+The output is shown in the following format:
+
+line 5/11 (54%), col  10/100 (10%),  char 100/200 (50%)
+
+This lets you know exactly where you are in the document.
+
+How To Read A File Using Nano
+If you opened nano without specifying a filename you can open a file by pressing ctrl and r at the same time.
+
+You are now able to specify a filename to read into the editor. If you already have text loaded into the window the file you read in will append itself to the bottom of your current text.
+
+If you want to open the new file in a new buffer press alt and f.
+
+How To Search And Replace Using Nano
+To start a search within nano press ctrl and \. 
+
+To turn off replace press ctrl and r. You can turn on replace again by repeating the keystroke.
+
+To search for text enter the text you wish to search for and press return.
+
+To search backwards through the file press ctrl and r to bring up the search window. Press alt and b.
+
+To force case sensitivity bring up the search window again and then press alt and c. You can turn it off again by repeating the keystroke.
+
+Nano wouldn't be a Linux text editor if it didn't provide a way to search using regular expressions. To turn regular expressions on bring up the search window again and then press alt and r.
+
+You can now use regular expressions for searching for text.
+
+Check Your Spelling Within Nano
+Again nano is a text editor and not a word processor so I'm not sure why spelling is a key feature of it but you can indeed check your spellings using the ctrl and t keyboard shortcut.
+
+In order for this to work you need to install the spell package.
+
+Nano Switches
+There are a number of switches you can specify when using nano. The best ones are covered below. You can find the rest by reading the nano manual.
+
+nano -B (backs up the file prior to editing it) 
+nano -E (converts tabs to spaces when editing)
+nano -c (constantly show the cursor position stats)
+nano -i (automatically indents new lines to the same position as the previous line)
+nano -k (toggle cut so that it cuts from cursor position instead of the whole line)
+nano -m (provides mouse support to the editor)
+nano -v (opens file as readonly)
+Summary
+Hopefully this will have given you a better understanding of the nano editor. It is worth learning and it commands much less of a learning curve than either vi or emacs.

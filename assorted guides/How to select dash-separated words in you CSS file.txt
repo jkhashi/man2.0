@@ -1,0 +1,23 @@
+How to select dash-separated words in you CSS files (plus 7 other tips)
+
+Using dashes to separate words in CSS is a great way to make your stylesheets more readable, but there’s a problem: Sublime treats the hyphenated selector as two separate words, which means you can’t double click to select it. Here’s a fix (courtesy of compscientist).
+
+Check out this gorgeous, Yosemite-inspired replacement icon (OS X only). I really like this one. I don’t have Yosemite installed yet, because my Mac is my daily driver at work for iPhone development, and I don’t want to risk installing a beta on it. But I’m tempted to install this icon anyway… (Side note: Does any other popular app have a cottage industry of people creating replacement icons? There are dozens out there for Sublime…)
+
+Here’s a quick read on creating and using snippets. If you like creating your own snippets, I do a deep dive in Sublime Productivity. Check it out here:
+
+http://sublimeproductivity.com
+
+These days, 4 spaces seems to be the defacto standard for most coders, but sometimes you’ll stumble across a project that uses 2. You may want to “fix” that JavaScript library before checking it in to your repo. This macro makes it easy to toggle back and forth between 2 and 4 spaces. I happened upon it in a Stack Overflow thread that also includes a couple of other suggestions for dealing with the same issue.
+
+This plugin integrates OS X spell checking into Sublime.. Stumbled across it this week but haven’t tried it out myself yet. It’s apparently broken on ST3 beta build 3049.
+
+If you’re relatively new to Sublime, this article includes a list of 11 excellent plugins. Most of these are well known, but it’s probably worth checking out even if you’re a Sublime vet. You might have missed one. 🙂
+
+Along the same lines, here’s a grab-bag of 25 tips. It includes some good keyboard shortcuts and must-have plugins.
+
+Finally, this is a quick walkthrough on using Sublime to do regex search and replace. If you find yourself needing to figure out a regular expression, Sublime’s realtime display of matches is super helpful.
+
+P.S. Want more tips to improve your Sublime workflow? Go here:
+
+http://sublimetexttips.com/newsletter

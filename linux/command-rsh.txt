@@ -1,0 +1,34 @@
+Name
+rsh - remote shell
+
+Synopsis
+rsh [-Kdnx ] [-l username ] host [command]
+
+Description
+Rsh executes command on host
+
+Rsh copies its standard input to the remote command, the standard output of the remote command to its standard output, and the standard error of the remote command to its standard error. Interrupt, quit and terminate signals are propagated to the remote command; rsh normally terminates when the remote command does.
+
+The options are as follows:
+
+-d
+
+The -d option turns on socket debugging (using setsockopt(2)) on the TCP sockets used for communication with the remote host.
+
+-l
+
+By default, the remote username is the same as the local username. The -l option allows the remote name to be specified.
+
+-n
+
+The -n option redirects input from the special device /dev/null (see the Sx BUGS section of this manual page).
+
+If no command is specified, you will be logged in on the remote host using rlogin(1).
+
+Shell metacharacters which are not quoted are interpreted on local machine, while quoted metacharacters are interpreted on the remote machine. For example, the command
+
+rsh otherhost cat remotefile >> localfile
+appends the remote file remotefile to the local file localfile while
+
+rsh otherhost cat remotefile ">>" other_remotefile
+appends remotefile to other_remotefile

@@ -1,0 +1,1739 @@
+# To the extent possible under law, the author(s) have dedicated all
+# copyright and related and neighboring rights to this software to the
+# public domain worldwide. This software is distributed without any warranty.
+# You should have received a copy of the CC0 Public Domain Dedication along
+# with this software.
+# If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+
+# System-wide profile file
+
+# Some resources...
+# Customizing Your Shell: http://www.dsl.org/cookbook/cookbook_5.html#SEC69
+# Consistent BackSpace and Delete Configuration:
+#   http://www.ibb.net/~anne/keyboard.html
+# The Linux Documentation Project: http://www.tldp.org/
+# The Linux Cookbook: http://www.tldp.org/LDP/linuxcookbook/html/
+# Greg's Wiki http://mywiki.wooledge.org/
+
+# Setup some default paths. Note that this order will allow user installed
+# software to override 'system' software.
+# Modifying these default path settings can be done in different ways.
+# To learn more about startup files, refer to your shell's man page.
+
+MSYS2_PATH="/usr/local/bin:/usr/bin:/bin"
++ MSYS2_PATH=/usr/local/bin:/usr/bin:/bin
+MANPATH='/usr/local/man:/usr/share/man:/usr/man:/share/man'
++ MANPATH=/usr/local/man:/usr/share/man:/usr/man:/share/man
+INFOPATH='/usr/local/info:/usr/share/info:/usr/info:/share/info'
++ INFOPATH=/usr/local/info:/usr/share/info:/usr/info:/share/info
+
+case "${MSYS2_PATH_TYPE:-minimal}" in
+  strict)
+    # Do not inherit any path configuration, and allow for full customization
+    # of external path. This is supposed to be used in special cases such as
+    # debugging without need to change this file, but not daily usage.
+    unset ORIGINAL_PATH
+    ;;
+  inherit)
+    # Inherit previous path. Note that this will make all of the Windows path
+    # available in current shell, with possible interference in project builds.
+    ORIGINAL_PATH="${ORIGINAL_PATH:-${PATH}}"
+    ;;
+  *)
+    # Do not inherit any path configuration but configure a default Windows path
+    # suitable for normal usage with minimal external interference.
+    WIN_ROOT="$(PATH=${MSYS2_PATH} cygpath -Wu)"
+    ORIGINAL_PATH="${WIN_ROOT}/System32:${WIN_ROOT}:${WIN_ROOT}/System32/Wbem:${WIN_ROOT}/System32/WindowsPowerShell/v1.0/"
+esac
++ case "${MSYS2_PATH_TYPE:-minimal}" in
+++ PATH=/usr/local/bin:/usr/bin:/bin
+++ cygpath -Wu
++ WIN_ROOT=/c/Windows
++ ORIGINAL_PATH=/c/Windows/System32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0/
+
+unset MINGW_MOUNT_POINT
++ unset MINGW_MOUNT_POINT
+source '/etc/msystem'
++ source /etc/msystem
+# MSYSTEM Environment Information
+# Copyright (C) 2016 Renato Silva
+# Licensed under public domain
+
+# Once sourced, this script provides common information associated with the
+# current MSYSTEM. For example, the compiler architecture and host type.
+
+# The MSYSTEM_ prefix is used for avoiding too generic names. For example,
+# makepkg is sensitive to the value of CARCH, so MSYSTEM_CARCH is defined
+# instead. The MINGW_ prefix does not influence makepkg-mingw variables and
+# is not used for the MSYS shell.
+
+export MSYSTEM="${MSYSTEM:-MSYS}"
+++ export MSYSTEM=MSYS
+++ MSYSTEM=MSYS
+
+unset MSYSTEM_PREFIX
+++ unset MSYSTEM_PREFIX
+unset MSYSTEM_CARCH
+++ unset MSYSTEM_CARCH
+unset MSYSTEM_CHOST
+++ unset MSYSTEM_CHOST
+
+unset MINGW_CHOST
+++ unset MINGW_CHOST
+unset MINGW_PREFIX
+++ unset MINGW_PREFIX
+unset MINGW_PACKAGE_PREFIX
+++ unset MINGW_PACKAGE_PREFIX
+
+unset CONFIG_SITE
+++ unset CONFIG_SITE
+
+case "${MSYSTEM}" in
+    MINGW32)
+        MSYSTEM_PREFIX='/mingw32'
+        MSYSTEM_CARCH='i686'
+        MSYSTEM_CHOST='i686-w64-mingw32'
+        MINGW_CHOST="${MSYSTEM_CHOST}"
+        MINGW_PREFIX="${MSYSTEM_PREFIX}"
+        MINGW_PACKAGE_PREFIX="mingw-w64-${MSYSTEM_CARCH}"
+        CONFIG_SITE="${MSYSTEM_PREFIX}/etc/config.site"
+        export MSYSTEM_PREFIX MSYSTEM_CARCH MSYSTEM_CHOST MINGW_CHOST MINGW_PREFIX MINGW_PACKAGE_PREFIX CONFIG_SITE
+        ;;
+    MINGW64)
+        MSYSTEM_PREFIX='/mingw64'
+        MSYSTEM_CARCH='x86_64'
+        MSYSTEM_CHOST='x86_64-w64-mingw32'
+        MINGW_CHOST="${MSYSTEM_CHOST}"
+        MINGW_PREFIX="${MSYSTEM_PREFIX}"
+        MINGW_PACKAGE_PREFIX="mingw-w64-${MSYSTEM_CARCH}"
+        CONFIG_SITE="${MSYSTEM_PREFIX}/etc/config.site"
+        export MSYSTEM_PREFIX MSYSTEM_CARCH MSYSTEM_CHOST MINGW_CHOST MINGW_PREFIX MINGW_PACKAGE_PREFIX CONFIG_SITE
+        ;;
+    *)
+        MSYSTEM_PREFIX='/usr'
+        MSYSTEM_CARCH="${HOSTTYPE}"
+        MSYSTEM_CHOST="${MACHTYPE}"
+        CONFIG_SITE="/etc/config.site"
+        export MSYSTEM_PREFIX MSYSTEM_CARCH MSYSTEM_CHOST CONFIG_SITE
+        ;;
+esac
+++ case "${MSYSTEM}" in
+++ MSYSTEM_PREFIX=/usr
+++ MSYSTEM_CARCH=x86_64
+++ MSYSTEM_CHOST=x86_64-pc-msys
+++ CONFIG_SITE=/etc/config.site
+++ export MSYSTEM_PREFIX MSYSTEM_CARCH MSYSTEM_CHOST CONFIG_SITE
+case "${MSYSTEM}" in
+MINGW32)
+  MINGW_MOUNT_POINT="${MINGW_PREFIX}"
+  PATH="${MINGW_MOUNT_POINT}/bin:${MSYS2_PATH}${ORIGINAL_PATH:+:${ORIGINAL_PATH}}"
+  PKG_CONFIG_PATH="${MINGW_MOUNT_POINT}/lib/pkgconfig:${MINGW_MOUNT_POINT}/share/pkgconfig"
+  ACLOCAL_PATH="${MINGW_MOUNT_POINT}/share/aclocal:/usr/share/aclocal"
+  MANPATH="${MINGW_MOUNT_POINT}/share/man:${MANPATH}"
+  ;;
+MINGW64)
+  MINGW_MOUNT_POINT="${MINGW_PREFIX}"
+  PATH="${MINGW_MOUNT_POINT}/bin:${MSYS2_PATH}${ORIGINAL_PATH:+:${ORIGINAL_PATH}}"
+  PKG_CONFIG_PATH="${MINGW_MOUNT_POINT}/lib/pkgconfig:${MINGW_MOUNT_POINT}/share/pkgconfig"
+  ACLOCAL_PATH="${MINGW_MOUNT_POINT}/share/aclocal:/usr/share/aclocal"
+  MANPATH="${MINGW_MOUNT_POINT}/share/man:${MANPATH}"
+  ;;
+*)
+  PATH="${MSYS2_PATH}:/opt/bin${ORIGINAL_PATH:+:${ORIGINAL_PATH}}"
+  PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig:/lib/pkgconfig"
+esac
++ case "${MSYSTEM}" in
++ PATH=/usr/local/bin:/usr/bin:/bin:/opt/bin:/c/Windows/System32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0/
++ PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/share/pkgconfig:/lib/pkgconfig
+
+MAYBE_FIRST_START=false
++ MAYBE_FIRST_START=false
+SYSCONFDIR="${SYSCONFDIR:=/etc}"
++ SYSCONFDIR=/etc
+
+# TMP and TEMP as defined in the Windows environment must be kept
+# for windows apps, even if started from msys2. However, leaving
+# them set to the default Windows temporary directory or unset
+# can have unexpected consequences for msys2 apps, so we define
+# our own to match GNU/Linux behaviour.
+#
+# Note: this uppercase/lowercase workaround does not seem to work.
+# In fact, it has been removed from Cygwin some years ago. See:
+#
+#     * https://cygwin.com/git/gitweb.cgi?p=cygwin-apps/base-files.git;a=commitdiff;h=3e54b07
+#     * https://cygwin.com/git/gitweb.cgi?p=cygwin-apps/base-files.git;a=commitdiff;h=7f09aef
+#
+ORIGINAL_TMP="${ORIGINAL_TMP:-${TMP}}"
++ ORIGINAL_TMP=/c/Windows/TEMP
+ORIGINAL_TEMP="${ORIGINAL_TEMP:-${TEMP}}"
++ ORIGINAL_TEMP=/c/Windows/TEMP
+unset TMP TEMP
++ unset TMP TEMP
+tmp=$(cygpath -w "$ORIGINAL_TMP" 2> /dev/null)
+++ cygpath -w /c/Windows/TEMP
++ tmp='C:\Windows\TEMP'
+temp=$(cygpath -w "$ORIGINAL_TEMP" 2> /dev/null)
+++ cygpath -w /c/Windows/TEMP
++ temp='C:\Windows\TEMP'
+TMP="/tmp"
++ TMP=/tmp
+TEMP="/tmp"
++ TEMP=/tmp
+
+# Define default printer
+p='/proc/registry/HKEY_CURRENT_USER/Software/Microsoft/Windows NT/CurrentVersion/Windows/Device'
++ p='/proc/registry/HKEY_CURRENT_USER/Software/Microsoft/Windows NT/CurrentVersion/Windows/Device'
+if [ -e "${p}" ] ; then
+  read -r PRINTER < "${p}"
+  PRINTER=${PRINTER%%,*}
+fi
++ '[' -e '/proc/registry/HKEY_CURRENT_USER/Software/Microsoft/Windows NT/CurrentVersion/Windows/Device' ']'
++ read -r PRINTER
++ PRINTER='HP LaserJet P1006'
+unset p
++ unset p
+
+print_flags ()
+{
+  (( $1 & 0x0002 )) && echo -n "binary" || echo -n "text"
+  (( $1 & 0x0010 )) && echo -n ",exec"
+  (( $1 & 0x0040 )) && echo -n ",cygexec"
+  (( $1 & 0x0100 )) && echo -n ",notexec"
+}
+
+# Shell dependent settings
+profile_d ()
+{
+  local file=
+  for file in $(export LC_COLLATE=C; echo /etc/profile.d/*.$1); do
+    [ -e "${file}" ] && . "${file}"
+  done
+
+  if [ -n "${MINGW_MOUNT_POINT}" ]; then
+    for file in $(export LC_COLLATE=C; echo ${MINGW_MOUNT_POINT}/etc/profile.d/*.$1); do
+      [ -e "${file}" ] && . "${file}"
+    done
+  fi
+}
+
+for postinst in $(export LC_COLLATE=C; echo /etc/post-install/*.post); do
+  [ -e "${postinst}" ] && . "${postinst}"
+done
+++ export LC_COLLATE=C
+++ LC_COLLATE=C
+++ echo /etc/post-install/01-devices.post /etc/post-install/03-mtab.post /etc/post-install/05-home-dir.post /etc/post-install/06-windows-files.post /etc/post-install/07-pacman-key.post /etc/post-install/08-xml-catalog.post
++ for postinst in $(export LC_COLLATE=C; echo /etc/post-install/*.post)
++ '[' -e /etc/post-install/01-devices.post ']'
++ . /etc/post-install/01-devices.post
+maybe_create_devs ()
+{
+  local DEVDIR=/dev
+  # Check for ${DEVDIR} directory
+  if [ -e "${DEVDIR}" -a ! -d "${DEVDIR}" ]
+  then
+    # No mercy.  Try to remove.
+    rm -f "${DEVDIR}"
+    if [ -e "${DEVDIR}" -a ! -d "${DEVDIR}" ]
+    then
+      echo
+      echo "${DEVDIR} is existant but not a directory."
+      echo "Please fix that manually, otherwise you WILL get problems."
+      echo
+      exit 1
+    fi
+  fi
+
+  # Create it if necessary
+  mkdir -m 755 "${DEVDIR}" 2> /dev/null
+  if [ ! -e "${DEVDIR}" ]
+  then
+    echo
+    echo "Creating ${DEVDIR} directory failed."
+    echo "Please fix that manually, otherwise you WILL get problems."
+    echo
+    exit 1
+  fi
+
+  # Check for ${DEVDIR}/shm directory (for POSIX semaphores and POSIX shared mem)
+  if [ -e "${DEVDIR}/shm" -a ! -d "${DEVDIR}/shm" ]
+  then
+    # No mercy.  Try to remove.
+    rm -f "${DEVDIR}/shm"
+    if [ -e "${DEVDIR}/shm" -a ! -d "${DEVDIR}/shm" ]
+    then
+      echo
+      echo "${DEVDIR}/shm is existant but not a directory."
+      echo "POSIX semaphores and POSIX shared memory will not work"
+      echo
+    fi
+  fi
+
+  # Create it if necessary
+  if [ ! -e "${DEVDIR}/shm" ]
+  then
+    mkdir -m 1777 "${DEVDIR}/shm"
+    if [ ! -e "${DEVDIR}/shm" ]
+    then
+      echo
+      echo "Creating ${DEVDIR}/shm directory failed."
+      echo "POSIX semaphores and POSIX shared memory will not work"
+      echo
+    fi
+  else
+    chmod 1777 "${DEVDIR}/shm"
+  fi
+
+  # Check for ${DEVDIR}/mqueue directory (for POSIX message queues)
+  if [ -e "${DEVDIR}/mqueue" -a ! -d "${DEVDIR}/mqueue" ]
+  then
+    # No mercy.  Try to remove.
+    rm -f "${DEVDIR}/mqueue"
+    if [ -e "${DEVDIR}/mqueue" -a ! -d "${DEVDIR}/mqueue" ]
+    then
+      echo
+      echo "${DEVDIR}/mqueue is existant but not a directory."
+      echo "POSIX message queues will not work"
+      echo
+    fi
+  fi
+
+  # Create it if necessary
+  if [ ! -e "${DEVDIR}/mqueue" ]
+  then
+    mkdir -m 1777 "${DEVDIR}/mqueue"
+    if [ ! -e "${DEVDIR}/mqueue" ]
+    then
+      echo
+      echo "Creating ${DEVDIR}/mqueue directory failed."
+      echo "POSIX message queues will not work"
+      echo
+    fi
+  else
+    chmod 1777 "${DEVDIR}/mqueue"
+  fi
+
+  # Install /dev/fd, /dev/std{in,out,err}.  The bash builtin test was compiled
+  # to assume these exist, so use /bin/test to really check.
+  /usr/bin/test -h /dev/stdin  || ln -sf /proc/self/fd/0 /dev/stdin
+  /usr/bin/test -h /dev/stdout || ln -sf /proc/self/fd/1 /dev/stdout
+  /usr/bin/test -h /dev/stderr || ln -sf /proc/self/fd/2 /dev/stderr
+  /usr/bin/test -h /dev/fd     || ln -sf /proc/self/fd   /dev/fd
+}
+
+maybe_create_devs
+++ maybe_create_devs
+++ local DEVDIR=/dev
+++ '[' -e /dev -a '!' -d /dev ']'
+++ mkdir -m 755 /dev
+++ '[' '!' -e /dev ']'
+++ '[' -e /dev/shm -a '!' -d /dev/shm ']'
+++ '[' '!' -e /dev/shm ']'
+++ chmod 1777 /dev/shm
+++ '[' -e /dev/mqueue -a '!' -d /dev/mqueue ']'
+++ '[' '!' -e /dev/mqueue ']'
+++ chmod 1777 /dev/mqueue
+++ /usr/bin/test -h /dev/stdin
+++ /usr/bin/test -h /dev/stdout
+++ /usr/bin/test -h /dev/stderr
+++ /usr/bin/test -h /dev/fd
++ for postinst in $(export LC_COLLATE=C; echo /etc/post-install/*.post)
++ '[' -e /etc/post-install/03-mtab.post ']'
++ . /etc/post-install/03-mtab.post
+maybe_create_mtab ()
+{
+  local MTAB="${SYSCONFDIR}/mtab"
+  # Create /etc/mtab as symlink to /proc/mounts
+  [ ! -L "${MTAB}" ] && ln -sf /proc/mounts ${MTAB}
+}
+
+maybe_create_mtab
+++ maybe_create_mtab
+++ local MTAB=/etc/mtab
+++ '[' '!' -L /etc/mtab ']'
++ for postinst in $(export LC_COLLATE=C; echo /etc/post-install/*.post)
++ '[' -e /etc/post-install/05-home-dir.post ']'
++ . /etc/post-install/05-home-dir.post
+maybe_create_home ()
+{
+  # Set the user id
+  USER="$(id -un)"
+
+  # Default to removing the write permission for group and other
+  #  (files normally created with mode 777 become 755; files created with
+  #  mode 666 become 644)
+  umask 022
+
+  # Here is how HOME is set, in order of priority, when starting from Windows.
+  #
+  # /etc/nsswitch.conf supports three settings to configure where to get the
+  # pw_dir, pw_shell, and pw_gecos content of a passwd entry from:
+  #   db_home: schema...     # Define how to fetch the pw_dir entry.
+  #   db_shell: schema...    # Define how to fetch the pw_shell entry.
+  #   db_gecos: schema...    # Define how to fetch the pw_gecos entry.
+  #
+  # The db_home: setting
+  # The db_home: setting defines how Cygwin fetches the user's home directory, or,
+  # more precise, the content of the pw_dir member of the user's passwd entry. The
+  # following list describes the meaning of each schema when used with db_home:
+  #
+  # - windows
+  # The user's home directory is set to the same directory which is used as
+  # Windows home directory. This is the homeDrive AD attribute if set, or the homeDirectory
+  # AD attribute if homeDrive is not set. For SAM accounts, this is equivalent to the "Home folder"
+  # setting in SAM. If both attributes are unset, Cygwin falls back to the user's local profile
+  # directory, typically something along the lines of C:\Users\$USERNAME. Of course, the Windows
+  # directory is converted to POSIX-style by Cygwin.
+  #
+  # - cygwin
+  # AD only: The user's home directory is set to the POSIX path given in the cygwinHome attribute
+  # from the cygwinUser auxiliary class.
+  #
+  # - unix
+  # AD only: The user's home directory is set to the POSIX path given in the unixHomeDirectory
+  # attribute from the posixAccount auxiliary class.
+  #
+  # - desc
+  # The user's home directory is set to the POSIX path given in the home="..." XML-alike setting
+  # in the user's description attribute in SAM or AD.
+  # @ad_attribute
+  # AD only: The user's home directory is set to the path given in the ad_attribute attribute.
+  # The path can be given as Windows or POSIX path.
+  # /path
+  # The user's home directory is set to the given POSIX path.
+  #
+  # Fallback
+  # If none of the schemes given for db_home: define a non-empty directory, the user's home directory
+  # is set to /home/$USERNAME. As has been briefly mentioned before, the default setting for db_home: is
+  #
+  #   db_home: cygwin desc
+  # So, for AD accounts Cygwin tries to fetch the path from the user's cygwinHome attribute first.
+  # If that's not available, or if the account is a local SAM account, Cygwin tries to get the home
+  # directory from the home= attribute of the user's description field. If that's not available,
+  # Cygwin falls back to the path /home/$USERNAME.
+  #
+  # The db_shell: setting
+  #
+  # The db_shell: setting defines how Cygwin fetches the user's login shell, the content of the
+  # pw_shell member of the user's passwd entry.
+  # The following list describes the meaning of each schema when used with db_shell:
+  #
+  # - windows
+  # The windows schema is ignored for now. The logical choice would be CMD, but that introduces
+  # some problems, for instance the fact that CMD has no concept of running as login shell. This may
+  # change in future.
+  #
+  # - cygwin
+  # AD only: The user's home directory is set to the POSIX path given in the cygwinShell attribute
+  # from the cygwinUser auxiliary class. See also the section called “The cygwin schema”.
+  #
+  # - unix
+  # AD only: The user's login shell is set to the POSIX path given in the loginShell attribute from
+  # the posixAccount auxiliary class. See also the section called “The unix schema”.
+  #
+  # - desc
+  # The user's login shell is set to the POSIX path given in the shell="..." XML-alike setting in the
+  # user's description attribute in SAM or AD. See the section called “The desc schema” for a detailed
+  # description.
+  #
+  # @ad_attribute
+  # AD only: The user's login shell is set to the path given in the ad_attribute attribute. The path can
+  # be given as Windows or POSIX path.
+  # /path
+  # The user's login shell is set to the given POSIX path. Albeit not being as important here, the wildcards
+  # described in the section called “Settings defining how to create the passwd entry” are also available
+  # for specifying a login shell path.
+  # Fallback
+  # If none of the schemes given for db_shell: define a non-empty pathname, the user's login shell is set to /bin/bash.
+  # As for db_home:, the default setting for db_shell: is
+  #
+  #   db_shell: cygwin desc
+  # So, for AD accounts Cygwin tries to fetch the path from the user's cygwinShell attribute first. If that's
+  # not available, or if the account is a local SAM account, Cygwin tries to get the home directory from the
+  # shell= attribute of the user's description field. If that's not available, Cygwin falls back to /bin/bash.
+  #
+  # The db_gecos: setting
+  #
+  # The db_gecos: setting defines how to fetch additional content for the pw_gecos member of the user's passwd
+  # entry. There's always a fixed, Cygwin-specific part in the pw_gecos field for identifying the account.
+  # However, an administrator might want to add informative content like, for instance, the user's full name.
+  # That's what the db_gecos: setting is for. The following list describes the meaning of each schema when used with db_gecos:
+  #
+  # - windows
+  # Add the AD displayName attribute or, for SAM accounts, the "Full name" entry to the pw_gecos field.
+  #
+  # - cygwin
+  # AD only: The content of the cygwinGecos attribute from the cygwinUser auxiliary class is added to pw_gecos.
+  #
+  # - unix
+  # AD only: The content of the gecos attribute from the posixAccount auxiliary class is added to pw_gecos.
+  #
+  # - desc
+  # The content of the gecos="..." XML-alike setting in the user's description attribute in SAM or AD is added to pw_gecos.
+  #
+  # @ad_attribute
+  # AD only: The content of the ad_attribute attribute is added to pw_gecos.
+  # /path
+  # The string following the slash is added to pw_gecos.
+  # Fallback
+  # If none of the schemes given for db_gecos: define a non-empty pathname, nothing is added to pw_gecos.
+  # As for db_home: and db_shell:, the default setting for db_gecos: is
+  #
+  #  db_gecos: cygwin desc
+  # So, for AD accounts Cygwin tries to fetch the string from the user's cygwinGecos attribute first.
+  # If that's not available, or if the account is a local SAM account, Cygwin tries to get the home directory
+  # from the gecos= attribute of the user's description field. If that's not available, Cygwin just doesn't add
+  # anything to pw_gecos.
+  #
+  # The cygwin schema
+  #
+  # The cygwin schema is based on a Cygwin-specific Active Directory schema extension. Using this schema
+  # extension allows to maintain Cygwin-specific settings entirely within AD, without colliding with any
+  # other schema.
+  # The cygwin schema extension is available in a default Cygwin installation in the file
+  # /usr/share/Msys/cygwin.ldif. To install the schema extension, you have to be schema admin, and you
+  # have to run the ldifde command on the schema master. The installation itself is rather simple.
+  # Assuming you're schema admin and running a shell with administrative privileges:
+  #
+  #   $ cd /usr/share/cygwin
+  #   $ ldifde -i -f cygwin.ldif -k -c "CN=schema,CN=Configuration,DC=X" #schemaNamingContext
+  # Afterwards, the auxiliary class cygwinUser is attached to the class User, and the auxiliary class cygwinGroup is attached to the class Group. The new attributes can be immediately edited using ADSI Edit.
+  #
+  # At the time of writing the following attributes are utilized by Cygwin:
+  #
+  # cygwinHome  Used as Cygwin home directory with db_home: cygwin. See the section called “The db_home: setting”.
+  # cygwinShell Used as Cygwin login shell with db_shell: cygwin. See the section called “The db_shell: setting”.
+  # cygwinGecos Content will be added to the pw_gecos field with db_gecos: cygwin. See the section called “The db_gecos: setting”.
+  # The unix schema
+  #
+  # The unix schema utilizes the posixAccount attribute extension. This is one of two schema extensions which are
+  # connected to AD accounts, available by default starting with Windows Server 2003 R2. They are usually not set,
+  # unless used by the Active Directory Server for NIS feature (deprecated since Server 2012 R2). Two schemata are interesting
+  # for Cygwin, posixAccount, connected to user accounts, and posixGroup, connected to group accounts. Both follow the description
+  # of RFC 2307, an Approach for Using LDAP as a Network Information Service. The user attributes utilized by Cygwin are:
+  #
+  # unixHomeDirectory - Used as Cygwin home directory with db_home: unix. See the section called “The db_home: setting”.
+  # loginShell - Used as Cygwin login shell with db_shell: unix. See the section called “The db_shell: setting”.
+  # gecos - Content will be added to the pw_gecos field with db_gecos: unix. See the section called “The db_gecos: setting”.
+  # uidNumber - See the section called “NFS account mapping” and the section called “Samba account mapping”.
+  # The group attributes utilized by Cygwin are:
+  #
+  # gidNumber   See the section called “NFS account mapping” and the section called “Samba account mapping”.
+  # Apart from power shell scripting or inventing new CLI tools, these attributes can be changed using the Attribute Editor
+  # tab in the user properties dialog of the Active Directory Users and Computers MMC snap-in. Alternatively, if the Server
+  # for NIS administration feature has been installed, there will be a UNIX Attributes tab which contains the required fields,
+  # except for the gecos field. Last resort is ADSI Edit.
+  #
+  # The desc schema
+  #
+  # When using user accounts from the local account database, the SAM, there are only a very limited number of settings available.
+  # In contrast to Active Directory there's no way to add fields to a user's entry. You have to make do with the fields available.
+  # The method to utilize the description field has been mainly introduced for those accounts, usually the only ones a home user has.
+  # However, for symmetry, and because there may be a reason to use this in an AD environment, this schema is also supported for AD users.
+  #
+  # Note
+  #
+  # The presentation of local user account settings on Windows is confusing, to say the least. The description field is not visible at all
+  # in the user settings available via the User Accounts control settings. And while it's called Description in the Local Users and Groups MMC
+  # snap-in (available, for instance, via the Computer Management GUI), in the command line tool net user the same field is called comment.
+  # The latter is especially confusing for AD admins, because the comment attribute in AD is called usercomment on the command line. Confused?
+  # Never mind, you're not the only one...
+  #
+  # Fortunately you can utilize the description field even if you're running a "home edition" of Windows, by using the command line. The net user
+  # command allows to set all values in the SAM, even if the GUI is crippled.
+  #
+  # A Cygwin SAM comment entry looks like this:
+  #
+  # <cygwin key="value" key="value" [...] />
+  # The supported keys are:
+  #
+  # home="value" - Sets the Cygwin home dir to value.
+  # shell="value" - Sets the Cygwin login shell to value.
+  # gecos="value" - Adds the string value to the user's gecos field.
+  # The next two settings are only supported for SAM accounts.
+  #
+  # group="value" - Sets the Cygwin primary group of the account to value, provided that the user is already a member of that group.
+  # This allows to override the default None primary group for local accounts. One nice idea here is, for instance, group="Users".
+  # unix="value" - Sets the NFS/Samba uid of the user to the decimal value.
+  # The <cygwin .../> string can start at any point in the comment, but you have to follow the rules:
+  #
+  # It starts with "<cygwin " and ends with "/>".
+  # The "cygwin" string and the key names have to be lowercase.
+  # No spaces between key and "value", just the equal sign.
+  # The value must be placed within double quotes and it must not contain a double quote itself. The double quotes are required for the decimal values as well!
+  # Note
+  #
+  # There's also a length restriction imposed by Windows. The description entry has a maximumn length of 1023 characters.
+  #
+  # CMD example:
+  #
+  # net user corinna /comment:"<cygwin home=\"/home/foo\"/>"
+  # Bash example (use single quotes):
+  #
+  # net user corinna /comment:'<cygwin home="/home/foo"/>'
+  # For changing group comments, use the `net localgroup' command. The supported key/value pair for SAM groups are:
+  #
+  # unix="value" - Sets the NFS/Samba gid of the group to the decimal value.
+
+  # If the home directory doesn't exist, create it.
+  if [ ! -d "${HOME}" ]; then
+    if mkdir -p "${HOME}"; then
+      echo "Copying skeleton files."
+      echo "These files are for the users to personalise their msys2 experience."
+      echo
+      echo "They will never be overwritten nor automatically updated."
+      echo
+      cd /etc/skel || echo "WARNING: Failed attempt to cd into /etc/skel!"
+      local f=
+      /usr/bin/find . -type f | while read f; do
+        local fDest=${f#.}
+        if [ ! -e "${HOME}${fDest}" -a ! -L "${HOME}${fDest}" ]; then
+          /usr/bin/install -D -p -v "${f}" "${HOME}/${fDest}"
+        fi
+      done
+    else
+      echo "${HOME} could not be created."
+      { [ -d "${TEMP}" ] && HOME="${TEMP}"; } ||
+      { [ -d "${TMP}" ] && HOME="${TMP}"; } ||
+      { [ -d /tmp ] && HOME=/tmp; } ||
+      HOME=/
+      echo "Setting HOME to ${HOME}."
+    fi
+  fi
+
+  # Start MSYS in selected folder
+  # c:\msys\usr\bin\bash -c "cd '%curdir'; export
+  # CHERE_INVOKING=1; exec /usr/bin/bash --login -i"
+  #
+  # Make sure we start in home unless invoked by CHERE
+  if [ ! -z "${CHERE_INVOKING}" ]; then
+    unset CHERE_INVOKING
+  else
+    cd "${HOME}" || echo "WARNING: Failed attempt to cd into ${HOME}!"
+  fi
+}
+
+maybe_create_home
+++ maybe_create_home
++++ id -un
+++ USER=Joseph
+++ umask 022
+++ '[' '!' -d /home/Joseph ']'
+++ '[' '!' -z '' ']'
+++ cd /home/Joseph
++ for postinst in $(export LC_COLLATE=C; echo /etc/post-install/*.post)
++ '[' -e /etc/post-install/06-windows-files.post ']'
++ . /etc/post-install/06-windows-files.post
+maybe_create_winetc ()
+{
+  local FILES="hosts protocols services networks"
+  local WINSYS32HOME="$(/usr/bin/cygpath -S -w)"
+  local WINETC="${WINSYS32HOME}\\drivers\\etc"
+
+  if [ ! -d "${WINETC}" ]; then
+    echo "Directory ${WINETC} does not exist; exiting" >&2
+    echo "If directory name is garbage you need to update your msys package" >&2
+    exit 1
+  fi
+
+  local mketc=
+  for mketc in ${FILES}
+  do
+    if [ ! -e "/etc/${mketc}" -a ! -L "/etc/${mketc}" ]
+    then
+      # Windows only uses the first 8 characters
+      local WFILE="${WINETC}\\$(expr substr "${mketc}" 1 8)"
+      /usr/bin/cp -p -v "${WFILE}" "/etc/${mketc}"
+    fi
+  done
+
+  /usr/bin/chmod 1777 /tmp 2>/dev/null
+}
+
+maybe_create_winetc
+++ maybe_create_winetc
+++ local 'FILES=hosts protocols services networks'
++++ /usr/bin/cygpath -S -w
+++ local 'WINSYS32HOME=C:\Windows\system32'
+++ local 'WINETC=C:\Windows\system32\drivers\etc'
+++ '[' '!' -d 'C:\Windows\system32\drivers\etc' ']'
+++ local mketc=
+++ for mketc in ${FILES}
+++ '[' '!' -e /etc/hosts -a '!' -L /etc/hosts ']'
+++ for mketc in ${FILES}
+++ '[' '!' -e /etc/protocols -a '!' -L /etc/protocols ']'
+++ for mketc in ${FILES}
+++ '[' '!' -e /etc/services -a '!' -L /etc/services ']'
+++ for mketc in ${FILES}
+++ '[' '!' -e /etc/networks -a '!' -L /etc/networks ']'
+++ /usr/bin/chmod 1777 /tmp
++ for postinst in $(export LC_COLLATE=C; echo /etc/post-install/*.post)
++ '[' -e /etc/post-install/07-pacman-key.post ']'
++ . /etc/post-install/07-pacman-key.post
+maybe_init_keyring ()
+{
+  if [ ! -d /etc/pacman.d/gnupg ]
+  then
+    /usr/bin/pacman-key --init
+    /usr/bin/pacman-key --populate msys2 || true
+    /usr/bin/pacman-key --refresh-keys || true
+
+    MAYBE_FIRST_START=true
+  fi
+}
+
+maybe_init_keyring
+++ maybe_init_keyring
+++ '[' '!' -d /etc/pacman.d/gnupg ']'
++ for postinst in $(export LC_COLLATE=C; echo /etc/post-install/*.post)
++ '[' -e /etc/post-install/08-xml-catalog.post ']'
++ . /etc/post-install/08-xml-catalog.post
+maybe_create_xml_catalog ()
+{
+  if [ ! -f "/etc/xml/catalog" ]
+  then
+    /usr/bin/mkdir -p /etc/xml
+    /usr/bin/xmlcatalog --noout --create /etc/xml/catalog
+
+    MAYBE_FIRST_START=true
+  fi
+}
+
+maybe_create_xml_catalog
+++ maybe_create_xml_catalog
+++ '[' '!' -f /etc/xml/catalog ']'
+
+if [ ! "x${BASH_VERSION}" = "x" ]; then
+  HOSTNAME="$(/usr/bin/hostname)"
+  profile_d sh
+  [ -f "/etc/bash.bashrc" ] && . "/etc/bash.bashrc"
+elif [ ! "x${KSH_VERSION}" = "x" ]; then
+  typeset -l HOSTNAME="$(/usr/bin/hostname)"
+  profile_d sh
+  PS1=$(print '\033]0;${PWD}\n\033[32m${USER}@${HOSTNAME} \033[33m${PWD/${HOME}/~}\033[0m\n$ ')
+elif [ ! "x${ZSH_VERSION}" = "x" ]; then
+  HOSTNAME="$(/usr/bin/hostname)"
+  profile_d sh
+  profile_d zsh
+  PS1='(%n@%m)[%h] %~ %% '
+elif [ ! "x${POSH_VERSION}" = "x" ]; then
+  HOSTNAME="$(/usr/bin/hostname)"
+  PS1="$ "
+else
+  HOSTNAME="$(/usr/bin/hostname)"
+  profile_d sh
+  PS1="$ "
+fi
++ '[' '!' 'x4.4.12(1)-release' = x ']'
+++ /usr/bin/hostname
++ HOSTNAME=bedroom
++ profile_d sh
++ local file=
+++ export LC_COLLATE=C
+++ LC_COLLATE=C
+++ echo /etc/profile.d/bash_completion.sh /etc/profile.d/lang.sh /etc/profile.d/tzset.sh
++ for file in $(export LC_COLLATE=C; echo /etc/profile.d/*.$1)
++ '[' -e /etc/profile.d/bash_completion.sh ']'
++ . /etc/profile.d/bash_completion.sh
+# Check for interactive bash and that we haven't already been sourced.
+if [ -n "${BASH_VERSION-}" -a -n "${PS1-}" -a -z "${BASH_COMPLETION_COMPAT_DIR-}" ]; then
+
+    # Check for recent enough version of bash.
+    if [ ${BASH_VERSINFO[0]} -gt 4 ] || \
+       [ ${BASH_VERSINFO[0]} -eq 4 -a ${BASH_VERSINFO[1]} -ge 1 ]; then
+        [ -r "${XDG_CONFIG_HOME:-$HOME/.config}/bash_completion" ] && \
+            . "${XDG_CONFIG_HOME:-$HOME/.config}/bash_completion"
+        if shopt -q progcomp && [ -r /usr/share/bash-completion/bash_completion ]; then
+            # Source completion code.
+            . /usr/share/bash-completion/bash_completion
+        fi
+    fi
+
+fi
+++ '[' -n '4.4.12(1)-release' -a -n '\s-\v\$ ' -a -z '' ']'
+++ '[' 4 -gt 4 ']'
+++ '[' 4 -eq 4 -a 4 -ge 1 ']'
+++ '[' -r /home/Joseph/.config/bash_completion ']'
+++ shopt -q progcomp
+++ '[' -r /usr/share/bash-completion/bash_completion ']'
+++ . /usr/share/bash-completion/bash_completion
+#                                                          -*- shell-script -*-
+#
+#   bash_completion - programmable completion functions for bash 4.1+
+#
+#   Copyright © 2006-2008, Ian Macdonald <ian@caliban.org>
+#             © 2009-2016, Bash Completion Maintainers
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2, or (at your option)
+#   any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software Foundation,
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+#   The latest version of this software can be obtained here:
+#
+#   https://github.com/scop/bash-completion
+#
+#   RELEASE: 2.3
+
+if [[ $- == *v* ]]; then
+    BASH_COMPLETION_ORIGINAL_V_VALUE="-v"
+else
+    BASH_COMPLETION_ORIGINAL_V_VALUE="+v"
+fi
++++ [[ himtvxBH == *v* ]]
++++ BASH_COMPLETION_ORIGINAL_V_VALUE=-v
+
+if [[ ${BASH_COMPLETION_DEBUG-} ]]; then
+    set -v
+else
+    set +v
+fi
++++ [[ -n '' ]]
++++ set +v
++++ : /etc/bash_completion.d
++++ readonly BASH_COMPLETION_COMPAT_DIR
++++ _blacklist_glob='@(acroread.sh)'
++++ shopt -s extglob progcomp
++++ complete -d pushd
++++ complete -u groups slay w sux
++++ complete -A stopped -P '"%' -S '"' bg
++++ complete -j -P '"%' -S '"' fg jobs disown
++++ complete -v readonly unset
++++ complete -A setopt set
++++ complete -A shopt shopt
++++ complete -A helptopic help
++++ complete -a unalias
++++ complete -A binding bind
++++ complete -c command type which
++++ complete -b builtin
++++ [[ msys == *@(solaris|aix)* ]]
++++ [[ msys == *@(solaris|aix)* ]]
++++ [[ msys == *@(solaris|aix)* ]]
++++ _backup_glob='@(#*#|*@(~|.@(bak|orig|rej|swp|dpkg*|rpm@(orig|new|save))))'
++++ complete -F _service service
++++ _sysvdirs
++++ sysvdirs=()
++++ [[ -d /etc/rc.d/init.d ]]
++++ [[ -d /etc/init.d ]]
++++ [[ -f /etc/slackware-version ]]
++++ unset svc svcdir sysvdirs
++++ [[ msys == *freebsd* ]]
++++ shopt -u hostcomplete
++++ complete -F _user_at_host -o nospace talk ytalk finger
++++ complete -F _known_hosts traceroute traceroute6 tracepath tracepath6 fping fping6 telnet rsh rlogin ftp dig mtr ssh-installkeys showmount
++++ shopt -q cdable_vars
++++ complete -F _cd -o nospace cd
++++ complete -F _command aoss command do else eval exec ltrace nice nohup padsp then time tsocks vsound xargs
++++ complete -F _root_command fakeroot gksu gksudo kdesudo really
++++ complete -F _longopt a2ps awk base64 bash bc bison cat colordiff cp csplit cut date df diff dir du enscript env expand fmt fold gperf grep grub head irb ld ldd less ln ls m4 md5sum mkdir mkfifo mknod mv netstat nl nm objcopy objdump od paste pr ptx readelf rm rmdir sed seq shasum sha1sum sha224sum sha256sum sha384sum sha512sum shar sort split strip sum tac tail tee texindex touch tr uname unexpand uniq units vdir wc who
++++ declare -A _xspecs
++++ _install_xspec '!*.?(t)bz?(2)' bunzip2 bzcat pbunzip2 pbzcat lbunzip2 lbzcat
++++ local 'xspec=!*.?(t)bz?(2)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.?(t)bz?(2)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.?(t)bz?(2)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.?(t)bz?(2)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.?(t)bz?(2)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.?(t)bz?(2)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.?(t)bz?(2)'
++++ complete -F _filedir_xspec bunzip2 bzcat pbunzip2 pbzcat lbunzip2 lbzcat
++++ _install_xspec '!*.@(zip|[ejsw]ar|exe|pk3|wsz|zargo|xpi|s[tx][cdiw]|sx[gm]|o[dt][tspgfc]|od[bm]|oxt|epub|apk|do[ct][xm]|p[op]t[mx]|xl[st][xm]|pyz)' unzip zipinfo
++++ local 'xspec=!*.@(zip|[ejsw]ar|exe|pk3|wsz|zargo|xpi|s[tx][cdiw]|sx[gm]|o[dt][tspgfc]|od[bm]|oxt|epub|apk|do[ct][xm]|p[op]t[mx]|xl[st][xm]|pyz)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(zip|[ejsw]ar|exe|pk3|wsz|zargo|xpi|s[tx][cdiw]|sx[gm]|o[dt][tspgfc]|od[bm]|oxt|epub|apk|do[ct][xm]|p[op]t[mx]|xl[st][xm]|pyz)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(zip|[ejsw]ar|exe|pk3|wsz|zargo|xpi|s[tx][cdiw]|sx[gm]|o[dt][tspgfc]|od[bm]|oxt|epub|apk|do[ct][xm]|p[op]t[mx]|xl[st][xm]|pyz)'
++++ complete -F _filedir_xspec unzip zipinfo
++++ _install_xspec '*.Z' compress znew
++++ local 'xspec=*.Z' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='*.Z'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.Z'
++++ complete -F _filedir_xspec compress znew
++++ _install_xspec '!*.@(Z|[gGd]z|t[ag]z)' gunzip zcat
++++ local 'xspec=!*.@(Z|[gGd]z|t[ag]z)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(Z|[gGd]z|t[ag]z)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(Z|[gGd]z|t[ag]z)'
++++ complete -F _filedir_xspec gunzip zcat
++++ _install_xspec '!*.@(Z|[gGdz]z|t[ag]z)' unpigz
++++ local 'xspec=!*.@(Z|[gGdz]z|t[ag]z)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(Z|[gGdz]z|t[ag]z)'
++++ complete -F _filedir_xspec unpigz
++++ _install_xspec '!*.Z' uncompress
++++ local 'xspec=!*.Z' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.Z'
++++ complete -F _filedir_xspec uncompress
++++ _install_xspec '!*.@(tlz|lzma)' lzcat lzegrep lzfgrep lzgrep lzless lzmore unlzma
++++ local 'xspec=!*.@(tlz|lzma)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(tlz|lzma)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(tlz|lzma)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(tlz|lzma)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(tlz|lzma)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(tlz|lzma)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(tlz|lzma)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(tlz|lzma)'
++++ complete -F _filedir_xspec lzcat lzegrep lzfgrep lzgrep lzless lzmore unlzma
++++ _install_xspec '!*.@(?(t)xz|tlz|lzma)' unxz xzcat
++++ local 'xspec=!*.@(?(t)xz|tlz|lzma)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(t)xz|tlz|lzma)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(t)xz|tlz|lzma)'
++++ complete -F _filedir_xspec unxz xzcat
++++ _install_xspec '!*.lrz' lrunzip
++++ local 'xspec=!*.lrz' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.lrz'
++++ complete -F _filedir_xspec lrunzip
++++ _install_xspec '!*.@(gif|jp?(e)g|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx)' ee
++++ local 'xspec=!*.@(gif|jp?(e)g|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(gif|jp?(e)g|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx)'
++++ complete -F _filedir_xspec ee
++++ _install_xspec '!*.@(gif|jp?(e)g|tif?(f)|png|p[bgp]m|bmp|x[bp]m|rle|rgb|pcx|fits|pm|svg)' qiv
++++ local 'xspec=!*.@(gif|jp?(e)g|tif?(f)|png|p[bgp]m|bmp|x[bp]m|rle|rgb|pcx|fits|pm|svg)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(gif|jp?(e)g|tif?(f)|png|p[bgp]m|bmp|x[bp]m|rle|rgb|pcx|fits|pm|svg)'
++++ complete -F _filedir_xspec qiv
++++ _install_xspec '!*.@(gif|jp?(e)g|tif?(f)|png|p[bgp]m|bmp|x[bp]m|rle|rgb|pcx|fits|pm|?(e)ps)' xv
++++ local 'xspec=!*.@(gif|jp?(e)g|tif?(f)|png|p[bgp]m|bmp|x[bp]m|rle|rgb|pcx|fits|pm|?(e)ps)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(gif|jp?(e)g|tif?(f)|png|p[bgp]m|bmp|x[bp]m|rle|rgb|pcx|fits|pm|?(e)ps)'
++++ complete -F _filedir_xspec xv
++++ _install_xspec '!*.@(@(?(e)ps|?(E)PS|pdf|PDF)?(.gz|.GZ|.bz2|.BZ2|.Z))' gv ggv kghostview
++++ local 'xspec=!*.@(@(?(e)ps|?(E)PS|pdf|PDF)?(.gz|.GZ|.bz2|.BZ2|.Z))' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(@(?(e)ps|?(E)PS|pdf|PDF)?(.gz|.GZ|.bz2|.BZ2|.Z))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(@(?(e)ps|?(E)PS|pdf|PDF)?(.gz|.GZ|.bz2|.BZ2|.Z))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(@(?(e)ps|?(E)PS|pdf|PDF)?(.gz|.GZ|.bz2|.BZ2|.Z))'
++++ complete -F _filedir_xspec gv ggv kghostview
++++ _install_xspec '!*.@(dvi|DVI)?(.@(gz|Z|bz2))' xdvi kdvi
++++ local 'xspec=!*.@(dvi|DVI)?(.@(gz|Z|bz2))' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(dvi|DVI)?(.@(gz|Z|bz2))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(dvi|DVI)?(.@(gz|Z|bz2))'
++++ complete -F _filedir_xspec xdvi kdvi
++++ _install_xspec '!*.dvi' dvips dviselect dvitype dvipdf advi dvipdfm dvipdfmx
++++ local 'xspec=!*.dvi' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.dvi'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.dvi'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.dvi'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.dvi'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.dvi'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.dvi'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.dvi'
++++ complete -F _filedir_xspec dvips dviselect dvitype dvipdf advi dvipdfm dvipdfmx
++++ _install_xspec '!*.[pf]df' acroread gpdf xpdf
++++ local 'xspec=!*.[pf]df' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.[pf]df'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.[pf]df'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.[pf]df'
++++ complete -F _filedir_xspec acroread gpdf xpdf
++++ _install_xspec '!*.@(?(e)ps|pdf)' kpdf
++++ local 'xspec=!*.@(?(e)ps|pdf)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(e)ps|pdf)'
++++ complete -F _filedir_xspec kpdf
++++ _install_xspec '!*.@(okular|@(?(e|x)ps|?(E|X)PS|[pf]df|[PF]DF|dvi|DVI|cb[rz]|CB[RZ]|djv?(u)|DJV?(U)|dvi|DVI|gif|jp?(e)g|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx|GIF|JP?(E)G|MIFF|TIF?(F)|PN[GM]|P[BGP]M|BMP|XPM|ICO|XWD|TGA|PCX|epub|EPUB|odt|ODT|fb?(2)|FB?(2)|mobi|MOBI|g3|G3|chm|CHM)?(.?(gz|GZ|bz2|BZ2)))' okular
++++ local 'xspec=!*.@(okular|@(?(e|x)ps|?(E|X)PS|[pf]df|[PF]DF|dvi|DVI|cb[rz]|CB[RZ]|djv?(u)|DJV?(U)|dvi|DVI|gif|jp?(e)g|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx|GIF|JP?(E)G|MIFF|TIF?(F)|PN[GM]|P[BGP]M|BMP|XPM|ICO|XWD|TGA|PCX|epub|EPUB|odt|ODT|fb?(2)|FB?(2)|mobi|MOBI|g3|G3|chm|CHM)?(.?(gz|GZ|bz2|BZ2)))' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(okular|@(?(e|x)ps|?(E|X)PS|[pf]df|[PF]DF|dvi|DVI|cb[rz]|CB[RZ]|djv?(u)|DJV?(U)|dvi|DVI|gif|jp?(e)g|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx|GIF|JP?(E)G|MIFF|TIF?(F)|PN[GM]|P[BGP]M|BMP|XPM|ICO|XWD|TGA|PCX|epub|EPUB|odt|ODT|fb?(2)|FB?(2)|mobi|MOBI|g3|G3|chm|CHM)?(.?(gz|GZ|bz2|BZ2)))'
++++ complete -F _filedir_xspec okular
++++ _install_xspec '!*.pdf' epdfview
++++ local 'xspec=!*.pdf' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.pdf'
++++ complete -F _filedir_xspec epdfview
++++ _install_xspec '!*.@(cb[rz7t]|djv?(u)|?(e)ps|pdf)' zathura
++++ local 'xspec=!*.@(cb[rz7t]|djv?(u)|?(e)ps|pdf)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(cb[rz7t]|djv?(u)|?(e)ps|pdf)'
++++ complete -F _filedir_xspec zathura
++++ _install_xspec '!*.@(?(e)ps|pdf)' ps2pdf ps2pdf12 ps2pdf13 ps2pdf14 ps2pdfwr
++++ local 'xspec=!*.@(?(e)ps|pdf)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(e)ps|pdf)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(e)ps|pdf)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(e)ps|pdf)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(e)ps|pdf)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(e)ps|pdf)'
++++ complete -F _filedir_xspec ps2pdf ps2pdf12 ps2pdf13 ps2pdf14 ps2pdfwr
++++ _install_xspec '!*.texi*' makeinfo texi2html
++++ local 'xspec=!*.texi*' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.texi*'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.texi*'
++++ complete -F _filedir_xspec makeinfo texi2html
++++ _install_xspec '!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)' tex latex slitex jadetex pdfjadetex pdftex pdflatex texi2dvi
++++ local 'xspec=!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?(la)tex|texi|dtx|ins|ltx|dbj)'
++++ complete -F _filedir_xspec tex latex slitex jadetex pdfjadetex pdftex pdflatex texi2dvi
++++ _install_xspec '!*.mp3' mpg123 mpg321 madplay
++++ local 'xspec=!*.mp3' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.mp3'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.mp3'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.mp3'
++++ complete -F _filedir_xspec mpg123 mpg321 madplay
++++ _install_xspec '!*@(.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|fxm|FXM|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp[234]|MP[234]|m4[pv]|M4[PV]|mkv|MKV|og[gmv]|OG[GMV]|t[ps]|T[PS]|m2t?(s)|M2T?(S)|mts|MTS|wav|WAV|flac|FLAC|asx|ASX|mng|MNG|srt|m[eo]d|M[EO]D|s[3t]m|S[3T]M|it|IT|xm|XM)|+([0-9]).@(vdr|VDR))?(.part)' xine aaxine fbxine
++++ local 'xspec=!*@(.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|fxm|FXM|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp[234]|MP[234]|m4[pv]|M4[PV]|mkv|MKV|og[gmv]|OG[GMV]|t[ps]|T[PS]|m2t?(s)|M2T?(S)|mts|MTS|wav|WAV|flac|FLAC|asx|ASX|mng|MNG|srt|m[eo]d|M[EO]D|s[3t]m|S[3T]M|it|IT|xm|XM)|+([0-9]).@(vdr|VDR))?(.part)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*@(.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|fxm|FXM|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp[234]|MP[234]|m4[pv]|M4[PV]|mkv|MKV|og[gmv]|OG[GMV]|t[ps]|T[PS]|m2t?(s)|M2T?(S)|mts|MTS|wav|WAV|flac|FLAC|asx|ASX|mng|MNG|srt|m[eo]d|M[EO]D|s[3t]m|S[3T]M|it|IT|xm|XM)|+([0-9]).@(vdr|VDR))?(.part)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*@(.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|fxm|FXM|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp[234]|MP[234]|m4[pv]|M4[PV]|mkv|MKV|og[gmv]|OG[GMV]|t[ps]|T[PS]|m2t?(s)|M2T?(S)|mts|MTS|wav|WAV|flac|FLAC|asx|ASX|mng|MNG|srt|m[eo]d|M[EO]D|s[3t]m|S[3T]M|it|IT|xm|XM)|+([0-9]).@(vdr|VDR))?(.part)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*@(.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|fxm|FXM|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp[234]|MP[234]|m4[pv]|M4[PV]|mkv|MKV|og[gmv]|OG[GMV]|t[ps]|T[PS]|m2t?(s)|M2T?(S)|mts|MTS|wav|WAV|flac|FLAC|asx|ASX|mng|MNG|srt|m[eo]d|M[EO]D|s[3t]m|S[3T]M|it|IT|xm|XM)|+([0-9]).@(vdr|VDR))?(.part)'
++++ complete -F _filedir_xspec xine aaxine fbxine
++++ _install_xspec '!*@(.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|fxm|FXM|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp[234]|MP[234]|m4[pv]|M4[PV]|mkv|MKV|og[gmv]|OG[GMV]|t[ps]|T[PS]|m2t?(s)|M2T?(S)|mts|MTS|wav|WAV|flac|FLAC|asx|ASX|mng|MNG|srt|m[eo]d|M[EO]D|s[3t]m|S[3T]M|it|IT|xm|XM|iso|ISO)|+([0-9]).@(vdr|VDR))?(.part)' kaffeine dragon
++++ local 'xspec=!*@(.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|fxm|FXM|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp[234]|MP[234]|m4[pv]|M4[PV]|mkv|MKV|og[gmv]|OG[GMV]|t[ps]|T[PS]|m2t?(s)|M2T?(S)|mts|MTS|wav|WAV|flac|FLAC|asx|ASX|mng|MNG|srt|m[eo]d|M[EO]D|s[3t]m|S[3T]M|it|IT|xm|XM|iso|ISO)|+([0-9]).@(vdr|VDR))?(.part)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*@(.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|fxm|FXM|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp[234]|MP[234]|m4[pv]|M4[PV]|mkv|MKV|og[gmv]|OG[GMV]|t[ps]|T[PS]|m2t?(s)|M2T?(S)|mts|MTS|wav|WAV|flac|FLAC|asx|ASX|mng|MNG|srt|m[eo]d|M[EO]D|s[3t]m|S[3T]M|it|IT|xm|XM|iso|ISO)|+([0-9]).@(vdr|VDR))?(.part)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*@(.@(mp?(e)g|MP?(E)G|wma|avi|AVI|asf|vob|VOB|bin|dat|divx|DIVX|vcd|ps|pes|fli|flv|FLV|fxm|FXM|viv|rm|ram|yuv|mov|MOV|qt|QT|wmv|mp[234]|MP[234]|m4[pv]|M4[PV]|mkv|MKV|og[gmv]|OG[GMV]|t[ps]|T[PS]|m2t?(s)|M2T?(S)|mts|MTS|wav|WAV|flac|FLAC|asx|ASX|mng|MNG|srt|m[eo]d|M[EO]D|s[3t]m|S[3T]M|it|IT|xm|XM|iso|ISO)|+([0-9]).@(vdr|VDR))?(.part)'
++++ complete -F _filedir_xspec kaffeine dragon
++++ _install_xspec '!*.@(avi|asf|wmv)' aviplay
++++ local 'xspec=!*.@(avi|asf|wmv)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(avi|asf|wmv)'
++++ complete -F _filedir_xspec aviplay
++++ _install_xspec '!*.@(rm?(j)|ra?(m)|smi?(l))' realplay
++++ local 'xspec=!*.@(rm?(j)|ra?(m)|smi?(l))' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(rm?(j)|ra?(m)|smi?(l))'
++++ complete -F _filedir_xspec realplay
++++ _install_xspec '!*.@(mpg|mpeg|avi|mov|qt)' xanim
++++ local 'xspec=!*.@(mpg|mpeg|avi|mov|qt)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(mpg|mpeg|avi|mov|qt)'
++++ complete -F _filedir_xspec xanim
++++ _install_xspec '!*.@(ogg|m3u|flac|spx)' ogg123
++++ local 'xspec=!*.@(ogg|m3u|flac|spx)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(ogg|m3u|flac|spx)'
++++ complete -F _filedir_xspec ogg123
++++ _install_xspec '!*.@(mp3|ogg|pls|m3u)' gqmpeg freeamp
++++ local 'xspec=!*.@(mp3|ogg|pls|m3u)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(mp3|ogg|pls|m3u)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(mp3|ogg|pls|m3u)'
++++ complete -F _filedir_xspec gqmpeg freeamp
++++ _install_xspec '!*.fig' xfig
++++ local 'xspec=!*.fig' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.fig'
++++ complete -F _filedir_xspec xfig
++++ _install_xspec '!*.@(mid?(i)|cmf)' playmidi
++++ local 'xspec=!*.@(mid?(i)|cmf)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(mid?(i)|cmf)'
++++ complete -F _filedir_xspec playmidi
++++ _install_xspec '!*.@(mid?(i)|rmi|rcp|[gr]36|g18|mod|xm|it|x3m|s[3t]m|kar)' timidity
++++ local 'xspec=!*.@(mid?(i)|rmi|rcp|[gr]36|g18|mod|xm|it|x3m|s[3t]m|kar)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(mid?(i)|rmi|rcp|[gr]36|g18|mod|xm|it|x3m|s[3t]m|kar)'
++++ complete -F _filedir_xspec timidity
++++ _install_xspec '!*.@(669|abc|am[fs]|d[bs]m|dmf|far|it|mdl|m[eo]d|mid?(i)|mt[2m]|oct|okt?(a)|p[st]m|s[3t]m|ult|umx|wav|xm)' modplugplay modplug123
++++ local 'xspec=!*.@(669|abc|am[fs]|d[bs]m|dmf|far|it|mdl|m[eo]d|mid?(i)|mt[2m]|oct|okt?(a)|p[st]m|s[3t]m|ult|umx|wav|xm)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(669|abc|am[fs]|d[bs]m|dmf|far|it|mdl|m[eo]d|mid?(i)|mt[2m]|oct|okt?(a)|p[st]m|s[3t]m|ult|umx|wav|xm)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(669|abc|am[fs]|d[bs]m|dmf|far|it|mdl|m[eo]d|mid?(i)|mt[2m]|oct|okt?(a)|p[st]m|s[3t]m|ult|umx|wav|xm)'
++++ complete -F _filedir_xspec modplugplay modplug123
++++ _install_xspec '*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)' vi vim gvim rvim view rview rgvim rgview gview emacs xemacs sxemacs kate kwrite
++++ local 'xspec=*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ for cmd in $@
++++ _xspecs[$cmd]='*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|mp3|mp?(e)g|avi|asf|ogg|class)'
++++ complete -F _filedir_xspec vi vim gvim rvim view rview rgvim rgview gview emacs xemacs sxemacs kate kwrite
++++ _install_xspec '!*.@(zip|z|gz|tgz)' bzme
++++ local 'xspec=!*.@(zip|z|gz|tgz)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(zip|z|gz|tgz)'
++++ complete -F _filedir_xspec bzme
++++ _install_xspec '!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))' netscape mozilla lynx galeon dillo elinks amaya epiphany
++++ local 'xspec=!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'
++++ complete -F _filedir_xspec netscape mozilla lynx galeon dillo elinks amaya epiphany
++++ _install_xspec '!*.@(?([xX]|[sS])[hH][tT][mM]?([lL])|[pP][dD][fF])' firefox mozilla-firefox iceweasel google-chrome chromium-browser
++++ local 'xspec=!*.@(?([xX]|[sS])[hH][tT][mM]?([lL])|[pP][dD][fF])' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL])|[pP][dD][fF])'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL])|[pP][dD][fF])'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL])|[pP][dD][fF])'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL])|[pP][dD][fF])'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(?([xX]|[sS])[hH][tT][mM]?([lL])|[pP][dD][fF])'
++++ complete -F _filedir_xspec firefox mozilla-firefox iceweasel google-chrome chromium-browser
++++ _install_xspec '!*.@(sxw|stw|sxg|sgl|doc?([mx])|dot?([mx])|rtf|txt|htm|html|?(f)odt|ott|odm)' oowriter
++++ local 'xspec=!*.@(sxw|stw|sxg|sgl|doc?([mx])|dot?([mx])|rtf|txt|htm|html|?(f)odt|ott|odm)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(sxw|stw|sxg|sgl|doc?([mx])|dot?([mx])|rtf|txt|htm|html|?(f)odt|ott|odm)'
++++ complete -F _filedir_xspec oowriter
++++ _install_xspec '!*.@(sxi|sti|pps?(x)|ppt?([mx])|pot?([mx])|?(f)odp|otp)' ooimpress
++++ local 'xspec=!*.@(sxi|sti|pps?(x)|ppt?([mx])|pot?([mx])|?(f)odp|otp)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(sxi|sti|pps?(x)|ppt?([mx])|pot?([mx])|?(f)odp|otp)'
++++ complete -F _filedir_xspec ooimpress
++++ _install_xspec '!*.@(sxc|stc|xls?([bmx])|xlw|xlt?([mx])|[ct]sv|?(f)ods|ots)' oocalc
++++ local 'xspec=!*.@(sxc|stc|xls?([bmx])|xlw|xlt?([mx])|[ct]sv|?(f)ods|ots)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(sxc|stc|xls?([bmx])|xlw|xlt?([mx])|[ct]sv|?(f)ods|ots)'
++++ complete -F _filedir_xspec oocalc
++++ _install_xspec '!*.@(sxd|std|sda|sdd|?(f)odg|otg)' oodraw
++++ local 'xspec=!*.@(sxd|std|sda|sdd|?(f)odg|otg)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(sxd|std|sda|sdd|?(f)odg|otg)'
++++ complete -F _filedir_xspec oodraw
++++ _install_xspec '!*.@(sxm|smf|mml|odf)' oomath
++++ local 'xspec=!*.@(sxm|smf|mml|odf)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(sxm|smf|mml|odf)'
++++ complete -F _filedir_xspec oomath
++++ _install_xspec '!*.odb' oobase
++++ local 'xspec=!*.odb' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.odb'
++++ complete -F _filedir_xspec oobase
++++ _install_xspec '!*.[rs]pm' rpm2cpio
++++ local 'xspec=!*.[rs]pm' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.[rs]pm'
++++ complete -F _filedir_xspec rpm2cpio
++++ _install_xspec '!*.aux' bibtex
++++ local 'xspec=!*.aux' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.aux'
++++ complete -F _filedir_xspec bibtex
++++ _install_xspec '!*.po' poedit gtranslator kbabel lokalize
++++ local 'xspec=!*.po' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.po'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.po'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.po'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.po'
++++ complete -F _filedir_xspec poedit gtranslator kbabel lokalize
++++ _install_xspec '!*.@([Pp][Rr][Gg]|[Cc][Ll][Pp])' harbour gharbour hbpp
++++ local 'xspec=!*.@([Pp][Rr][Gg]|[Cc][Ll][Pp])' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@([Pp][Rr][Gg]|[Cc][Ll][Pp])'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@([Pp][Rr][Gg]|[Cc][Ll][Pp])'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@([Pp][Rr][Gg]|[Cc][Ll][Pp])'
++++ complete -F _filedir_xspec harbour gharbour hbpp
++++ _install_xspec '!*.[Hh][Rr][Bb]' hbrun
++++ local 'xspec=!*.[Hh][Rr][Bb]' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.[Hh][Rr][Bb]'
++++ complete -F _filedir_xspec hbrun
++++ _install_xspec '!*.ly' lilypond ly2dvi
++++ local 'xspec=!*.ly' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.ly'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.ly'
++++ complete -F _filedir_xspec lilypond ly2dvi
++++ _install_xspec '!*.@(dif?(f)|?(d)patch)?(.@([gx]z|bz2|lzma))' cdiff
++++ local 'xspec=!*.@(dif?(f)|?(d)patch)?(.@([gx]z|bz2|lzma))' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(dif?(f)|?(d)patch)?(.@([gx]z|bz2|lzma))'
++++ complete -F _filedir_xspec cdiff
++++ _install_xspec '!@(*.@(ks|jks|jceks|p12|pfx|bks|ubr|gkr|cer|crt|cert|p7b|pkipath|pem|p10|csr|crl)|cacerts)' portecle
++++ local 'xspec=!@(*.@(ks|jks|jceks|p12|pfx|bks|ubr|gkr|cer|crt|cert|p7b|pkipath|pem|p10|csr|crl)|cacerts)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!@(*.@(ks|jks|jceks|p12|pfx|bks|ubr|gkr|cer|crt|cert|p7b|pkipath|pem|p10|csr|crl)|cacerts)'
++++ complete -F _filedir_xspec portecle
++++ _install_xspec '!*.@(mp[234c]|og[ag]|@(fl|a)ac|m4[abp]|spx|tta|w?(a)v|wma|aif?(f)|asf|ape)' kid3 kid3-qt
++++ local 'xspec=!*.@(mp[234c]|og[ag]|@(fl|a)ac|m4[abp]|spx|tta|w?(a)v|wma|aif?(f)|asf|ape)' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(mp[234c]|og[ag]|@(fl|a)ac|m4[abp]|spx|tta|w?(a)v|wma|aif?(f)|asf|ape)'
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.@(mp[234c]|og[ag]|@(fl|a)ac|m4[abp]|spx|tta|w?(a)v|wma|aif?(f)|asf|ape)'
++++ complete -F _filedir_xspec kid3 kid3-qt
++++ _install_xspec '!*.py' pyflakes
++++ local 'xspec=!*.py' cmd
++++ shift
++++ for cmd in $@
++++ _xspecs[$cmd]='!*.py'
++++ complete -F _filedir_xspec pyflakes
++++ unset -f _install_xspec
++++ complete -F _minimal ''
++++ complete -D -F _completion_loader
++++ [[ -d /etc/bash_completion.d ]]
++++ unset i _blacklist_glob
++++ [[ /usr/share/bash-completion/bash_completion != \/\h\o\m\e\/\J\o\s\e\p\h/.bash_completion ]]
++++ [[ -r /home/Joseph/.bash_completion ]]
++++ unset -f have
++++ unset have
++++ set -v
+unset BASH_COMPLETION_ORIGINAL_V_VALUE
++++ unset BASH_COMPLETION_ORIGINAL_V_VALUE
+
+# ex: ts=4 sw=4 et filetype=sh
++ for file in $(export LC_COLLATE=C; echo /etc/profile.d/*.$1)
++ '[' -e /etc/profile.d/lang.sh ']'
++ . /etc/profile.d/lang.sh
+# To the extent possible under law, the author(s) have dedicated all
+# copyright and related and neighboring rights to this software to the
+# public domain worldwide. This software is distributed without any warranty.
+# You should have received a copy of the CC0 Public Domain Dedication along
+# with this software.
+# If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+# /etc/profile.d/lang.sh: sourced by /etc/profile.
+
+# The latest version as installed by the MSYS2 Setup program can
+# always be found at /etc/defaults/etc/profile.d/lang.sh
+
+# Modifying /etc/profile.d/lang.sh directly will prevent
+# setup from updating it.
+
+# System-wide lang.sh file
+
+# if no locale variable is set, indicate terminal charset via LANG
+test -z "${LC_ALL:-${LC_CTYPE:-$LANG}}" && export LANG=$(/usr/bin/locale -uU)
+++ test -z C.UTF-8
++ for file in $(export LC_COLLATE=C; echo /etc/profile.d/*.$1)
++ '[' -e /etc/profile.d/tzset.sh ']'
++ . /etc/profile.d/tzset.sh
+# To the extent possible under law, the author(s) have dedicated all
+# copyright and related and neighboring rights to this software to the
+# public domain worldwide. This software is distributed without any warranty.
+# You should have received a copy of the CC0 Public Domain Dedication along
+# with this software.
+# If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+# /etc/profile.d/tzset.sh: sourced by /etc/profile.
+
+# The latest version as installed by the MSYS2 Setup program can
+# always be found at /etc/defaults/etc/profile.d/tzset.sh
+
+# Modifying /etc/profile.d/tzset.sh directly will prevent
+# setup from updating it.
+
+# System-wide tzset.sh file
+
+#Uses the geographical location setting of the user to find the right
+#mapping, rather than the locale setting.  Only on Windows 2000 which
+#doesn't know about the user's geographical location, or if fetching
+#the geographical location fails, it falls back to the user's locale.
+test -z "$TZ" && export TZ=$(/usr/bin/tzset)
+++ test -z ''
++++ /usr/bin/tzset
+++ export TZ=America/Los_Angeles
+++ TZ=America/Los_Angeles
++ '[' -n '' ']'
++ '[' -f /etc/bash.bashrc ']'
++ . /etc/bash.bashrc
+# To the extent possible under law, the author(s) have dedicated all
+# copyright and related and neighboring rights to this software to the
+# public domain worldwide. This software is distributed without any warranty.
+# You should have received a copy of the CC0 Public Domain Dedication along
+# with this software.
+# If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+# /etc/bash.bashrc: executed by bash(1) for interactive shells.
+
+# System-wide bashrc file
+
+# Check that we haven't already been sourced.
+([[ -z ${CYG_SYS_BASHRC} ]] && CYG_SYS_BASHRC="1") || return
+++ [[ -z '' ]]
+++ CYG_SYS_BASHRC=1
+
+# If not running interactively, don't do anything
+[[ "$-" != *i* ]] && return
+++ [[ himtvxBH != *i* ]]
+
+# Warnings
+unset _warning_found
+++ unset _warning_found
+for _warning_prefix in '' ${MINGW_PREFIX}; do
+    for _warning_file in ${_warning_prefix}/etc/profile.d/*.warning{.once,}; do
+        test -f "${_warning_file}" || continue
+        _warning="$(command sed 's/^/\t\t/' "${_warning_file}" 2>/dev/null)"
+        if test -n "${_warning}"; then
+            if test -z "${_warning_found}"; then
+                _warning_found='true'
+                echo
+            fi
+            if test -t 1
+                then printf "\t\e[1;33mwarning:\e[0m\n${_warning}\n\n"
+                else printf "\twarning:\n${_warning}\n\n"
+            fi
+        fi
+        [[ "${_warning_file}" = *.once ]] && rm -f "${_warning_file}"
+    done
+done
+++ for _warning_prefix in '' ${MINGW_PREFIX}
+++ for _warning_file in ${_warning_prefix}/etc/profile.d/*.warning{.once,}
+++ test -f '/etc/profile.d/*.warning.once'
+++ continue
+++ for _warning_file in ${_warning_prefix}/etc/profile.d/*.warning{.once,}
+++ test -f '/etc/profile.d/*.warning'
+++ continue
+unset _warning_found
+++ unset _warning_found
+unset _warning_prefix
+++ unset _warning_prefix
+unset _warning_file
+++ unset _warning_file
+unset _warning
+++ unset _warning
+
+# If MSYS2_PS1 is set, use that as default PS1;
+# if a PS1 is already set and exported, use that;
+# otherwise set a default prompt
+# of user@host, MSYSTEM variable, and current_directory
+[[ -n "${MSYS2_PS1}" ]] && export PS1="${MSYS2_PS1}"
+++ [[ -n '' ]]
+# if we have the "High Mandatory Level" group, it means we're elevated
+if [[ -n "$(command -v getent)" ]] && id -G | grep -q "$(getent -w group 'S-1-16-12288' | cut -d: -f2)"
+  then _ps1_symbol='\[\e[1m\]#\[\e[0m\]'
+  else _ps1_symbol='\$'
+fi
++++ command -v getent
+++ [[ -n '' ]]
+++ _ps1_symbol='\$'
+[[ $(declare -p PS1 2>/dev/null | cut -c 1-11) = 'declare -x ' ]] || \
+  export PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n'"${_ps1_symbol}"' '
++++ declare -p PS1
++++ cut -c 1-11
+++ [[ declare --  = \d\e\c\l\a\r\e\ \-\x\  ]]
+++ export 'PS1=\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n\$ '
+++ PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n\$ '
+unset _ps1_symbol
+++ unset _ps1_symbol
+
+# Uncomment to use the terminal colours set in DIR_COLORS
+# eval "$(dircolors -b /etc/DIR_COLORS)"
+
+if [ -n "$ACLOCAL_PATH" ]
+then
+  export ACLOCAL_PATH
+fi
++ '[' -n '' ']'
+
+export PATH MANPATH INFOPATH PKG_CONFIG_PATH USER TMP TEMP PRINTER HOSTNAME PS1 SHELL tmp temp ORIGINAL_TMP ORIGINAL_TEMP ORIGINAL_PATH
++ export PATH MANPATH INFOPATH PKG_CONFIG_PATH USER TMP TEMP PRINTER HOSTNAME PS1 SHELL tmp temp ORIGINAL_TMP ORIGINAL_TEMP ORIGINAL_PATH
+unset PATH_SEPARATOR
++ unset PATH_SEPARATOR
+
+if [ "$MAYBE_FIRST_START" = "true" ]; then
+  sh /usr/bin/regen-info.sh
+
+  if [ -f "/usr/bin/update-ca-trust" ]
+  then
+    sh /usr/bin/update-ca-trust
+  fi
+
+  clear
+  echo
+  echo
+  echo "###################################################################"
+  echo "#                                                                 #"
+  echo "#                                                                 #"
+  echo "#                   C   A   U   T   I   O   N                     #"
+  echo "#                                                                 #"
+  echo "#                  This is first start of MSYS2.                  #"
+  echo "#       You MUST restart shell to apply necessary actions.        #"
+  echo "#                                                                 #"
+  echo "#                                                                 #"
+  echo "###################################################################"
+  echo
+  echo
+fi
++ '[' false = true ']'
+unset MAYBE_FIRST_START
++ unset MAYBE_FIRST_START
+# To the extent possible under law, the author(s) have dedicated all
+# copyright and related and neighboring rights to this software to the
+# public domain worldwide. This software is distributed without any warranty.
+# You should have received a copy of the CC0 Public Domain Dedication along
+# with this software.
+# If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+# ~/.bash_profile: executed by bash(1) for login shells.
+
+# The copy in your home directory (~/.bash_profile) is yours, please
+# feel free to customise it to create a shell
+# environment to your liking.  If you feel a change
+# would be benifitial to all, please feel free to send
+# a patch to the msys2 mailing list.
+
+# User dependent .bash_profile file
+
+# source the users bashrc if it exists
+if [ -f "${HOME}/.bashrc" ] ; then
+  source "${HOME}/.bashrc"
+fi
++ '[' -f /home/Joseph/.bashrc ']'
++ source /home/Joseph/.bashrc
+# To the extent possible under law, the author(s) have dedicated all
+# copyright and related and neighboring rights to this software to the
+# public domain worldwide. This software is distributed without any warranty.
+# You should have received a copy of the CC0 Public Domain Dedication along
+# with this software.
+# If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+# ~/.bashrc: executed by bash(1) for interactive shells.
+
+# The copy in your home directory (~/.bashrc) is yours, please
+# feel free to customise it to create a shell
+# environment to your liking.  If you feel a change
+# would be benifitial to all, please feel free to send
+# a patch to the msys2 mailing list.
+
+# User dependent .bashrc file
+
+# If not running interactively, don't do anything
+[[ "$-" != *i* ]] && return
+++ [[ himtvxBH != *i* ]]
+
+# Shell Options
+#
+# See man bash for more options...
+#
+# Don't wait for job termination notification
+# set -o notify
+#
+# Don't use ^D to exit
+# set -o ignoreeof
+#
+# Use case-insensitive filename globbing
+# shopt -s nocaseglob
+#
+# Make bash append rather than overwrite the history on disk
+# shopt -s histappend
+#
+# When changing directory small typos can be ignored by bash
+# for example, cd /vr/lgo/apaache would find /var/log/apache
+# shopt -s cdspell
+
+# Completion options
+#
+# These completion tuning parameters change the default behavior of bash_completion:
+#
+# Define to access remotely checked-out files over passwordless ssh for CVS
+# COMP_CVS_REMOTE=1
+#
+# Define to avoid stripping description in --option=description of './configure --help'
+# COMP_CONFIGURE_HINTS=1
+#
+# Define to avoid flattening internal contents of tar files
+# COMP_TAR_INTERNAL_PATHS=1
+#
+# Uncomment to turn on programmable completion enhancements.
+# Any completions you add in ~/.bash_completion are sourced last.
+# [[ -f /etc/bash_completion ]] && . /etc/bash_completion
+
+# History Options
+#
+# Don't put duplicate lines in the history.
+# export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+#
+# Ignore some controlling instructions
+# HISTIGNORE is a colon-delimited list of patterns which should be excluded.
+# The '&' is a special pattern which suppresses duplicate entries.
+# export HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
+# export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
+#
+# Whenever displaying the prompt, write the previous line to disk
+# export PROMPT_COMMAND="history -a"
+
+# Aliases
+#
+# Some people use a different file for aliases
+# if [ -f "${HOME}/.bash_aliases" ]; then
+#   source "${HOME}/.bash_aliases"
+# fi
+#
+# Some example alias instructions
+# If these are enabled they will be used instead of any instructions
+# they may mask.  For example, alias rm='rm -i' will mask the rm
+# application.  To override the alias instruction use a \ before, ie
+# \rm will call the real rm not the alias.
+#
+# Interactive operation...
+# alias rm='rm -i'
+# alias cp='cp -i'
+# alias mv='mv -i'
+#
+# Default to human readable figures
+# alias df='df -h'
+# alias du='du -h'
+#
+# Misc :)
+# alias less='less -r'                          # raw control characters
+# alias whence='type -a'                        # where, of a sort
+# alias grep='grep --color'                     # show differences in colour
+# alias egrep='egrep --color=auto'              # show differences in colour
+# alias fgrep='fgrep --color=auto'              # show differences in colour
+#
+# Some shortcuts for different directory listings
+# alias ls='ls -hF --color=tty'                 # classify files in colour
+# alias dir='ls --color=auto --format=vertical'
+# alias vdir='ls --color=auto --format=long'
+# alias ll='ls -l'                              # long list
+# alias la='ls -A'                              # all but . and ..
+# alias l='ls -CF'                              #
+
+# Umask
+#
+# /etc/profile sets 022, removing write perms to group + others.
+# Set a more restrictive umask: i.e. no exec perms for others:
+# umask 027
+# Paranoid: neither group nor others have any perms:
+# umask 077
+
+# Functions
+#
+# Some people use a different file for functions
+# if [ -f "${HOME}/.bash_functions" ]; then
+#   source "${HOME}/.bash_functions"
+# fi
+#
+# Some example functions:
+#
+# a) function settitle
+# settitle ()
+# {
+#   echo -ne "\e]2;$@\a\e]1;$@\a";
+# }
+#
+# b) function cd_func
+# This function defines a 'cd' replacement function capable of keeping,
+# displaying and accessing history of visited directories, up to 10 entries.
+# To use it, uncomment it, source this file and try 'cd --'.
+# acd_func 1.0.5, 10-nov-2004
+# Petar Marinov, http:/geocities.com/h2428, this is public domain
+# cd_func ()
+# {
+#   local x2 the_new_dir adir index
+#   local -i cnt
+#
+#   if [[ $1 ==  "--" ]]; then
+#     dirs -v
+#     return 0
+#   fi
+#
+#   the_new_dir=$1
+#   [[ -z $1 ]] && the_new_dir=$HOME
+#
+#   if [[ ${the_new_dir:0:1} == '-' ]]; then
+#     #
+#     # Extract dir N from dirs
+#     index=${the_new_dir:1}
+#     [[ -z $index ]] && index=1
+#     adir=$(dirs +$index)
+#     [[ -z $adir ]] && return 1
+#     the_new_dir=$adir
+#   fi
+#
+#   #
+#   # '~' has to be substituted by ${HOME}
+#   [[ ${the_new_dir:0:1} == '~' ]] && the_new_dir="${HOME}${the_new_dir:1}"
+#
+#   #
+#   # Now change to the new dir and add to the top of the stack
+#   pushd "${the_new_dir}" > /dev/null
+#   [[ $? -ne 0 ]] && return 1
+#   the_new_dir=$(pwd)
+#
+#   #
+#   # Trim down everything beyond 11th entry
+#   popd -n +11 2>/dev/null 1>/dev/null
+#
+#   #
+#   # Remove any other occurence of this dir, skipping the top of the stack
+#   for ((cnt=1; cnt <= 10; cnt++)); do
+#     x2=$(dirs +${cnt} 2>/dev/null)
+#     [[ $? -ne 0 ]] && return 0
+#     [[ ${x2:0:1} == '~' ]] && x2="${HOME}${x2:1}"
+#     if [[ "${x2}" == "${the_new_dir}" ]]; then
+#       popd -n +$cnt 2>/dev/null 1>/dev/null
+#       cnt=cnt-1
+#     fi
+#   done
+#
+#   return 0
+# }
+#
+# alias cd=cd_func
+
+# Set PATH so it includes user's private bin if it exists
+# if [ -d "${HOME}/bin" ] ; then
+#   PATH="${HOME}/bin:${PATH}"
+# fi
+
+# Set MANPATH so it includes users' private man if it exists
+# if [ -d "${HOME}/man" ]; then
+#   MANPATH="${HOME}/man:${MANPATH}"
+# fi
+
+# Set INFOPATH so it includes users' private info if it exists
+# if [ -d "${HOME}/info" ]; then
+#   INFOPATH="${HOME}/info:${INFOPATH}"
+# fi

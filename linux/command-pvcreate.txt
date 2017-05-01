@@ -1,0 +1,51 @@
+Name
+pvcreate - initialize a disk or partition for use by LVM 
+
+Synopsis
+pvcreate [-d|--debug] [-f[f]|--force [--force]] [-y|--yes] [-h|--help] [-v|--verbose] [-V|--version] PhysicalVolume [PhysicalVolume...] 
+
+Description
+pvcreate initializes PhysicalVolume for later use by the Logical Volume Manager (LVM). Each PhysicalVolume can be a disk partition, whole disk, meta device, or loopback file. For DOS disk partitions, the partition id must be set to 0x8e using fdisk(8), cfdisk(8), or a equivalent.
+
+For whole disk devices only the partition table must be erased, which will effectively destroy all data on that disk. This can be done by zeroing the first sector with:
+
+dd if=/dev/zero of=PhysicalVolume bs=512 count=1
+
+Continue with vgcreate(8) to create a new volume group on PhysicalVolume, or vgextend(8) to add PhysicalVolume to an existing volume group.  
+
+Options
+-d, --debug
+
+Enables additional debugging output (if compiled with DEBUG).
+
+-f, --force
+
+Force the creation without any confirmation. You can not recreate (reinitialize) a physical volume belonging to an existing volume group. In an emergency you can override this behaviour with -ff. In no case case can you initialize an active physical volume with this command.
+
+-s, --size
+
+Overrides the size of the physical volume which is normally retrieved. Useful in rare case where this value is wrong. More useful to fake large physical volumes of up to 2 Terabyes - 1 Kilobyte on smaller devices for testing purposes only where no real access to data in created logical volumes is needed.
+
+If you wish to create the supported maximum, use "pvcreate -s 2147483647k PhysicalVolume [PhysicalVolume ...]". All other LVM tools will use this size with the exception of lvmdiskscan(8)
+
+-y, --yes
+
+Answer yes to all questions.
+
+-h, --help
+
+Print a usage message on standard output and exit successfully.
+
+-v, --verbose
+
+Gives verbose runtime information about pvcreate's activities.
+
+-V, --version
+
+Print the version number on standard output and exit successfully.
+
+Example
+
+Initialize partition #4 on the third SCSI disk and the entire fifth SCSI disk for later use by LVM:
+
+pvcreate /dev/sdc4 /dev/sde

@@ -1,0 +1,157 @@
+Check Disk Space with the Commands df and du
+
+A quick way to get a summary of the available and used disk space on your Linux system is to type in the df command in a terminal window. The command df stands for "disk filesystem". With the -h option (df -h) it shows the disk space in "human readable" form, which in this case means, it gives you the units along with the numbers.
+
+The output of the df command is a table with four columns. The first column contains the file system path, which can be a reference to a hard disk or another storage device, or a file system connected to the network.
+
+The second column shows the capacity of that file system. The third column shows the available space, and the last column shows the path on which that file system is mounted. The mount point is the place in the directory tree where you can find and access that file system.
+
+The du command, on the other hand, shows the disk space used by the files and directories in the current directory. Again the -h option (df -h) makes the output easier to comprehend.
+
+By default, the du command lists all subdirectories to show how much disk space each has occupied. This can be avoided with the -s option (df -h -s). This only shows a summary. Namely the combined disk space used by all subdirectories. If you want to show the disk usage of a directory (folder) other than the current directory, you simply put that directory name as the last argument. For example: du -h -s images, where "images" would be a subdirectory of the current directory.
+
+More About The df Command
+By default, you will only need to see the accessible file systems which is the default when using the df command.
+
+You can, however, return the usage of all file systems including pseudo, duplicate and inaccessible file systems by using either of the following commands:
+
+df -a
+df -all
+
+The above commands won't seem very useful to most people but the next ones will. By default, the used and available disk space is listed in bytes.
+
+You can, of course, use the following command:
+
+df -h
+
+This displays the output in a more readable format such as size 546G, available 496G. Whilst this is ok the units of measure differ for each filesystem.
+
+To standardize the units across all file systems you can use simply use the following commands:
+
+df -BM
+
+df --block-size=M
+
+The M stands for megabytes. You can also use any of the following formats:
+
+K = Kilobytes
+M = Megabytes
+G = Gigabytes
+T = Terabytes
+P = Petabytes
+E = Exabyte
+Z = Zettabyte
+Y = Yottabyte
+A kilobyte is 1024 bytes and a megabyte is 1024 kilobytes. You may wonder why we use 1024 and not 1000. It is all to do with the binary makeup of a computer. You start at 2 and then 4, 8, 16, 32, 64, 128, 256, 512 and then 1024.
+
+Human beings, however, tend to count in decimal and so we are used to thinking in 1, 10, 100, 1000. You can use the following command to display the values in a decimal format as opposed to the binary format. (i.e. it prints values in powers of 1000 instead of 1024).
+
+df -H
+
+df --si
+
+You will find that numbers such as 2.9G become 3.1G.
+
+Running out of disk space isn't the only problem you might face when running a Linux system. A Linux system also uses the concept of inodes. Each file you create is given an inode. You can, however, create hard links between files which also use inodes.
+
+There is a limit on the number of inodes a file system can use.
+
+To see whether your file systems are close to hitting their limit run the following commands:
+
+df -i
+
+df --inodes
+
+You can customize the output of the df command as follows:
+
+df --output=FIELD_LIST
+
+The available options for the FIELD_LIST are as follows:
+
+source
+fstype
+itotal
+iused
+iavail
+ipcent
+size
+used
+avail
+pcent
+file
+target
+You can combine any or all of the fields. For example:
+
+df --output=source,size,used
+
+You may also wish to see totals for the values on the screen such as the total available space across all file systems.
+
+To do this use the following command:
+
+df --total
+
+By default, the df listing doesn't show the file system type. You can output the file system type by using the following commands:
+
+df -T
+
+df --print-type
+
+The file system type will be something like ext4, vfat, tmpfs
+
+If you just want to see information for a certain type you can use the following commands:
+
+df -t ext4
+
+dt --type=ext4
+
+Alternatively, you can use the following commands to exclude file systems.
+
+df -x ext4
+
+df --exclude-type=ext4
+
+More About The du Command
+The du command as you have already read lists details about the file space usage for each directory.
+
+Here are a few more switches which you may or may not find useful.
+
+By default after each item is listed a carriage return is shown which lists each new item on a new line. You can omit the carriage return by using the following commands:
+
+du -0
+
+du --null
+
+This isn't particularly useful unless you want to see the total usage quickly.
+
+A more useful command is the ability to list the space taken by all files and not just the directories.
+
+To do this use the following commands:
+
+du -a
+
+du --all
+
+You will probably want to output this information to a file using the following command:
+
+du -a > filename
+
+As with the df command, you can specify the way the output is presented. By default, it is in bytes but you can choose kilobytes, megabytes etc using the following commands:
+
+du -BM
+
+du --block-size=M
+
+You can also go for the human readable for such as 2.5G using the following commands:
+
+du -h
+
+du --human-readable
+
+To get a total at the end use the following commands:
+
+du -c
+
+du --total
+
+Summary
+For more information read the man pages for du and df.

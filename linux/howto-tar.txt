@@ -1,0 +1,112 @@
+Example uses of the Linux command "tar"
+
+Introduction
+Recently I have written a guide showing how to extract tar.gz files. Within that guide, I explained the concept of tar files and what they are.
+
+In essence, a tar file is a method of creating an archive file which contains many other files.
+
+Imagine you have a folder structure with files in it that you want to copy from one computer to another. You could write a script which performs the copy and places all the files in the correct folders on the destination machine.
+
+It would be far easier if you could create a single file with all the files and folders incorporated as part of the file which you could then copy to the destination and extract.
+
+Users who are used to using Windows software such as WinZip will already be aware of this sort of functionality but the difference between a zip file and a tar file is that the tar file isn't compressed.
+
+It is quite common for a tar file to be compressed as shown in the guide showing how to extract tar.gz files.
+
+This article will show you how to use the tar command.
+
+How To Create A Tar File
+Imagine your pictures folder under your home folder has lots of different folders with many images in each folder.
+
+You can create a tar file containing all of your images whilst maintaining the folder structure using the following command:
+
+tar -cvf photos ~/photos
+
+The switches are as follows:
+
+-c = create
+-v = verbose
+-f = files
+How To List The Files In A Tar File
+You can list the contents of a tar file by using the following command:
+
+tar -tf tarfilename
+
+This provides a list of the files and folders within a tar file. You should always do this before extracting a tar file from a strange source.
+
+At the very least a tar file might extract files to folders you weren't expecting and corrupt parts of your system so knowing which files are going where is a good starting point.
+
+At the worst bad people create something called a tar bomb which is designed to destroy your system.he
+
+The previous command simply gives a list of the files and folders. If you would like a more verbose view showing file sizes use the following command:
+
+tar -tvf tarfilename
+
+The switches are as follows:
+
+-t = list contents of an archive
+-f = file
+-v = verbose
+How To Extract From A Tar File
+Now that you have listed the files in a tar file you might wish to extract the tar file.
+
+To extract the contents of a tar file use the following command:
+
+tar -xvf tarfile
+
+The switches are as follows:
+
+-x = extract
+-v = verbose
+-f = file
+How To Append Files To A Tar File
+If you want to add files into an existing tar file run the following command:
+
+tar -rvf tarfilename /path/to/files
+
+The switches are as follows:
+
+-r = Append
+-v = Verbose
+-f = Files
+How To Append Files Only If They Are Newer
+The problem with the previous command is that if you added files that already exist in the tar file they would be overwritten.
+
+If you want to only add files if they are newer than existing files use the following command:
+
+tar -uvf tarfilename /path/to/files
+
+How To Prevent Tar From Overwriting Files Whilst Extracting
+If you are extracting a tar file you may not want to overwrite files if they already exist.
+
+This command makes sure that existing files are left alone:
+
+tar -xkvf tarfilename
+
+Only Extract Files That Are Newer Than Existing Files
+If you are extracting a tar file you might be happy for files to be overwritten but only if the file in the tar file is newer than the existing file.
+
+The following command shows how to do this:
+
+tar --keep-newer-files -xvf tarfilename
+
+How To Remove Files After Adding Them To A Tar File
+A tar file remains uncompressed so if you had a 400-gigabyte file to a tar file you will have a 400-gigabyte file in its original location and tar file with a 400-gigabyte file in it.
+
+You may wish to remove the original file when it is added to a tar file.
+
+ 
+
+The following command shows how to do this:
+
+tar --remove-files -cvf tarfilename /path/to/files
+
+Compress A Tar File When You Create It
+To compress a tar file as soon as it is created use the following command:
+
+tar -cvfz tarfilename /path/to/files
+
+Summary
+The tar command has dozens of switches and more information can be found by using the man tar command or by running tar --help.
+
+This guide provides the basics that most people need to know for creating and extracting tar files.

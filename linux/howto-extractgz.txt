@@ -1,0 +1,84 @@
+How To Extract tar.gz Files
+
+Introduction
+This guide will show you not only how to extract tar.gz files but it will also tell you what they are and why you would use them.
+
+What Is A tar.gz File?
+A file with the extension gz has been compressed using the gzip command. 
+
+You can zip up any file using the gzip command as follows:
+
+gzip
+
+For example:
+
+gzip image1.png
+
+The above command will compress the file image1.png and the file will now be called image1.png.gz.
+
+You can uncompress a file which has been compressed with gzip by using the gunzip command as follows:
+
+gunzip image1.png.gz
+
+Imagine now that you wanted to compress all of the images in a folder. You could use the following command:
+
+gzip *.png *.jpg *.bmp
+
+This would compress every file with the extension png, jpg or bmp. All of the files, however, would remain as individual files.
+
+It would be good if you could create a single file containing all of the files and then compress that using gzip.
+
+That is where the tar command comes in. A tar file which is often known as a tarball is a method of creating an archive file which contains many other files.
+
+A tar file on its own is not compressed.
+
+If you have a folder full of images you can create a tar file for the images using the following command:
+
+ tar -cvf images.tar ~/Pictures
+
+The above command creates a tar file called images.tar and populates it with all the files in the pictures folder.
+
+Now that you have a single file with all of your images you can now compress it using the gzip command:
+
+gzip images.tar
+
+The filename for the images file will now be images.tar.gz.
+
+You can create a tar file and compress it using a single command as follows:
+
+tar -cvzf images.tar.gz ~/Pictures
+
+How To Extract tar.gz Files
+Now you know a tar.gz file is a compressed tar file and that you know a tar file is a nice way of grouping files and folders.
+
+The first thing to do then to extract a tar.gz file is to decompress the file as follows:
+
+gunzip
+
+For example:
+
+gunzip images.tar.gz
+
+To extract the files from a tar file use the following command:
+
+tar -xvf
+
+For example:
+
+tar -xvf images.tar
+
+You can, however, decompress the gzip file and extract the files from the tar file using a single command as follows:
+
+tar -xvzf images.tar.gz
+
+Listing The Contents Of A tar.gz File
+You should be careful about extracting tar.gz files that you receive from other people or from download links as they may either deliberately or inadvertently destroy your system.
+
+You can view the contents of a tar file using the following syntax:
+
+tar -tzf images.tar.gz
+
+The above command will show you the names and locations of the files that will be extracted. 
+
+Summary
+tar.gz files are great for backup purposes as they keep the files and paths intact within the tar file and the file is compressed to make it smaller.

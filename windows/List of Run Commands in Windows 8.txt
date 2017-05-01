@@ -1,0 +1,179 @@
+List of Run Commands in Windows 8
+
+A Windows 8 run command is simply the name of the file used to execute a program. Knowing the run command for a program in Windows 8 can be useful if you'd like to start a program from a script file or if you only have access to a command line interface during a Windows issue.
+
+For example, write.exe is the file name for the WordPad program in Windows 8. By executing the write run command, you can start the WordPad program.
+
+Did I Miss a Windows 8 Run Command? Please let me know and I'll add it, but make sure it's a true run command, not a Command Prompt command or a Control Panel "command" that some other lists I've seen sometimes include.
+
+You can see those in my Command Prompt Commands in Windows 8 and Control Panel Command Line Commands lists.
+
+List of Run Commands in Windows 8
+
+Program Name	Run Command
+About Windows	winver
+Add a Device	devicepairingwizard
+Add Features to Windows 8	windowsanytimeupgradeui
+Add Hardware Wizard	hdwwiz
+Advanced Startup Options	bootim
+Advanced User Accounts	netplwiz
+Authorization Manager	azman
+Backup and Restore	sdclt
+Bluetooth File Transfer	fsquirt
+Buy a Product Key Online	purchasewindowslicense
+Calculator	calc
+Certificates	certmgr
+certlm
+Change Computer Performance Settings	systempropertiesperformance
+Change Data Execution Prevention Settings	systempropertiesdataexecutionprevention
+Change Printer Settings	printui
+Character Map	charmap
+ClearType Tuner	cttune
+Color Management	colorcpl
+Command Prompt	cmd
+Component Services	comexp
+Component Services	dcomcnfg
+Computer Management	compmgmt
+Computer Management	compmgmtlauncher
+Connect to a Network Projector	netproj1
+Connect to a Projector	displayswitch
+Control Panel	control
+Create A Shared Folder Wizard	shrpubw
+Create a System Repair Disc	recdisc
+Credential Backup and Restore Wizard	credwiz
+Data Execution Prevention	systempropertiesdataexecutionprevention
+Default Location	locationnotifications
+Device Manager	devmgmt
+Device Pairing Wizard	devicepairingwizard
+Diagnostics Troubleshooting Wizard	msdt
+Digitizer Calibration Tool	tabcal
+DirectAcesss Properties	daprop
+DirectX Diagnostic Tool	dxdiag
+Disk Cleanup	cleanmgr
+Disk Defragmenter	dfrgui
+Disk Management	diskmgmt
+Display	dpiscaling
+Display Color Calibration	dccw
+Display Switch	displayswitch
+DPAPI Key Migration Wizard	dpapimig
+Driver Verifier Manager	verifier
+Ease of Access Center	utilman
+EFS REKEY Wizard	rekeywiz
+Encrypting File System Wizard	rekeywiz
+Event Viewer	eventvwr
+Fax Cover Page Editor	fxscover
+File History	filehistory
+File Signature Verification	sigverif
+Flash Player Settings Manager	flashplayerapp
+Font Viewer	fontview2
+IExpress Wizard	iexpress
+Import to Windows Contacts	wabmig3
+Install or Uninstall Display Languages	lusrmgr
+Internet Explorer	iexplore3
+iSCSI Initiator Configuration Tool	iscsicpl
+iSCSI Initiator Properties	iscsicpl
+Language Pack Installer	lpksetup
+Local Group Policy Editor	gpedit
+Local Security Policy	secpol
+Local Users and Groups	lusrmgr
+Location Activity	locationnotifications
+Magnifier	magnify
+Malicious Software Removal Tool	mrt
+Manage Your File Encryption Certificates	rekeywiz
+Math Input Panel	mip3
+Microsoft Management Console	mmc
+Microsoft Support Diagnostic Tool	msdt
+NAP Client Configuration	napclcfg
+Narrator	narrator
+New Scan Wizard	wiaacmgr
+Notepad	notepad
+ODBC Data Source Administrator	odbcad32
+ODBC Driver Configuration	odbcconf
+On-Screen Keyboard	osk
+Paint	mspaint
+Performance Monitor	perfmon
+Performance Options	systempropertiesperformance
+Phone Dialer	dialer
+Presentation Settings	presentationsettings
+Print Management	printmanagement
+Printer Migration	printbrmui
+Printer User Interface	printui
+Private Character Editor	eudcedit
+Protected Content Migration	dpapimig
+Recovery Drive	recoverydrive
+Refresh Your PC	systemreset
+Registry Editor	regedt324
+regedit
+Remote Access Phonebook	rasphone
+Remote Desktop Connection	mstsc
+Resource Monitor	resmon
+perfmon /res
+Resultant Set of Policy	rsop
+Securing the Windows Account Database	syskey
+Services	services
+Set Program Access and Computer Defaults	computerdefaults
+Share Creation Wizard	shrpubw
+Shared Folders	fsmgmt
+Snipping Tool	snippingtool
+Sound Recorder	soundrecorder
+SQL Server Client Network Utility	cliconfg
+Steps Recorder	psr
+Sticky Notes	stikynot
+Stored User Names and Passwords	credwiz
+Sync Center	mobsync
+System Configuration	msconfig
+System Configuration Editor	sysedit5
+System Information	msinfo32
+System Properties (Advanced Tab)	systempropertiesadvanced
+System Properties (Computer Name Tab)	systempropertiescomputername
+System Properties (Hardware Tab)	systempropertieshardware
+System Properties (Remote Tab)	systempropertiesremote
+System Properties (System Protection Tab)	systempropertiesprotection
+System Restore	rstrui
+Task Manager	taskmgr
+Task Manager	launchtm
+Task Scheduler	taskschd
+Touch Keyboard and Handwriting Panel	tabtip3
+Trusted Platform Module (TPM) Management	tpm
+User Account Control Settings	useraccountcontrolsettings
+Utility Manager	utilman
+Version Reporter Applet	winver
+Volume Mixer	sndvol
+Windows Activation Client	slui
+Windows Anytime Upgrade Results	windowsanytimeupgraderesults
+Windows Contacts	wab3
+Windows Disc Image Burning Tool	isoburn
+Windows Easy Transfer	migwiz3
+Windows Explorer	explorer
+Windows Fax and Scan	wfs
+Windows Features	optionalfeatures
+Windows Firewall with Advanced Security	wf
+Windows Help and Support	winhlp32
+Windows Journal	journal3
+Windows Media Player	dvdplay
+wmplayer3
+Windows Memory Diagnostic Scheduler	mdsched
+Windows Mobility Center	mblctr
+Windows Picture Acquisition Wizard	wiaacmgr
+Windows PowerShell	powershell
+Windows PowerShell ISE	powershell_ise
+Windows Remote Assistance	msra
+Windows Repair Disc	recdisc
+Windows Script Host	wscript
+Windows SmartScreen	smartscreensettings
+Windows Store Cach Clear	wsreset
+Windows Update	wuapp
+Windows Update Standalone Installer	wusa
+WMI Management	wmimgmt
+WMI Tester	wbemtest
+WordPad	write
+XPS Viewer	xpsrchvw
+[1] The netproj run command is only available in Windows 8 if Network Projection is enabled from Windows Features.
+
+[2] The fontview run command must be followed with the name of the font that you want to see.
+
+[3] This run command can not be executed from the Command Prompt because the file is not in the default Windows path. However, it can be run from other areas in Windows 8 that allow execution of files when typed, like Run and Search.
+
+[4] The regedt32 run command forwards to regedit and executes it instead.
+
+[5] This run command is not available in 64-bit versions of Windows 8.

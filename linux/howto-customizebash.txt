@@ -1,0 +1,119 @@
+How To Create Users Within Linux Using The "useradd" Command
+
+Introduction
+If you have been using Linux for a while and particularly if you are beginning to get familiar with the Linux command line you will know that BASH is a Linux shell.
+
+BASH stands for Bourne Again Shell. There are a number of different shells including csh, zsh, dash and korn.
+
+A shell is an interpreter which can accept commands for a user and run them to perform operations such as navigating around a file system, running programs and interacting with devices.
+
+Many Debian based Linux distributions such as Debian itself, Ubuntu and Linux Mint use DASH as a shell instead of BASH. DASH stands for Debian Almquist Shell. The DASH shell is very similar to BASH but it is a lot smaller than the BASH shell.
+
+Regardless as to whether you are using BASH or DASH you will have a file called .bashrc. In fact you will have multiple .bashrc files.
+
+Open a terminal window and type in the following command:
+
+sudo find / -name .bashrc
+
+When I run this command there are three results returned:
+
+/etc/skel/.bashrc
+/home/gary/.bashrc
+/root/.bashrc
+The /etc/skel/.bashrc file is copied into the home folder of any new users that are created on a system.
+
+The /home/gary/.bashrc is the file used whenever the user gary opens a shell and the root file is used whenever root opens a shell.
+
+What Is The .bashrc File?
+The .bashrc file is a shell script which is run every time a user opens a new shell.
+
+For example open a terminal window and enter the following command:
+
+bash
+
+Now within the same window enter this command:
+
+bash
+
+Every time you open a terminal window the bashrc file is performed.
+
+The .bashrc file is a good place therefore to run commands that you want to run every single time you open a shell.
+
+As an example open the .bashrc file using nano as follows:
+
+nano ~/.bashrc
+
+At the end of the file enter the following command:
+
+echo "Hello $USER"
+
+Save the file by pressing CTRL and O and then exit nano by pressing CTRL and X.
+
+Within the terminal window run the following command:
+
+bash
+
+The word "Hello" should be displayed along with the username you are logged in as.
+
+You can use the .bashrc file to do anything you wish and indeed in this guide I showed you how to display system information using the screenfetch command. 
+
+The Use Of Aliases
+
+The .bashrc file is commonly used to set aliases to commonly used commands so that you don't have to remember long commands.
+
+Some people consider this a bad thing because you could forget how to use the real command when placed on a machine where your own particular .bashrc file doesn't exist.
+
+The truth is however that all of the commands are readily available online and in the man pages so I see adding aliases as a positive rather than a negative.
+
+If you look at the default .bashrc file in a distribution such as Ubuntu or Mint you will see some aliases already set up.
+
+For example:
+
+alias ll='ls -alF'
+
+alias la='ls -A'
+
+alias l='ls -CF'
+
+The ls command is used to list the files and directories in the file system.
+
+If you read this guide you will find out what all of the switches mean when you run the ls command.
+
+The -alF means that you will see a file listing show all files including hidden files which are preceeded with a dot. The file listing will include the author's name and each file type will be classified.
+
+The -A switch simply lists all files and directories but it omits the .. file.
+
+Finally the -CF lists entries by column along with their classification.
+
+Now you could at any time enter any of these commands direct into a terminal:
+
+ls -alF
+
+ls -A
+
+ls-CF
+
+As an alias has been set in the .bashrc file you can simply run the alias as follows:
+
+ll
+
+la
+
+l
+
+If you find yourself running a command regularly and it is a relatively long command it might be worth adding your own alias to the .bashrc file.
+
+The format for alias is as follows:
+
+alias new_command_name = command_to_run
+
+Basically you specify the alias command and then give the alias a name. You then specify the command you wish to run after the equals sign.
+
+For instance:
+
+alias up='cd ..'
+
+The above command lets you go up a directory simply by entering up.
+
+Summary
+The .bashrc file is a very powerful tool and is a great way to customise your Linux shell. Used in the correct way you will increase your productivity ten fold.

@@ -1,0 +1,189 @@
+Introduction
+This guide shows you how to create users within Linux using the command line. 
+
+Whilst many desktop Linux distributions provide a graphical tool for creating users it is a good idea to learn how to do it from the command line so that you can transfer your skills from one distribution to another without learning new user interfaces.
+
+How To Create A User
+
+Let's start by creating a simple user.
+
+The following command will add a new user called test to your system:
+
+sudo useradd test 
+
+What will happen when this command is run will depend on the contents of the configuration file located in /etc/default/useradd.
+
+To view the contents of /etc/default/useradd run the following command:
+
+sudo nano /etc/default/useradd
+
+The configuration file will set a default shell which in Ubuntu is bin/sh. All the other options are commented out.
+
+The commented out options allow you to set a default home folder, a group, number of days after the password has expired before the account becomes disabled and a default expiry date.
+
+The important thing to glean from the above information is that running the useradd command without any switches may produce different results on different distributions and it is all to do with the settings in the /etc/default/useradd file.
+
+In addition to the /etc/default/useradd file, there is also a file called /etc/login.defs which will be discussed later in the guide.
+
+Important: sudo is not installed on every distribution. If it is not installed you need to log into an account with appropriate permissions for creating users
+
+02
+of 13
+How To Create A User With A Home Directory
+
+The previous example was fairly simple but the user may or may not have been assigned a home directory based on the settings file.
+
+To force the creation of a home directory to use the following command:
+
+useradd -m test
+
+The above command creates a /home/test folder for the user test.
+
+03
+of 13
+How To Create A User With A Different Home Directory
+
+If you want the user to have a home folder in a different place to the default you can use the -d switch.
+
+sudo useradd -m -d /test test
+
+The above command will create a folder called test for user test under the root folder.
+
+Note: Within the -m switch the folder may not be created. It depends on the setting within /etc/login.defs.
+
+In order to get this to work without specifying a -m switch edit the file /etc/login.defs and at the bottom of the file add the following line:
+
+CREATE_HOME yes
+
+04
+of 13
+How To Change A User's Password Using Linux
+
+Now that you have created a user with a home folder you will need to change the user's password.
+
+To set a user's password you need to use the following command:
+
+passwd test
+
+The above command will allow you to set the test user's password. You will be prompted for the password you wish to use.
+
+05
+of 13
+How To Switch Users
+
+You can test your new user's account by typing the following into a terminal window:
+
+su - test
+
+The above command switches user to the test account and assuming you created a home folder you will be placed in the home folder for that user.
+
+06
+of 13
+Create A User With An Expiry Date
+
+If you are working in an office and you have a new contractor starting who is going to be at your office for a short period of time then you will want to set an expiry date on his or her user account.
+
+Similarly, if you have family coming to stay then you can create a user account for that family member that expires after they have left.
+
+To set an expiry date when creating a user, use the following command:
+
+ useradd -d /home/test -e 2016-02-05 test
+
+The date must be specified in the format YYYY-MM-DD where YYYY is the year, MM is the month number and DD is the day number.
+
+07
+of 13
+How To Create A User And Assign It To A Group
+
+If you have a new user joining your company then you might want to assign specific groups for that user so that they have access to the same files and folders as other members of their team.
+
+For example, imagine you had a guy called john and he was joining as an accountant.
+
+The following command would add john to the accounts group.
+
+useradd -m john -G accounts
+
+08
+of 13
+Adjusting Login Defaults Within Linux
+
+The file /etc/login.defs is a configuration file which provides the default behavior for login activities.
+
+There are some key settings in this file. To open the /etc/login.defs file enter the following command:
+
+sudo nano /etc/login.defs
+
+The login.defs file contains the following settings which you might want to change:
+
+PASS_MAX_DAYS - how long before a password expires 
+PASS_MIN_DAYS - how often can a password be changed
+PASS_WARN_AGE - number of days warning before a password expires
+LOGIN_RETRIES - number of login attempts before failure
+LOGIN_TIMEOUT - how long is it before the login times out.
+DEFAULT_HOME - can a user login if no home folder exists
+Note that these are the default options and they can be overridden when creating a new user.
+
+09
+of 13
+How To Specify Login Password Expiry When Creating A User
+
+You can set a password expiry date, the number of login retries and the timeout when creating a user.
+
+The following example shows how to create a user with a password warning, a maximum number of days before the password expires and login retries set.
+
+sudo useradd test5 -m -K PASS_MAX_DAYS=5 -K PASS_WARN_AGE=3 -K LOGIN_RETRIES=1
+
+10
+of 13
+Force Creation Of A User Without A Home Folder
+
+ If the login.defs file has the option CREATE_HOME yes set then when a user is created a home folder will automatically be created.
+
+To create a user without a home folder regardless of the settings use the following command:
+
+useradd -M test
+
+It is fairly confusing that -m stands for creating home and -M stands for do not create home.
+
+11
+of 13
+Specify The User's Full Name When Creating A User
+
+As part of your user creation policy, you might choose to do something like the first initial, followed by the last name. For example, the username for "John Smith" will be "jsmith".
+
+When looking for details about a user you might not then be able to distinguish between John Smith and Jenny Smith.
+
+You can add a comment when creating an account so it is easier to find out the user's real name.
+
+The following command shows how to do this:
+
+useradd -m jsmith -c "john smith"
+
+12
+of 13
+Analysing The /etc/passwd File
+
+Linux User Information
+ Linux User Information.
+ When you create a user the details of that user are added to the /etc/passwd file.
+
+To view the details about a particular user you can use the grep command as follows:
+
+grep john /etc/passwd
+
+ 
+
+Note: The above command will return details about all users with the word john as part of the username.
+
+The /etc/passuword file contains a colon-separated list of fields about each user.
+
+The fields are as follows:
+
+username
+encrypted password (which you obviously can't see)
+userid
+user's group id
+full name of the user
+user's home directory
+login shell
+

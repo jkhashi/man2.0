@@ -1,0 +1,191 @@
+Introduction
+The ldd command can be used to show you the shared libraries required by any given program. It is useful for working out when there is a missing dependency and it can be used to list missing functions and objects.
+
+This guide shows how to use the ldd command and when to avoid using it.
+
+How To Find Shared Libraries For Programs Using "ldd"
+
+Sample Usage Of The ldd Command
+To find the shared libraries that a program uses type the following command:
+
+ldd /path/to/program
+
+You need to provide the full path to an application. You can find the full path to an application in a number of ways.
+
+For example if you want to find Firefox you can type the following command:
+
+find / -name firefox
+
+The problem with the find command is that it will not only list the executable but everywhere that Firefox is located as follows:
+
+/etc/skel/.mozilla/firefox
+/home/<user>/cache/mozilla/firefox
+/home/<user>/.mozilla/firefox
+/usr/bin/Firefox
+/usr/lib/Firefox
+/usr/lib/Firefox/Firefox
+This approach is a bit overkill and you may need to use the sudo command to elevate your privileges otherwise you get lots of permission denied errors.
+
+It is much easier to use the whereis command to find an application as follows:
+
+whereis firefox
+
+This time the output is as follows:
+
+/usr/bin/firefox
+/usr/lib/firefox
+All you have to do now to find the shared libraries for Firefox is type the following command:
+
+ldd /usr/bin/firefox
+
+The output from the command will be something like this:
+
+        linux-vdso.so.1 (0x00007ffff8364000)
+        libpthread.so.0 => /usr/lib/libpthread.so.0 (0x00007feb9917a000)
+        libdl.so.2 => /usr/lib/libdl.so.2 (0x00007feb98f76000)
+        libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0x00007feb98bf4000)
+        libm.so.6 => /usr/lib/libm.so.6 (0x00007feb988f6000)
+        libgcc_s.so.1 => /usr/lib/libgcc_s.so.1 (0x00007feb986e0000)
+        libc.so.6 => /usr/lib/libc.so.6 (0x00007feb9833c000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007feb99397000)
+
+The linux-vdso.so.1 is the name of the library and the hex number is the address where the library will be loaded to in memory.
+
+You will notice on many of the other lines the => symbol followed by a path. This is the path to the physical binary and again the hex number is the address where the library will be loaded.
+
+How To Find The Missing Functions Using ldd
+Imagine you have a program that is failing and you think you have all the dependancies you need. For one reason or another though it is complaining when you run the program.
+
+In this section I will show you how to find missing functions in shared objects and how it can happen.
+
+The first thing I did was to create my own shared object using the c programming language. To do this I created a file called garylib.h as follows:
+
+
+#define garylib_h__
+
+extern void showversion(void);
+extern void showmessage(void);
+
+#endif // garylib_h__
+
+Basically I have a library with 2 functions, showversion and showmessage.
+
+I then created the garylib.c file to add the physical code for the functions as follows:
+
+#include <stdio.h>
+
+void showversion(void)
+{
+        puts("Garys code version 1.0");
+}
+
+void showmessage(void)
+{
+        puts("did this work");
+}
+
+As you can see the functions don't really do much.
+
+The showversion function prints out the message "Garys code version 1.0" and the second function shows the message "did this work".
+
+I created an object from this c code with the following code:
+
+gcc -c -Wall -Werror -fpic garylib.c
+
+This created a file called garylib.o.
+
+To turn this into a shared object I then ran the following command:
+
+gcc -shared -o garylib.so garylib.o
+
+With the shared object created I then created a program to access the methods from the shared object called garymain.c as follows:
+
+  GNU nano 2.5.0                                       File: garymain.c                                                                                      
+
+#include <stdio.h>
+#include "garylib.h"
+
+int main(void)
+{
+        puts("this is a test program");
+        showversion();
+        showmessage();
+        return 0;
+}
+
+As you can see the int main function calls both the showversion and showmessage method.
+
+I then compiled the code with the following command:
+
+gcc -Wall -o test garymain.c /home/gary/demo/garylib.so
+
+This creates a final program called test. To run the test program all I had to do was type the following:
+
+./test
+
+The following was displayed to the screen:
+
+this is a test program
+garys code version 1.0
+did this work
+It isn't a very inspiring program but for the purposes of showing why missing functions are a problem it will do the trick.
+
+The point about shared objects is that they can be used by many applications. If however the developer edits the library and changes one of the function names you may have a problem.
+
+For example I edited the garylib.h and garylib.c file so that showmessage is now called showmessage2. I then recreated the shared object. I didn't however recompile the garymain program.
+
+If I now run the test program I get the following message:
+
+this is a test program
+
+garys code version 1.0
+
+./test: symbol lookup error: ./test: undefined symbol: showmessage
+
+In the real world this is more likely to happen because you have a version of a shared library installed that is older than one required by a binary program installed onto your computer.
+
+Most software delivered to your Linux system will be done so as a binary as opposed to downloading and compiling the source. If the program compiled when you installed it there would be a compilation error.
+
+So how do you find out whether your program is calling a function that doesn't exist. Type the following ldd command:
+
+ldd -r path/to/program
+
+For example:
+
+ldd -r test
+
+The output is the same as with the normal ldd command whereby all the shared objects are listed but it also shows the following at the end:
+
+undefined symbol: showmessage (./test)
+
+Find Missing Objects Using LDD
+Be very careful if you wish to try this out. Don't start deleting or renaming objects as it can break your system.
+
+Looking at my previous example what happens if the garylib.so file doesn't exist at all?
+
+When you try and run the program you will get output similar to the following:
+
+./test: error while loading shared libraries: /home/gary/demo/garylib.so: cannot open shared object file: No such file or directory
+
+You can find the missing libraries using the following command:
+
+ldd -d path/to/program
+
+The output is similar to the following:
+
+linux-vdso.so.1 (0x00007ffc2936b000)
+        /home/gary/demo/garylib.so => not found
+        libc.so.6 => /usr/lib/libc.so.6 (0x00007fd0c6259000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fd0c65fd000)
+
+More Verbose Information About Shared Objects
+You can use the following command to get more information from the ldd command:
+
+ldd -v /path/to/program
+
+The output shows version information as well as the paths and addresses to the shared libraries.
+
+Important Security Information
+Never run ldd against an untrusted program. There is a safer alternative listed by the manual page for ldd which is as follows:
+
+objdump -p /path/to/program | grep NEEDED

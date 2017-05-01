@@ -1,0 +1,37 @@
+Name
+execl, execlp, execle, execv, execvp - execute a file  
+
+Synopsis
+#include <unistd.h>
+
+extern char **environ;
+
+int execl(const char *path, const char *arg, ...); 
+int execlp(const char *file, const char *arg, ...); 
+int execle(const char *path, const char *arg , ..., char * const envp[]); 
+int execv(const char *path, char *const argv[]); 
+int execvp(const char *file, char *const argv[]);  
+
+Description
+The exec family of functions replaces the current process image with a new process image.
+
+The functions described in this manual page are front-ends for the function execve (2). The initial argument for these functions is the pathname of a file which is to be executed.
+
+The const char *arg and subsequent ellipses in the execl, execlp, and execle functions can be thought of as  arg0,  arg1, ...,  argn. Together they describe a list of one or more pointers to null-terminated strings that represent the argument list available to the executed program. The first argument, by convention, should point to the file name associated with the file being executed. The list of arguments must be terminated by a NULL pointer.
+
+The execv and execvp functions provide an array of pointers to null-terminated strings that represent the argument list available to the new program. The first argument, by convention, should point to the file name associated with the file being executed. The array of pointers  must be terminated by a  NULL pointer.
+
+The execle function also specifies the environment of the executed process by following the NULL pointer that terminates the list of arguments in the parameter list or the pointer to the argv array with an additional parameter. This additional parameter is an array of pointers to null-terminated strings and must be terminated by a NULL pointer.
+
+The other functions take the environment for the new process image from the external variable environ in the current process.
+
+Some of these functions have special semantics.
+
+The functions execlp and execvp will duplicate the actions of the shell in searching for an executable file if the specified file name does not contain a slash (/) character. The search path is the path specified in the environment by the PATH variable. If this variable isn't specified, the default path ``:/bin:/usr/bin'' is used. In addition, certain errors are treated specially.
+
+If permission is denied for a file (the attempted execve returned EACCES), these functions will continue searching the rest of the search path. If no other file is found, however, they will return with the global variable errno set to EACCES.
+
+If the header of a file isn't recognized (the attempted execve returned ENOEXEC), these functions will execute the shell with the path of the file as its first argument. (If this attempt fails, no further searching is done.)  
+
+Return Value
+If any of the exec functions returns, an error will have occurred. The return value is -1, and the global variable errno will be set to indicate the error. 

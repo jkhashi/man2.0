@@ -1,0 +1,31 @@
+Using Sublime Text multi-select to insert lists, numbers and GUIDs
+
+On this one project I worked on, we needed to generate dummy product IDs for test runs.
+
+Each product ID needed to be unique, or the test run would go haywire.
+
+What’s that? There’s a programming convention for handling this problem, you say? It’s called a GUID?
+
+Well, maybe. But someone on this project decided that regular GUIDs took up too much disk space, and they devised an ingenious solution: a five-character GUID!
+
+So, yeah…
+
+Conflicts ensued, and they always triggered troubleshooting sessions …
+
+GUIDs are definitely useful.
+
+What if you’re editing some data by hand and need to generate and insert a few GUIDs on the fly?
+
+The Text Pastry plugin (Sublime Text 2 and 3) has you covered.
+
+Text Pastry extends Sublime’s multiple selection feature, adding support for some advanced paste scenarios where you want to insert something different at each cursor point.
+
+For example, you can copy a list of space-delimited words, then insert multiple cursors and paste one word at each insertion point.
+
+Or you can get your cursors positioned and then insert an incrementing number at each one.
+
+And of course, you can use it to generate and insert a different GUID at each cursor, which could be a lifesaver if you’re editing some CSV data by hand.
+
+One feature that’s noteably absent: support for the five-character GUID.
+
+For more useful tips and tricks, join the Sublime Text Tips weekly newsletter.

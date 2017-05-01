@@ -1,0 +1,101 @@
+How To Become Root Or Any Other User Using The Linux Command Line
+
+Introduction
+Nowadays it is possible to use Linux without much interaction with the command line but there are still many occasions where doing something using the command line is much easier than using a graphical tool.
+
+An example of a command you might use regularly from the command line is apt-get which is used to install software within Debian and Ubuntu based distributions.
+
+In order to install software using apt-get you need to be a user who has sufficient permissions to do so.
+
+One of the first commands users of popular desktop Linux operating systems such as Ubuntu and Mint learn is sudo.
+
+The sudo command allows you to run any command as another user and is commonly used to elevate permissions so that the command is run as an administrator (which in Linux terms is known as the root user).
+
+That is all well and good but if you are going to run a series of commands or you need to run as another user for a prolonged period of time then what you are looking for is the su command.
+
+This guide will show you how to use the su command and will provide information about the switches that are available.
+
+Switch To The Root User
+In order to switch to the root user you need to open a terminal by pressing ALT and T at the same time.
+
+The way you switch to the root user differs can differ. For example on Ubuntu based distributions such as Linux Mint, Ubuntu, Kubuntu, Xubuntu and Lubuntu you need to switch using the sudo command as follows:
+
+sudo su
+
+If you are using a distribution which allowed you to set a root password when you installed the distribution then you can simply use the following:
+
+su
+
+If you ran the command with sudo then you will be asked for the sudo password but if you ran the command just as su then you will need to enter the root password.
+
+To confirm that you have indeed switched to the root user type the following command:
+
+whoami
+
+The whoami command tells you which user you are currently running as.
+
+How To Switch To Another User And Adopt Their Environment
+The su command can be used to switch to any other user's account.
+
+For instance imagine you created a new user called ted using the useradd command as follows:
+
+sudo useradd -m ted
+
+This would create a user called ted and it would create a home directory for ted called ted.
+
+You would need to set the password for the ted account before it could be used using the following command:
+
+passwd ted
+
+The above command would ask you to create and confirm a password for the ted account.
+
+You can switch to the ted account using the following command:
+
+su ted
+
+As it stands the above command would log you in as ted but you wouldn't be placed in the home folder for test and any settings that ted has added to the .bashrc file will not be loaded.
+
+You can however log in as ted and adopt the environment using the following command:
+
+su - ted
+
+This time when you log in as ted you will be placed into the home directory for ted.
+
+A good way of seeing this in full action is add the screenfetch utility to the ted user account.
+
+ 
+
+Execute A Command After Switching User Accounts
+If you want to switch to another user's account but have a command run as soon as you switch use the -c switch as follows:
+
+su -c screenfetch - ted
+
+In the above command the su switches user, the -c screenfetch runs the screenfetch utility and the - ted switches to the ted account.
+
+Adhoc Switches
+I have already shown how you can switch to another account and provide a similar environment using the - switch.
+
+For completeness you can also use the following:
+
+su -l <username>
+
+su --login <username>
+
+You can run a different shell from the default when you switch user by supplying the -s switch as follows:
+
+su -s <shellname> - <username>
+
+su --shell <shellname> - <username>
+
+You can preserve the current environment settings by using the following switches:
+
+su -m <username>
+
+su -p <username>
+
+su --preserve-environment <username>
+
+Summary
+Most casual users will get by with just the sudo command to run commands with elevated privileges but if you want to spend a prolonged amount of time logged in as another user you can use the su command.
+
+It is worth noting though that it is a good idea to only run as an account with the permissions you need for the job in hand. In other words don't run every command as root.

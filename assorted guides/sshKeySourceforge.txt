@@ -1,0 +1,188 @@
+SSH Key Overview
+SSH is used as the protocol and tool for project developers (members) to access various SourceForge.net developer services:
+Project web access
+Developer web access
+Project uploads
+Subversion access
+Git access
+Mercurial acesss
+To access our services via SSH, you must be a project member (developer), have any needed project permissions enabled for the type of access desired, and have an SSH Client setup.
+In order to avoid needing to use your SourceForge.net password everytime you make a commit you can setup an SSH key.
+SSH Key Types
+Protecting your SSH Private Key
+SSH Clients
+Key Generation: PuTTY
+Key Generation: OpenSSH
+SSH Key Posting
+Using Multiple SSH Keys
+Invalidating Unused Keys
+SSH Key Synchronization Delay
+SSH Key Passphrase Usage
+Generating Replacement SSH Keys
+SSH Agent Overview
+SSH Agent: Pageant
+SSH Agent: ssh-agent
+Copying SSH Data Between Hosts
+Backing Up SSH Key Data
+Example SSH Key Data
+Lost SSH Keys
+Regenerating Lost Public SSH Key
+Troubleshooting: Mismatched or Wrong SSH Key
+Troubleshooting: Key Sync Delay
+Conversion from other key formats (ssh.com)
+Reporting SSH Key Issues
+SSH Key Types
+Over the years, SSH (both the protocol, and tools that use the protocol) has been redesigned several times, with each major revision supporting a different style of authentication and different key formats.
+OpenSSH 7.0 and greater disables DSA functionality unless specifically enabled.
+The SSH1 protocol supports RSA keys.
+The SSH2 protocol supports RSA and DSA keys.
+SourceForge.net supports both the SSH1 and SSH2 protocols.
+SourceForge.net supports both RSA and DSA keys.
+To work with our systems, keys must be formatted in an OpenSSH-compatible key file format; both PuTTY and OpenSSH use a compatible file format. Users of other clients may need to convert their key data for use with our services.
+Your SourceForge SSH key data is managed using the links from the Account Services page on the SourceForge.net site.
+Protecting your SSH Private Key
+Each SSH key pair has a public key component and a private key component. With your public key a server can identify that a connection comes from a machine that has the private key. Always protect your private key.
+Only public key data should ever be uploaded to SourceForge.net.
+SSH Clients
+To use ssh, you'll need an SSH client, but that's easy OSX and linux usually include OpenSSH, and windows users can use:
+PuTTY and
+WinSCP provide GUI-driven support for SSH (used for interactive login), SCP, and SFTP (used for file transfers).
+Key Generation: PuTTY
+To generate a SSH key using PuTTY:
+Execute the PUTTYGEN.EXE program.
+Select the desired key type, "SSH2 RSA", within the "Parameters" section.
+Click on the "Generate" button.
+Follow the instruction to move the mouse over the blank area of the program in order to create random data used by PUTTYGEN to generate secure keys. Key generation will occur once PUTTYGEN has collected sufficient random data.
+Enter USERNAME@shell.sourceforge.net for the key comment, depending on what host the key is for, replacing USERNAME with your SourceForge.net username.
+Enter the desired passphrase in the "Key passphrase" and "Confirm passphrase" fields. If the key will be used for automation of operations (i.e. as part of a script), you may choose to omit this step from the key generation process.
+Click on the "Save private key" button. Use the resulting dialog to save your private key data for future use. You may use a filename such as SourceForge-Shell.ppk". The .ppk extension is used for PuTTY Private Key files.
+Go to the SSH key posting page on the SourceForge.net site. Copy your public key data from the "Public key for pasting into OpenSSH authorized_keys2 file" section of the PuTTY Key Generator, and paste the key data to the provided form on the SourceForge.net site. Click on the "Update" button to complete the posting process.
+Exit the PuTTY Key Generator (PUTTYGEN).
+Key data sync to hosts from the SourceForge.net site occurs on regular intervals. Your key data will be synchronized to the designated servers (shell and code repositories) after a short delay.
+Key Generation: OpenSSH
+To generate a SSH key using OpenSSH:
+Run the 'ssh-keygen' command as shown in the following example. Be sure to enter a password for the key, as that will make your key much more secure; omit this passphrase if the key will be used to perform automated (scripted) operations. Replace USERNAME with your SourceForge.net username.
+$ ssh-keygen -t rsa -C "USERNAME@shell.sf.net"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/username/.ssh/id_rsa):
+Created directory '/home/username/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/username/.ssh/id_rsa.
+Your public key has been saved in /home/username/.ssh/id_rsa.pub.
+The key fingerprint is:
+f3:31:a8:c6:82:18:c8:0f:dd:6b:fb:27:98:83:3d:3b USERNAME@shell.sf.net
+SSH Key Posting
+Links to manage your SSH keys may be found on the Account Services page.
+Each account on SourceForge.net uses one sets of keys for project shell and code repository services.
+OpenSSH users will upload the contents of their id_dsa.pub (used for SSH2/DSA), identity.pub (used for SSH1/RSA), and id_rsa.pub (used for SSH2/RSA) files (as needed, based on the type of key they generated; our instructions specify SSH2/RSA, so your key would be placed in ~/.ssh/id_rsa.pub by default) -- note the .pub extension on the files that store the public key data. Private key data should never be uploaded.
+PuTTY users will paste the contents of the "Public key for pasting into OpenSSH authorized_keys2 file" section of the PuTTY Key Generator (PUTTYGEN.EXE), after loading their key, to the provided key posting form on the site.
+Using Multiple SSH Keys
+If you have configured your SSH key without a passphrase (as to permit automation of operations over SSH), you should only use that key from the hosts that are performing the automated operations; generate a second key for use from machines used interactively. You may keep multiple SSH keys on file for each account, as a means to provide secure access to your account from multiple hosts. When uploading your SSH key data, one line should be used for each SSH key. Removing an entry in the upload form will remove it from your list of keys; this is the means provided to remove deprecated key data from our servers.
+Should you need to use an alternate filename for the key (aside from the default), you must specify which key you wish to use. With PuTTY and Pageant, this is not a problem. For users of the OpenSSH client, the '-i' flag must be used to specify the key file to be used for authentication. An example follows:
+# Replace KEYFILE with the path and filename of the SSH private key to be used
+$ ssh -i KEYFILE USERNAME@shell.sourceforge.net
+Invalidating Unused Keys
+You should only keep keys on file with SourceForge.net if they are actively being used. Disused keys should be removed from your SSH key profile on the SourceForge.net site. To invalidate a SSH key, access the SSH key management page from the Account Maintenance page and re-post the keys you want to continue using (leave out the key you want to invalidate). Key changes will occur on the designated hosts after a short delay.
+SSH Key Synchronization Delay
+SSH key data is synced from the SourceForge.net site to our service hosts on a ten (10) minute cycle. Any temporary changes to this sync process (as needed for upgrades and outages) will be listed on the SourceForge.net Site Status page. Please wait at least 30 minutes before reporting an issue with the key sync process.
+Please observe the documented delay (above) before testing host access.
+SSH Key Passphrase Usage
+SSH clients such as PuTTY and OpenSSH allow you to set a passphrase on your SSH private key. If a passphrase is set on your private key, the SSH client will ask you to enter that passphrase in order to unlock the private key before it allows you to connect to a remote host using that key. This is added security to prevent someone from assuming your identity if they were to steal your SSH private key. This passphrase is used by your SSH client to unlock your key data and is not transmitted over the wire.
+SourceForge.net encourages you to always place a passphrase on your SSH private keys unless the key is being used from a single, secure machine in an automated application (such as launching a backup of project web content each night).
+To change or set a passphrase on an SSH key under PuTTY, do the following:
+Run the puttygen.exe program.
+Click on the "Load" button.
+Select the private key file that you want to put a passphrase on.
+Enter the new desired passphrase in the "Key passphrase" and "Confirm Passphrase" fields.
+Click on the "Save private key" button. Overwrite the existing copy of your key.
+To change or set a passphrase on an SSH key under OpenSSH, do the following:
+$ ssh-keygen -p -t rsa
+Enter file in which the key is (/home/username/.ssh/id_rsa):
+Enter old passphrase:
+Key has comment '/home/username/.ssh/id_rsa'
+Enter new passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved with the new passphrase.
+Generating Replacement SSH Keys
+As you regularly change passwords on your user accounts, you should also periodically generate new SSH keys (and change your SSH passphrase). We recommend that you do this, at minimum, on a yearly basis.
+SSH Agent Overview
+SSH agents provide a mechanism for loading an SSH key and providing the associated passphrase, which the SSH agent will then use to automatically respond to for authenticating to a remote host. The benefit of this is that once the key has been loaded into the SSH agent, a passphrase will not have to be entered each time a connection is made. This makes it a lot more convenient when doing repetitive SSH operations such as code commits. Both the PuTTY suite and OpenSSH provide SSH agents, pageant and ssh-agent, respectively.
+SSH Agent: Pageant
+Pageant is the graphical SSH agent provided with the PuTTY SSH Suite. This SSH agent provides an amount of convenience for applications such as accessing the shell server using plink.exe or putty.exe. To load a key into pageant for use, do the following:
+Start Pageant and provide it with the key name 'pageant.exe PATH_TO_SSH_KEY', where PATH_TO_SSH_KEY is the path and filename of the SSH key generated using puttygen.
+Enter the passphrase if prompted for it in the 'Pageant: Enter Passphrase' box that will come up if a passphrase is associated with the key.
+Additional keys can be added to pageant using the dialog options on the pageant interface. Pageant is accessible from the Windows systray.
+SSH Agent: ssh-agent
+The ssh-agent is provided with OpenSSH. This agent is typically started by default in most environments. If it is not, you may want to refer to platform specific documentation on how to get ssh-agent to load on system boot. Adding a key for ssh-agent to use is done using the ssh-add utility that will prompt you for the key passphrase after loading a key that has an associated passphrase. Use of the ssh-add client to add SSH keys to ssh-agent follows:
+# Add the default keys to ssh-agent, if no filenames were specified during key creation, it'll be one of the defaults
+ssh-add
+# Add a key to ssh-agent that isn't one of the default key files
+ssh-add FILENAME
+Copying SSH Data Between Hosts
+As SourceForge.net permits you to have multiple keys (even of the same type) on file for your account, there is typically little reason to copy SSH key data between different hosts. We encourage you to maintain a separate key for each of your hosts (as to minimize security impact).
+SSH key data may be backed up and restored in the event that you reload your workstation, or you may generate a new SSH key and invalidate your old key. If you decide to generate a new SSH key remember to invalidate any disused keys.
+Backing Up SSH Key Data
+You are solely responsible for ensuring you have a viable backup of your SSH key data. Backups of SSH key data should be treated with the same level of security and paranoia that you treat SSH key data on your workstation. Security should be the first and last thing you consider when backing up security data.
+Backups of your SSH key data may not be necessary; if your SSH key is lost, simply generate a new one and invalidate the old one. If you decide you do want to backup your SSH key data, make sure your backup is stored securely.
+OpenSSH users should backup the contents of the .ssh subdirectory of their home directory on their personal workstation (not on the shell server).
+PuTTY users should backup their key data.
+Backups should not be shared between users; if a key is lost, simply invalidate the old key and generate/upload a new key to replace the lost key.
+Example SSH Key Data
+Sample SSH2 (RSA) key data (data is on one line, normally, but has been broken here for your viewing convenience):
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAyyA8wePstPC69PeuHFtOwyTecByonsHFAjHbVnZ+h0dp
+omvLZxUtbknNj3+c7MPYKqKBOx9gUKV/diR/mIDqsb405MlrI1kmNR9zbFGYAAwIHGxt0Lv5ffwaqsz7
+cECHBbMojQGEz3IH3twEvDfF6cu5p00QfP0MSmEi/eB+W+h30NGdqLJCziLDlp409jAfXbQm/4Yx7apL
+vEmkaYSrb5f/pfvYv1FEV1tS8/J7DgdHUAWo6gyGUUSZJgsyHcuJT7v9Tf0xwiFWOWL9WsWXa9fCKqTe
+YnYJhHlqfinZRnT/+jkz0OZ7YmXo6j4Hyms3RCOqenIX1W6gnIn+eQIkw USERNAME@shell.sourceforge.net
+Sample SSH2 (DSA) key data (data is on one line, normally, but has been broken here for your viewing convenience):
+ssh-dss AAAAB3NzaC1kc3MAAACBAN431nwhJuE5F5HhsTVS7WlSCH1dn/vaPOZQ6WOBvCYIY6k97UkW
+XbsLjKIBz2P/jaL2w92U72cUmKiXgVFaxP7LgRylF0UHjFoPfbbesY2isfdHTgGnbmJDOui+RHGNiLl6
+f62q0mPIZQxyq6SSyqLD6NiO3IlyrsCSXAerkrdxAAAAFQD7wt2MuZU27cF4oOd6puEcm/jl7wAAAIEA
+vQvsiBcgEVvlAIMnZlP2QdO2O96p0wlCoHmKS8WYhwiAEB4QsLypM9ZQ/yG4HO7p9y7gcgo8cyUo/9jd
+pOMKAWVJSsujqqH0VBLHZVD5tdBPG4p4i3uws6my2z2AQARMfKN9L/uSmfEi69sDy6JkEah27yOp3zVh
+xZInM/hFrVcAAACBAL9K78gikerCL/LFLK4FkQp56drqx2WmubrAuG9SmnPpRQR5SNoA6lYI3CRttLHT
+540XW0PYDz53NnBc3C3/v3EE4nokyyUw783mWKbAbI6+jtibViUhfJwbi7xLB2TVyeWMBeHArsxkfHyO
+zFyjC4Db4UrmU71tYQfOlzmIipf7 USERNAME@shell.sourceforge.net
+SSH key data should not be modified during the upload process; do not add any line feeds or spaces to your key data during the upload process.
+If your key was created by some other SSH suite, you may have to convert the key format to the OpenSSH key format.
+Lost SSH Keys
+If you lose your SSH private key data, take steps to immediately invalidate that key via the SSH key management facility. Regenerate and post a replacement SSH key, if needed. If your key was compromised, take immediate action to notify the other members of your development team and verify the integrity of your project data.
+Regenerating Lost Public SSH Key
+SSH public keys can be regenerated, if they are lost, if the private key is available. The reverse is not possible, a new key pair must be generated if the private key is lost.
+OpenSSH: The '-y' option of the ssh-keygen binary can print the public key that corresponds to a given private SSH key:
+$ ssh-keygen -t rsa -y
+Enter file in which the key is (/home/username/.ssh/id_rsa):
+Enter passphrase:
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAyyA8wePstPC69PeuHFtOwyTecByonsHFAjHbVnZ+h0dp
+omvLZxUtbknNj3+c7MPYKqKBOx9gUKV/diR/mIDqsb405MlrI1kmNR9zbFGYAAwIHGxt0Lv5ffwaqsz7
+cECHBbMojQGEz3IH3twEvDfF6cu5p00QfP0MSmEi/eB+W+h30NGdqLJCziLDlp409jAfXbQm/4Yx7apL
+vEmkaYSrb5f/pfvYv1FEV1tS8/J7DgdHUAWo6gyGUUSZJgsyHcuJT7v9Tf0xwiFWOWL9WsWXa9fCKqTe
+YnYJhHlqfinZRnT/+jkz0OZ7YmXo6j4Hyms3RCOqenIX1W6gnIn+eQIkw
+PuTTY: The PUTTYGEN.EXE program will display the corresponding public SSH key to a given private SSH key when you load the private SSH key into it. The following steps will work for this purpose:
+Run PUTTYGEN.EXE
+Click on the 'Load key' button
+Select the file that contains the private key that you want the associated public key of
+Enter the passphrase for the private key, if prompted
+The matching public key will be displayed in the 'Public key for pasting into OpenSSH authorized_keys2 file' section of the PuTTY Key Generator and may also be saved to a file using the provided button.
+Troubleshooting: Mismatched or Wrong SSH Key
+One of the primary issues with SSH key authentication is having a mismatched key. This is caused by either using the wrong key to authenticate with, or more commonly, trying to authenticate with the wrong key type. Some clients will not fall back to try the other key type if there aren't any keys of the default key type. This can cause an authentication issue when a simple change can resolve the issue. For this reason, we strongly recommend that you create a SSH2 DSA key and configure your client to use this key. If you do so, this will clear up one of the most common issues with SSH key authentication.
+OpenSSH: This client software doesn't have the problem of not falling back to the non-default protocol if a particular key isn't available. Thus, the only problem this client has is the case where the user is using the wrong SSH key for authentication. The client will automatically look in ~/.ssh/id_rsa and ~/.ssh/id_dsa for your SSH key. Should you have selected an alternate filename for your SSH key, you must use the -i command line option and specify the filename, as previously described.
+PuTTY: The PuTTY SSH tools will tend to fail if the default SSH key type doesn't match that which was created and will not properly fallback to the other option. As such, you must configure the preferred protocol for your session in PUTTY.EXE prior to using any of the PuTTY suite's programs (they can all use the saved session settings). If you generated a SSH 1 key and not a SSH2 key, make sure to set the preferred protocol accordingly (though we recommend that you generate a SSH2 key instead).
+The PLINK.EXE program has a command-line override for the key type. If connecting without specifying the key type, you should try the '-1' or '-2' option on the command line to force the key type. Then, change the PuTTY session to use the same protocol that worked with the plink command.
+plink.exe -1 USERNAME@shell.sourceforge.net
+plink.exe -2 USERNAME@shell.sourceforge.net
+If the above steps don't help identify the issue, then it is likely that either the wrong key pair is being used (perhaps they don't match and you are trying to use a private key that belongs to a public key that you haven't uploaded). Another possibility is that the key hasn't been synchronized yet if it was just recently posted and has not been tested and found to work yet.
+Troubleshooting: Key Sync Delay
+There is a small key synchronization delay between posting your key to the form in your user account to the time they get placed on the shell and code repository servers. If you find your key hasn't synchronized (as you still cannot login after initially posting your key), you should wait an hour and retry the connection. Should that not work, try reposting the key to the upload form. It is possible that you uploaded the wrong key, or the sync process missed your key. If the key still doesn't work, you should submit a Support Request to the SourceForge.net team.
+Conversion from other key formats (ssh.com)
+Both OpenSSH and PuTTY include mechanisms in their key generator tools to convert keys from other formats to the OpenSSH key format. SourceForge.net uses the OpenSSH key format, but some users of unsupported SSH clients may still wish to connect to SourceForge.net using a familiar SSH client. Do note, however, that we still strongly urge you to use a unique SSH key for each host that you connect to. To convert the key type, do the following (KEYFILE is the filename and path for the SSH private key that is to be converted):
+OpenSSH: The ssh-keygen utility will convert a key file from a number of formats to the OpenSSH format, including from the SECSH Public Key File Format used by a number of commercial SSH implementations:
+ssh-keygen -i -f KEYFILE
+PuTTY: PUTTYGEN.EXE can import and convert some key file formats to the proper type. Follow these steps to do so:
+Run PUTTYGEN.EXE
+Select the 'Import key' option from the 'Conversion' menu
+Select the private key that is to be imported, then click the 'Open' button
+At this point, you can save the key to the PuTTY .ppk format and the public key can either be copied and pasted from the interface or saved to a file as needed
+Reporting SSH Key Issues
+If the above tips don't help you resolve your key issue, then you should report the issue to SourceForge.net Support. During the issue resolution process we may ask you for information regarding your key, including a copy of the public key data or a key fingerprint. This information can be safely provided in the open without concern as this information is meant to be publicly available and in no way compromises the security of your account. We will, however, never ask for a copy of your SSH private key. You should never provide that key to us or upload it to our hosts.

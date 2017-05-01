@@ -1,0 +1,86 @@
+Everything You Need To Know About the sudo Command
+
+New users to Linux, especially Ubuntu users, soon become aware of the sudo command. It is highly likely, however, that most users never get beyond the fact that when they see the words "permission denied" they know that if they try the command again with sudo it will probably work.
+
+This guide reveals more information about the sudo command such as how to grant access to sudo by adding a user to the sudoers file.
+
+About sudo
+A common misconception about sudo is that it is used solely to provide root permissions to an ordinary user.
+
+In fact, the sudo command allows you to run a command as any user, with the default generally being the root user.
+
+How To Grant User sudo Permissions
+Ubuntu users probably take it for granted that they can always run the sudo command. The reason that this is possible is that during the installation stage a default user is created and the default user in Ubuntu is always set up with sudo permissions.
+
+If you are using other distributions or other users within Ubuntu it is likely that the user needs to be granted permissions to run the sudo command.
+
+It is very important that only a few people have access to the sudo command and they should be system administrators. Every other user should just be given the permissions they need to perform their job.
+
+To grant a user sudo permissions you just need to add them to the sudo group.
+
+You can do this when creating a user by using the following command:
+
+sudo useradd -m <username> -G sudo
+
+The above command will create a user with a home folder and add the user to the sudo group.
+
+If the user already exists then you can add the user to the sudo group using the following command:
+
+sudo usermod -a <username> -G sudo
+
+A Neat sudo Trick For When You Forget To Run It
+Every so often you will run a command and you will get the dreaded permission denied message. If it is a long command you can either go up through the history and edit the line to have sudo in front of it or you can type it out again.
+
+Neither of the above options are necessary. If you run the following command, it will run the previous command using sudo.
+
+sudo !!
+
+This command is part of another article called "15 Linux Terminal Commands That Will Rock Your World".
+
+How To Switch To root User Using sudo
+The su command is used to switch from one user account to another. Running the su command on its own switches to the superuser account. 
+
+Therefore to switch to the superuser account using sudo you can simply run the following command:
+
+sudo su
+
+How To Run A sudo Command In The Background
+If you want to run a command which requires superuser privileges in the background you can run the sudo command with the -b switch as shown by the command below:
+
+sudo -b <command>
+
+Note that if the command being run requires user interaction then it won't work.
+
+An alternative way to run a command in the background is to add an ampersand to the end as follows:
+
+sudo <command> &
+
+How To Edit Files Using sudo Privileges
+The obvious way to edit a file using superuser privileges is to run an editor such as nano using sudo as follows:
+
+sudo nano <filename>
+
+Alternatively you can use the following syntax:
+
+sudo -e <filename>
+
+How To Run A Command As Another User Using sudo
+As mentioned as the beginning of the article the sudo command can be used to run a command as any other user.
+
+For instance if you are logged in as user john and you want to run the command as terry then you can run the sudo command in the following way:
+
+sudo -u terry <command>
+
+If you want to try it out create a new user called test and run the following whoami command:
+
+sudo -u test whoami
+
+How To Validate The sudo Credentials Using sudo -v
+When you run a command using sudo it will ask you for your password in order to run the command. For a period of time afterwards you can run other commands using sudo and your password will not be required.
+
+If you wish to extend the period so that you aren't asked for your credentials again for a further period of time run the following command:
+
+sudo -v
+
+Summary
+There is more to sudo than simply running a command as a super user. It is worth reading the sudo manual page to see some of the other switches that can be used.

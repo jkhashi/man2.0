@@ -1,0 +1,68 @@
+MinGW/MSYS development environment
+Part 5: Building extra tools
+. Index .. Base system .. Local packages .. GTK+ .. Qt ..	Tools .. Projects .. Home .
+This section describes how to compile some extra packages. You can skip this section if you don't need them.
+
+Content
+
+Building readline
+Building gperf
+Building readline
+Readline is a set of libraries that offers command-line editing and history capabilities.
+
+Homepage: http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
+Download: readline-6.2.tar.gz
+Build and install readline by executing the following commands:
+
+cd $LOCALBUILDDIR && \
+wget -c ftp://ftp.cwru.edu/pub/bash/readline-6.2.tar.gz && \
+tar zxf readline-6.2.tar.gz && \
+cd readline-6.2 && \
+./configure --prefix=$LOCALDESTDIR && \
+make SHLIB_LIBS=-lpdcurses && \
+make install
+Building gperf
+gperf is a perfect hash function generator.
+
+Homepage: http://www.gnu.org/software/gperf/
+Download: gperf-3.0.4.tar.gz
+Build and install gperf by executing the following commands:
+
+cd $LOCALBUILDDIR && \
+wget -c http://ftp.gnu.org/pub/gnu/gperf/gperf-3.0.4.tar.gz && \
+tar zxf gperf-3.0.4.tar.gz && \
+cd gperf-3.0.4 && \
+./configure --prefix=$LOCALDESTDIR && \
+make && \
+make install
+Building wget
+wget is a utility for downloading files from the internet
+
+Homepage: http://www.gnu.org/software/wget/
+Download: http://ftp.gnu.org/gnu/wget/wget-1.12.tar.bz2
+By building wget we replace
+
+Build and install wget by executing the following commands:
+
+# edit src/host.c
+# comment out the line 
+#	/extern int h_errno;
+#
+# after configure: edit src/config.h
+#	#undef HAVE_SYMLINK
+#	#undef HAVE_USLEEP
+#
+# make fails to link the exe:
+#	append -lws2_32 to the command 
+# (adding LDFLAGS to ./configure doesn't work)
+#
+cd $LOCALBUILDDIR && \
+wget http://ftp.gnu.org/gnu/wget/wget-1.12.tar.bz2 && \
+tar xjf wget-1.12.tar.bz2 && \
+cd wget-1.12 && \
+CPPFLAGS="$CPPFLAGS -DWINDOWS" ./configure --prefix=$LOCALDESTDIR --disable-iri && \
+make && \
+make install
+<< part 4 - Building Qt
+Index
+part 6 - Building projects >>

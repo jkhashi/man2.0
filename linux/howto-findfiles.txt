@@ -1,0 +1,154 @@
+Introduction
+In this guide, you will find out how to use Linux to find a file or series of files.
+
+You can use the file manager provided with your Linux distribution to search for files. If you are used to using Windows then a file manager is akin to Windows Explorer. It contains a user interface with a series of folders which when clicked show the subfolders within those folders and any files that are contained within.
+
+Most file managers provide a search feature and a method for filtering the list of files.
+
+The best way to search for files is to use the Linux command line because there are many more methods available to search for a file than a graphical tool could ever possibly attempt to include.
+
+How To Open A Terminal Window
+In order to search for files using the Linux command line, you will need to open a terminal window.
+
+There are many ways to open a terminal window as shown in this guide. One way that is sure to work on most Linux systems is to press the CTRL, ALT and T key at the same time. If that fails to use the menu on your Linux desktop environment to find the terminal editor.
+
+The Easiest Way To Find A File
+The command used to search for files is called find.
+
+Here is the basic syntax of the Find command.
+
+find <startingpoint> <options> <search term>
+
+The starting point is the folder where you want to start searching from.
+
+To start searching the whole drive you would type the following:
+
+find / <options> <search term>
+
+If however, you want to start searching for the folder you are currently in then you can use the following syntax:
+
+find . <options> <search term>
+
+Generally, when searching you will want to search by name, therefore, to search for a file called myresume.odt across the whole drive you would use the following syntax:
+
+find / -name myresume.odt
+
+The first part of the find command is obviously the word find.
+
+The second part is where to start searching from
+
+The next part is an expression which determines what to find.
+
+Finally the last part is the name of the thing to find.
+
+Where To Start Searching From
+As mentioned briefly in the previous section you can choose any location in the file system to start searching from. For instance, if you want to search for the current file system you can use a full stop as follows:
+
+find . -name game
+
+The above command will look for a file or folder called the game in all folders under the current folder. You can find the name of the current folder using the pwd command.
+
+If you want to search the entire file system then you need to start at the root folder as follows:
+
+find / -name game
+
+It is likely that the results returned by the above command will show permission denied for many of the results returned.
+
+You will probably need to elevate your permissions using the sudo command or switch to an administrator account using the su command.
+
+The starting position can be literally anywhere on your file system. For example to search for the home folder type the following:
+
+find ~ -name game
+
+The tilde is a metacharacter commonly used for denoting the home folder of the current user.
+
+Expressions
+The most common expression you will use is -name.
+
+The -name expression lets you search for the name of a file or folder.
+
+There are however other expressions you can use as follows:
+
+-amin n - The file was last accessed n minutes ago
+-anewer - The file was last accessed more recently than it was modified
+-atime n - The file was last accessed more n days ago
+-cmin n - The file was last changed n minutes ago
+-cnewer - The file was last changed more recently than the file was modified
+-ctime n - The file was last changed more than n days ago
+-empty - The file is empty
+-executable - The file is executable
+-false - Always false
+-fstype type - The file is on the specified file system
+-gid n - The file belongs to group with the ID n
+-group groupname - The file belongs to the named group
+-ilname pattern - Search for a symbolic line but ignore case
+-iname pattern - Search for a file but ignore case
+-inum n - search for a file with the specified node
+-ipath path - search for a path but ignore case
+-iregex expression - search for a expression but ignore case
+-links n - search for a file with the specified number of links
+-lname name - search for a symbolic link
+-mmin n - file's data was last modified n minutes ago
+-mtime n - file's data was last modified n days ago
+-name name - search for a file with the specified name
+-newer name - search for a file edited more recently than the file given
+-nogroup - search for a file with no group id
+-nouser - search for a file with no user attached to it
+-path path - search for a path
+-readable - find files which are readable
+-regex pattern - search for files matching a regular expression
+-type type - search for a particular type
+-uid uid - files numeric user id is the same as uid
+-user name - file is owned by user specified
+-writable - search for files that can be written to
+How To Find Files Accessed More Than A Certain Number Of Day Ago
+Imagine you want to find all the files within your home folder accessed more than 100 days ago. You might want to do this if you want to backup and remove old files that you don't access regularly.
+
+In order to do this run the following command:
+
+find ~ -atime 100
+
+How To Find Empty Files And Folders
+If you want to find all the empty files and folders in your system use the following command:
+
+find / -empty
+
+How To Find All Of The Executable Files
+If you want to find all of the executable files on your computer use the following command:
+
+find / -exec
+
+How To Find All Of The Readable Files
+To find all of the files that are readable use the following command:
+
+find / -read
+
+Patterns
+When you search for a file you can use a pattern. For example, maybe you are searching for all files with the extension mp3.
+
+You can use the following pattern:
+
+find / -name *.mp3
+
+How To Send Output From Find The Find Command To A File
+The main problem with the find command is that it can sometimes return too many results to look at in one go.
+
+You can pipe the output to the tail command or you can output the lines to a file as follows:
+
+find / -name *.mp3 -fprint nameoffiletoprintto
+
+How To Find And Execute A Command Against A File
+Imagine you want to search for and edit a file at the same time.
+
+You can use the following command:
+
+find / -name filename -exec nano '{}' \;
+
+The above command searches for a file called filename and then runs the nano editor for the file that it finds.
+
+Summary
+The find command is very powerful. This guide has demonstrated how to search for files but there are a huge number of options available and to understand all of them you should check out the Linux manual.
+
+You can do this by running the following command in the terminal:
+
+man find

@@ -1,0 +1,527 @@
+Windows 8 Command Prompt Commands (Part 2)
+
+This is the second part of a 3-part, alphabetical list of commands available from the Command Prompt in Windows 8.
+
+See Windows 8 Command Prompt Commands Part 1 to start at the beginning.
+
+append - ksetup | ktmutil - time | timeout - xwizard
+
+01
+of 100
+Ktmutil
+The ktmutil command starts the Kernel Transaction Manager utility.
+
+02
+of 100
+Label
+The label command is used to manage the volume label of a disk.
+
+03
+of 100
+Licensingdiag
+The licensingdiag command is a tool used to generate a text-based log and other data files that contain product activation and other Windows licensing information.
+
+04
+of 100
+Loadfix
+The loadfix command is used to load the specified program in the first 64K of memory and then runs the program.
+
+The loadfix command is not available in 64-bit versions of Windows 8.
+
+05
+of 100
+Lodctr
+The lodctr command is used to update registry values related to performance counters.
+
+06
+of 100
+Logman
+The logman command is used to create and manage Event Trace Session and Performance logs. The logman command also supports many functions of Performance Monitor.
+
+07
+of 100
+Logoff
+The logoff command is used to terminate a session.
+
+08
+of 100
+Lpq
+The lpq command displays the status of a print queue on a computer running Line Printer Daemon (LPD).
+
+The lpq command is not available by default in Windows 8 but can be enabled by turning on the LPD Print Service and LPR Port Monitor features from Programs and Features in Control Panel.
+
+09
+of 100
+Lpr
+The lpr command is used to send a file to a computer running Line Printer Daemon (LPD).
+
+The lpr command is not available by default in Windows 8 but can be enabled by turning on the LPD Print Service and LPR Port Monitor features from Programs and Features in Control Panel.
+
+10
+of 100
+Makecab
+The makecab command is used to losslessly compress one or more files. The makecab command is sometimes called Cabinet Maker.
+
+11
+of 100
+Manage-bde
+The manage-bde command is used to configure BitLocker Drive Encryption from the command line.
+
+12
+of 100
+Md
+The md command is the shorthand version of the mkdir command.
+
+13
+of 100
+Mem
+The mem command shows information about used and free memory areas and programs that are currently loaded into memory in the MS-DOS subsystem.
+
+The mem command is not available in 64-bit versions of Windows 8.
+
+14
+of 100
+Mkdir
+The mkdir command is used to create a new folder.
+
+15
+of 100
+Mklink
+The mklink command is used to create a symbolic link.
+
+16
+of 100
+Mode
+The mode command is used to configure system devices, most often COM and LPT ports.
+
+17
+of 100
+More
+The more command is used to display the information contained in a text file. The more command can also be used to paginate the results of any other Command Prompt command. More »
+
+18
+of 100
+Mountvol
+The mountvol command is used to display, create, or remove volume mount points.
+
+19
+of 100
+Move
+The move command is used to move one or files from one folder to another. The move command is also used to rename directories.
+
+20
+of 100
+Mrinfo
+The mrinfo command is used to provide information about a router's interfaces and neighbors.
+
+21
+of 100
+Msg
+The msg command is used to send a message to a user. More »
+
+22
+of 100
+Msiexec
+The msiexec command is used to start Windows Installer, a tool used to install and configure software.
+
+23
+of 100
+Muiunattend
+The muiunattend command starts the Multilanguage User Interface unattended setup process.
+
+24
+of 100
+Nbtstat
+The nbtstat command is used to show TCP/IP information and other statistical information about a remote computer.
+
+25
+of 100
+Net
+The net command is used to display, configure, and correct a wide variety of network settings. More »
+
+26
+of 100
+Net1
+The net1 command is used to display, configure, and correct a wide variety of network settings.
+
+The net command should be used instead of the net1 command. The net1 command was made available in some early versions of Windows as a temporary fix for a Y2K issue that the net command had. The net1 command remains in Windows 8 only for compatibility with older programs and scripts that utilized the command.
+
+27
+of 100
+Netcfg
+The netcfg command is used to install the Windows Preinstallation Environment (WinPE), a lightweight version of Windows used to deploy workstations.
+
+28
+of 100
+Netsh
+The netsh command is used to start Network Shell, a command-line utility used to manage the network configuration of the local, or a remote, computer.
+
+29
+of 100
+Netstat
+The netstat command is most commonly used to display all open network connections and listening ports. More »
+
+30
+of 100
+Nlsfunc
+The nlsfunc command is used to load information specific to a particular country or region.
+
+The nlsfunc command is not available in 64-bit versions of Windows 8 and is only available in 32-bit versions to support older MS-DOS files.
+
+31
+of 100
+Nltest
+The nltest command is used to test secure channels between Windows computers in a domain and between domain controllers that are trusting other domains.
+
+The nltest command was first available in Windows 8.
+
+32
+of 100
+Nslookup
+The nslookup is most commonly used to display the hostname of an entered IP address. The nslookup command queries your configured DNS server to discover the IP address.
+
+33
+of 100
+Ocsetup
+The ocsetup command starts the Windows Optional Component Setup tool, used to install additional Windows features.
+
+34
+of 100
+Openfiles
+The openfiles command is used to display and disconnect open files and folders on a system.
+
+35
+of 100
+Path
+The path command is used to display or set a specific path available to executable files.
+
+36
+of 100
+Pathping
+The pathping command functions much like the tracert command but will also report information about network latency and loss at each hop.
+
+37
+of 100
+Pause
+The pause command is used within a batch or script file to pause the processing of the file. When the pause command is used, a Press any key to continue... message displays in the command window.
+
+38
+of 100
+Ping
+The ping command sends an Internet Control Message Protocol (ICMP) Echo Request message to a specified remote computer to verify IP-level connectivity. More »
+
+39
+of 100
+Pkgmgr
+The pkgmgr command is used to start the Windows Package Manager from the Command Prompt. Package Manager installs, uninstalls, configures, and updates features and packages for Windows.
+
+40
+of 100
+Pnpunattend
+The pnpunattend command is used to automate the installation of hardware device drivers.
+
+41
+of 100
+Pnputil
+The pnputil command is used to start the Microsoft PnP Utility, a tool used to install a Plug and Play device from the command line.
+
+42
+of 100
+Popd
+The popd command is used to change the current directory to the one most recently stored by the pushd command. The popd command is most often utilized from within a batch or script file.
+
+43
+of 100
+Powercfg
+The powercfg command is used to manage the Windows power management settings from the command line.
+44
+of 100
+Print
+The print command is used to print a specified text file to a specified printing device.
+
+45
+of 100
+Prompt
+The prompt command is used to customize the appearance of the prompt text in Command Prompt.
+
+46
+of 100
+Pushd
+The pushd command is used to store a directory for use, most commonly from within a batch or script program.
+
+47
+of 100
+Pwlauncher
+The pwlauncher command is used to enable, disable, or show the status of your Windows To Go startup options.
+
+48
+of 100
+Qappsrv
+The qappsrv command is used to display all Remote Desktop Session Host servers available on the network.
+
+49
+of 100
+Qprocess
+The qprocess command is used to display information about running processes.
+
+50
+of 100
+Query
+The query command is used to display the status of a specified service.
+
+51
+of 100
+Quser
+The quser command is used to display information about users currently logged on to the system.
+
+52
+of 100
+Qwinsta
+The qwinsta command is used to display information about open Remote Desktop Sessions.
+
+53
+of 100
+Rasautou
+The rasautou command is used to manage Remote Access Dialer AutoDial addresses.
+
+54
+of 100
+Rasdial
+The rasdial command is used to start or end a network connection for a Microsoft client.
+
+55
+of 100
+Rd
+The rd command is the shorthand version of the rmdir command.
+
+56
+of 100
+Reagentc
+The reagentc command is used to configure the Windows Recovery Environment (RE).
+
+57
+of 100
+Recover
+The recover command is used to recover readable data from a bad or defective disk.
+58
+of 100
+Reg
+The reg command is used to manage the Windows Registry from the command line. The reg command can perform common registry functions like adding registry keys, exporting the registry, etc.
+
+59
+of 100
+Regini
+The regini command is used to set or change registry permissions and registry values from the command line.
+
+60
+of 100
+Register-cimprovider
+The register-cimprovider command is used to register a Common Information Model (CIM) Provider in Windows 8.
+
+61
+of 100
+Regsvr32
+The regsvr32 command is used to register a DLL file as a command component in the Windows Registry.
+
+62
+of 100
+Relog
+The relog command is used to create new performance logs from data in existing performance logs.
+
+63
+of 100
+Rem
+The rem command is used to record comments or remarks in a batch or script file.
+
+64
+of 100
+Ren
+The ren command is the shorthand version of the rename command.
+
+65
+of 100
+Rename
+The rename command is used to change the name of the individual file that you specify.
+
+66
+of 100
+Repair-bde
+The repair-bde command is used to repair or decrypt a damaged drive that's been encrypted using BitLocker.
+
+67
+of 100
+Replace
+The replace command is used to replace one or more files with one or more other files.
+
+68
+of 100
+Reset
+The reset command, executed as reset session, is used to reset the session subsystem software and hardware to known initial values.
+
+69
+of 100
+Rmdir
+The rmdir command is used to delete an existing and completely empty folder.
+
+70
+of 100
+Robocopy
+The robocopy command is used to copy files and directories from one location to another. This command is also called Robust File Copy.
+
+The robocopy command is superior to the more simple copy command because robocopy supports many more options.
+
+71
+of 100
+Route
+The route command is used to manipulate network routing tables.
+
+72
+of 100
+Rpcping
+The rpcping command is used to ping a server using RPC.
+
+73
+of 100
+Runas
+The runas command is used to execute a program using another user's credentials.
+
+74
+of 100
+Rwinsta
+The rwinsta command is the shorthand version of the reset session command.
+
+75
+of 100
+Sc
+The sc command is used to configure information about services. The sc command communicates with the Service Control Manager.
+
+76
+of 100
+Schtasks
+The schtasks command is used to schedule specified programs or commands to run a certain times. The schtasks command can be used to create, delete, query, change, run, and end scheduled tasks.
+77
+of 100
+Sdbinst
+The sdbinst command is used to deploy customized SDB database files.
+
+78
+of 100
+Secedit
+The secedit command is used to configure and analyze system security by comparing the current security configuration to a template.
+
+79
+of 100
+Set
+The set command is used to enable or disable certain options in Command Prompt.
+
+80
+of 100
+Setlocal
+The setlocal command is used to start the localization of environment changes inside a batch or script file.
+81
+of 100
+Setspn
+The setspn command is used to manage the Service Principal Names (SPN) for an Active Directory (AD) service account.
+82
+of 100
+Setver
+The setver command is used to set the MS-DOS version number that MS-DOS reports to a program.
+
+The setver command is not available in 64-bit versions of Windows 8.
+
+83
+of 100
+Setx
+The setx command is used to create or change environment variables in the user environment or the system environment.
+
+84
+of 100
+Sfc
+The sfc command is used to verify and replace important Windows system files. The sfc command is also referred to as System File Checker and Windows Resource Checker. More »
+
+85
+of 100
+Share
+The share command is used to install file locking and file sharing functions in MS-DOS.
+
+The share command is not available in 64-bit versions of Windows 8. Share is only available in 32-bit versions of Windows 8 to support older MS-DOS files.
+
+86
+of 100
+Shift
+The shift command is used to change the position of replaceable parameters in a batch or script file.
+
+87
+of 100
+Shutdown
+The shutdown command can be used to shut down, restart, or log off the current system or a remote computer. More »
+
+88
+of 100
+Sort
+The sort command is used to read data from a specified input, sort that data, and return the results of that sort to the Command Prompt screen, a file, or another output device.
+
+89
+of 100
+Start
+The start command is used to open a new command line window to run a specified program or command. The start command can also be used to start an application without creating a new window.
+
+90
+of 100
+Subst
+The subst command is used to associate a local path with a drive letter. The subst command is a lot like the net use command except a local path is used instead of a shared network path.
+
+91
+of 100
+Sxstrace
+The sxstrace command is used to start the WinSxs Tracing Utility, a programming diagnostic tool.
+
+92
+of 100
+Systeminfo
+The systeminfo command is used to display basic Windows configuration information for the local or a remote computer.
+
+93
+of 100
+Takeown
+The takeown command is used to regain access to a file that an administrator was denied access to when reassigning ownership of the file.
+
+94
+of 100
+Taskkill
+The taskkill command is used to terminate a running task. The taskkill command is the command line equivalent of ending a process in Task Manager in Windows.
+
+95
+of 100
+Tasklist
+"Displays a list of applications, services, and the Process ID (PID) currently running on either a local or a remote computer.
+
+96
+of 100
+Tcmsetup
+The tcmsetup command is used to setup or disable the Telephony Application Programming Interface (TAPI) client.
+
+97
+of 100
+Telnet
+The telnet command is used to communicate with remote computers that use the Telnet protocol.
+
+The telnet command is not available by default in Windows 8 but can be enabled by turning on the Telnet Client Windows feature from Programs and Features in Control Panel.
+
+98
+of 100
+Tftp
+The tftp command is used to transfer files to and from a remote computer that's running the Trivial File Transfer Protocol (TFTP) service or daemon.
+
+The tftp command is not available by default in Windows 8 but can be enabled by turning on the TFTP Client Windows feature from Programs and Features in Control Panel.
+
+99
+of 100
+Time
+The time command is used to show or change the current time.
+
+100
+of 100
+Continue: Timeout through Xwizard
+Click the link above to see List #3 of 3 detailing the remainder of the Command Prompt commands available in Windows 8. More »
+

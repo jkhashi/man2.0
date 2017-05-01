@@ -1,0 +1,474 @@
+MinGW/MSYS development environment
+Part 2: Building local packages
+. Index .. Base system .. Local packages .. GTK+ .. Qt ..	Tools .. Projects .. Home .
+This section describes how to compile the necessary additional packages and install them in ${LOCALDESTDIR}. This variable is set to /local32 or /local64, depending on your build environment.
+
+Content
+
+Installing a static pkg-config binary
+Building zlib
+Building nasm
+Building SDL2
+Building libpng
+Building libjpeg
+Building libtiff
+Building libwebp
+Building SDL2_image
+Building OpenAL Soft
+Building smpeg2
+Building libogg
+Building libvorbis
+Building FLAC
+Building SDL2_mixer
+Building OpenSSL
+Building curl
+Building pdcurses
+Building freeglut
+Building the Bullet Physics library
+Building the PhysicsFS library
+Installing a static pkg-config binary
+The pkg-config tool is necessary to build a number of local packages. To resolve of a circular dependency between pkg-config and glib I've provided a staticly linked	version we install in ${LOCALDESTDIR}. Later on we'll replace it with our own build.
+
+Download: msys-pkg-config-0.26-static.zip
+Unpack the archive and install pkg-config into ${LOCALDESTDIR}.
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://ingar.satgnu.net/devenv/mingw32/files/msys-pkg-config-0.26-static.zip  && \
+cd ${LOCALBUILDDIR}  && \
+unzip ${LOCALSOURCEDIR}/msys-pkg-config-0.26-static.zip && \
+install pkg-config.exe ${LOCALDESTDIR}/bin
+There is a bug that affects the next part of this guide, as a workaround we install a pkg-config.sh wrapper script:
+
+cat >  ${LOCALDESTDIR}/bin/pkg-config.sh << "EOF"
+#!/bin/sh
+if pkg-config "$@" > /dev/null 2>&1 ; then
+res=true
+else
+res=false
+fi
+pkg-config "$@" | tr -d \\r && $res
+
+EOF
+Make the script executable and point the PKG_CONFIG environment variable to the script:
+
+chmod ugo+x ${LOCALDESTDIR}/bin/pkg-config.sh && \
+echo "PKG_CONFIG=${LOCALDESTDIR}/bin/pkg-config.sh" >> ${LOCALDESTDIR}/etc/profile.local && \
+echo "export PKG_CONFIG" >> ${LOCALDESTDIR}/etc/profile.local
+Load the altered profile.local:
+
+source ${LOCALDESTDIR}/etc/profile.local
+References:
+
+http://lists-archives.org/gtk/02552-make-errors.html
+http://www.go-evolution.org/Building_Evolution_on_Windows#pkg-config
+Building zlib
+zlib is a compression library.
+
+Homepage: http://www.zlib.net/
+Download: zlib-1.2.8.tar.gz
+Build and install the zlib dll by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://www.zlib.net/zlib-1.2.8.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/zlib-1.2.8.tar.gz && \
+cd zlib-1.2.8 && \
+sed 's/-O3/-O3 -mms-bitfields -mthreads/' win32/Makefile.gcc >Makefile.gcc && \
+make IMPLIB='libz.dll.a' -fMakefile.gcc && \
+install zlib1.dll ${LOCALDESTDIR}/bin && \
+install libz.dll.a ${LOCALDESTDIR}/lib && \
+install libz.a ${LOCALDESTDIR}/lib && \
+install zlib.h ${LOCALDESTDIR}/include && \
+install zconf.h ${LOCALDESTDIR}/include
+Create the pkgconfig files for zlib:
+
+echo "prefix=${LOCALDESTDIR}" > ${LOCALDESTDIR}/lib/pkgconfig/zlib.pc && \
+cat >> ${LOCALDESTDIR}/lib/pkgconfig/zlib.pc << "EOF"
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+sharedlibdir=${libdir}
+includedir=${prefix}/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.8
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
+
+EOF
+Building nasm
+The Netwide Assembler.
+
+Homepage: http://www.nasm.us/
+Download: nasm-2.12.02.tar.gz
+Build and install nasm by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://www.nasm.us/pub/nasm/releasebuilds/2.12.02/nasm-2.12.02.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/nasm-2.12.02.tar.gz && \
+cd nasm-2.12.02 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building SDL2
+The Simple Direct Media Layer is a cross-platform application framework.
+
+Homepage: http://www.libsdl.org/
+Download: SDL2-2.0.4.tar.gz
+Download a necessary patch:
+
+Patch: SDL2-2.0.4-fix-gcc-compatibility.patch
+Build and install SDL2 by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://www.libsdl.org/release/SDL2-2.0.4.tar.gz && \
+wget -c http://ingar.satgnu.net/devenv/mingw32/files/patches/SDL2-2.0.4-fix-gcc-compatibility.patch && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/SDL2-2.0.4.tar.gz && \
+cd SDL2-2.0.4 && \
+patch -Np1 -i ${LOCALSOURCEDIR}/SDL2-2.0.4-fix-gcc-compatibility.patch && \
+./configure --prefix=${LOCALDESTDIR} --disable-render-d3d && \
+make && \
+make install
+Notes:
+
+patch -Np1 -i ${LOCALSOURCEDIR}/SDL2-2.0.4-fix-gcc-compatibility.patch
+SDL2 fails to build with the newer mingw-w64 without this patch.
+--disable-render-d3d
+The Direct3D driver fails to build on mingw-w64.
+Build the SDL2 test programs by executing the following commands:
+
+cd test && \
+./autogen.sh && \
+./configure && \
+make
+Run the SDL2 test programs:
+
+./testplatform
+./testgl2
+The following test takes some time to complete, it won't show any output until it's done.
+
+./testthread
+References:
+
+http://sourceforge.net/p/mingw-w64/mailman/message/34059317/
+Building libpng
+libng is PNG image file format library.
+
+Homepage: http://www.libpng.org/pub/png/libpng.html
+Download: libpng-1.6.23.tar.gz
+Build and install libpng by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c "http://downloads.sourceforge.net/libpng/libpng-1.6.23.tar.gz" && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/libpng-1.6.23.tar.gz && \
+cd libpng-1.6.23 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building libjpeg
+libjpeg is a JPEG image file format library.
+
+Homepage: http://www.ijg.org/
+Download: jpegsrc.v9b.tar.gz
+Build and install libjpeg by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://www.ijg.org/files/jpegsrc.v9b.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/jpegsrc.v9b.tar.gz && \
+cd jpeg-9b && \
+./configure --prefix=${LOCALDESTDIR} --enable-shared --enable-static && \
+make && \
+make install
+Building libtiff
+libtiff is a TIFF image file format library.
+
+Homepage: http://www.remotesensing.org/libtiff/
+Download: tiff-4.0.6.tar.gz
+Build and install libtiff by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c ftp://ftp.remotesensing.org/pub/libtiff/tiff-4.0.6.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/tiff-4.0.6.tar.gz && \
+cd tiff-4.0.6 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building libwebp
+libwebp is a WebP image file format library.
+
+Homepage: https://developers.google.com/speed/webp/
+Download: libwebp-0.5.1.tar.gz
+Build and install libwebp by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget --no-check-certificate -c https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-0.5.1.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/libwebp-0.5.1.tar.gz && \
+cd libwebp-0.5.1 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building SDL2_image
+SDL2_image is an image support library for SDL2
+
+Homepage: http://www.libsdl.org/projects/SDL_image
+Download: SDL2_image-2.0.1.tar.gz
+Build and install SDL_image by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/SDL2_image-2.0.1.tar.gz --exclude=Xcode && \
+cd SDL2_image-2.0.1 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building OpenAL Soft
+OpenAL Soft is an implementation of the OpenAL 3D audio API.
+
+Homepage: http://kcat.strangesoft.net/openal.htm
+Download: openal-soft-1.17.2.tar.bz2
+Build and install OpenAL Soft by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://kcat.strangesoft.net/openal-releases/openal-soft-1.17.2.tar.bz2 && \
+cd ${LOCALBUILDDIR} && \
+tar xjf ${LOCALSOURCEDIR}/openal-soft-1.17.2.tar.bz2 && \
+cd openal-soft-1.17.2 && \
+cd build && \
+cmake -DCMAKE_INSTALL_PREFIX:PATH=${LOCALDESTDIR} -G "MSYS Makefiles" .. && \
+make && \
+make install
+Test the OpenAL Soft installation:
+
+openal-info
+Building smpeg2
+smpeg is an mpeg file format library
+
+Homepage: https://icculus.org/smpeg
+Download: svn://svn.icculus.org/smpeg/tags/release_2_0_0
+Build and install smpeg by executing the following commands:
+
+cd ${LOCALBUILDDIR} && \
+svn export svn://svn.icculus.org/smpeg/tags/release_2_0_0 smpeg-2.0.0 && \
+cd smpeg-2.0.0 && \
+./autogen.sh && \
+./configure --prefix=${LOCALDESTDIR} --enable-mmx  && \
+make && \
+make install
+Building libogg
+libogg is an ogg bitstream format library
+
+Homepage: http://www.vorbis.com/
+Download: libogg-1.3.2.tar.gz
+Build and install libogg by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/libogg-1.3.2.tar.gz && \
+cd libogg-1.3.2 && \
+LDFLAGS='-mwindows' ./configure --prefix=${LOCALDESTDIR} && \
+make  && \
+make install
+Building libvorbis
+libvorbis is a vorbis audio format library
+
+Homepage: http://www.vorbis.com/
+Download: libvorbis-1.3.5.tar.gz
+Build and install libvorbis by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/libvorbis-1.3.5.tar.gz && \
+cd libvorbis-1.3.5 && \
+LDFLAGS='-mwindows' ./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building FLAC
+FLAC is a Free Lossless Audio Codec.
+
+Homepage: http://xiph.org/flac/
+Download: flac-1.3.1.tar.gz
+The 64-bit build requires ./configure --build=x86_64-w64-mingw32 --disable-xmms-plugin --prefix=${LOCALDESTDIR}
+Build and install FLAC by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://downloads.xiph.org/releases/flac/flac-1.3.1.tar.xz && \
+cd ${LOCALBUILDDIR} && \
+tar xJf ${LOCALSOURCEDIR}/flac-1.3.1.tar.xz && \
+cd flac-1.3.1 && \
+./configure --disable-xmms-plugin --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building SDL2_mixer
+SDL2_mixer is an audio support library for SDL2.
+
+Homepage: http://www.libsdl.org/projects/SDL_mixer/
+Download: SDL2_mixer-2.0.1.tar.gz
+Build and install SDL_mixer by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/SDL2_mixer-2.0.1.tar.gz --exclude=Xcode && \
+cd SDL2_mixer-2.0.1 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building OpenSSL
+OpenSSL is a library that implements the Secure Sockets Layer(SSL) and Transport Layer Security (TLS) protocols.
+
+Homepage: http://openssl.org/
+Download: openssl-1.0.2h.tar.gz
+Download and extract the OpenSLL source code by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c ftp://ftp.openssl.org/source//openssl-1.0.2h.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/openssl-1.0.2h.tar.gz && \
+cd openssl-1.0.2h
+Build the package (32-bit):
+
+./Configure --prefix=${LOCALDESTDIR} --openssldir=${LOCALDESTDIR}/etc/ssl --libdir=lib shared zlib-dynamic mingw && \
+make
+Build the package (64-bit):
+
+./Configure --prefix=${LOCALDESTDIR} --openssldir=${LOCALDESTDIR}/etc/ssl --libdir=lib shared zlib-dynamic mingw64 && \
+make
+Run the test suite to verify the build:
+
+make test
+Install the package:
+
+make MANDIR=${LOCALDESTDIR}/share/man MANSUFFIX=ssl install
+Building curl
+curl is a command line tool for transferring data with URL syntax
+
+Homepage: http://curl.haxx.se/
+Download: curl-7.49.1.tar.bz2
+Build and install curl by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget --no-check-certificate -c https://curl.haxx.se/download/curl-7.49.1.tar.bz2 && \
+cd ${LOCALBUILDDIR} && \
+tar xjf ${LOCALSOURCEDIR}/curl-7.49.1.tar.bz2 && \
+cd curl-7.49.1 && \
+CFLAGS="-mms-bitfields -mthreads" ./configure  --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building pdcurses
+Public Domain Curses is an implementation of the curses library
+
+Homepage: http://pdcurses.sourceforge.net/
+Download: PDCurses-3.4.tar.gz
+Build and install pdcurses by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://downloads.sourceforge.net/project/pdcurses/pdcurses/3.4/PDCurses-3.4.tar.gz  && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/PDCurses-3.4.tar.gz  && \
+cd PDCurses-3.4  && \
+cd win32  && \
+cat mingwin32.mak | sed 's|\\exp\-|\/exp\-|g' > mingwin32.new  && \
+mv mingwin32.new mingwin32.mak  && \
+cat mingwin32.mak | sed 's|type|cat|g' > mingwin32.new  && \
+mv mingwin32.new mingwin32.mak  && \
+cat mingwin32.mak | sed 's|copy|cp|g' > mingwin32.new  && \
+mv mingwin32.new mingwin32.mak  && \
+cat mingwin32.mak | sed 's|del|rm|g' > mingwin32.new  && \
+mv mingwin32.new mingwin32.mak  && \
+make -f mingwin32.mak libs  && \
+install pdcurses.a ${LOCALDESTDIR}/lib/libpdcurses.a  && \
+make -f mingwin32.mak clean  && \
+make -f mingwin32.mak DLL=Y libs  && \
+install pdcurses.dll ${LOCALDESTDIR}/bin  && \
+cd ..  && \
+install curses.h ${LOCALDESTDIR}/include
+Note: the sed lines replace the DOS commands in the install script with their UNIX equivalent.
+
+Building freeglut
+freeglut is a free implementation of the OpenGL Utility Toolkit
+
+Homepage: http://freeglut.sourceforge.net/
+Download: freeglut-3.0.0.tar.gz
+Build and install freeglut by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://downloads.sourceforge.net/project/freeglut/freeglut/3.0.0/freeglut-3.0.0.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/freeglut-3.0.0.tar.gz && \
+cd freeglut-3.0.0 && \
+mkdir build && \
+cd build && \
+cmake -DCMAKE_INSTALL_PREFIX:PATH=${LOCALDESTDIR} -G "MSYS Makefiles" .. && \
+make && \
+make install
+Building the Bullet Physics library
+Bullet is a collision detection and physics library
+
+Homepage: http://www.bulletphysics.com/
+Download: bullet-2.83.7.tar.gz
+Build and install bullet by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget --no-check-certificate -O bullet-2.83.7.tar.gz -c https://github.com/bulletphysics/bullet3/archive/2.83.7.tar.gz && \
+wget -c http://ingar.satgnu.net/devenv/mingw32/files/patches/bullet3-2.83.5-ming-w64.patch && \
+wget -c http://ingar.satgnu.net/devenv/mingw32/files/patches/bullet3-2.83.5-ming-w64-extra.patch && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/bullet-2.83.7.tar.gz && \
+cd bullet3-2.83.7 && \
+patch -Np1 -i ${LOCALSOURCEDIR}/bullet3-2.83.5-ming-w64.patch && \
+patch -Np1 -i ${LOCALSOURCEDIR}/bullet3-2.83.5-ming-w64-extra.patch && \
+mkdir build && \
+cd build && \
+cmake -DCMAKE_INSTALL_PREFIX:PATH=${LOCALDESTDIR} -DINSTALL_LIBS:BOOL=ON -G "MSYS Makefiles" .. && \
+make && \
+make install
+Notes:
+
+patch -Np1 -i ${LOCALSOURCEDIR}/bullet3-2.83.5-ming-w64.patch
+The 64-bit version does not build without patching. The ad-hoc fix is to replace long with size_t where required.
+patch -Np1 -i ${LOCALSOURCEDIR}/bullet3-2.83.5-ming-w64-extra.patch
+Second part of the patch.
+References:
+
+Bullet issue #394
+Building the PhysicsFS library
+PhysicsFS is a library to provide abstract access to various archives.
+
+Homepage: http://icculus.org/physfs/
+Download: physfs-2.0.3.tar.bz2
+Build and install PhysicsFS by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget http://icculus.org/physfs/downloads/physfs-2.0.3.tar.bz2 && \
+wget -c http://ingar.satgnu.net/devenv/mingw32/files/patches/physfs-2.0.3-size_t.patch  && \
+cd ${LOCALBUILDDIR} && \
+tar xjf ${LOCALSOURCEDIR}/physfs-2.0.3.tar.bz2 && \
+cd physfs-2.0.3 && \
+patch -Np0 -i ${LOCALSOURCEDIR}/physfs-2.0.3-size_t.patch && \
+mkdir build && \
+cd build && \
+cmake -DCURSES_LIBRARY=${LOCALDESTDIR}/bin/pdcurses.dll \
+-DZLIB_LIBRARY=${LOCALDESTDIR}/lib/libz.dll.a -DZLIB_INCLUDE_DIR=${LOCALDESTDIR}/include \
+-DCMAKE_INSTALL_PREFIX=${LOCALDESTDIR} -G "MSYS Makefiles" .. && \
+make && \
+make install
+Notes:
+
+wget http://icculus.org/physfs/downloads/physfs-2.0.3.tar.bz2
+icculus.org seems to have issues with wget -c
+patch -Np0 -i ${LOCALSOURCEDIR}/physfs-2.0.3-size_t.patch
+The 64-bit version does not build without patching.
+<< part 1 - Setting up the base system
+Index
+part 3 - Building GTK+ >>

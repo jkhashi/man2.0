@@ -1,0 +1,100 @@
+Zero Friction Blogging with Sublime Text
+
+I’m spoiled by good text editors. After spending eight hours a day zipping through code files at work using only my keyboard, I can’t settle for a less when it’s time to crank out a blog post.
+
+I’m also a firm believer in using plain text formats. Writing is a lot of work, and I want to be able to reuse what I write as easily as possible.
+
+I keep the “source code” for my writing projects in Markdown. It’s easy to tranform into other formats, pastes cleanly, can be versioned with Git, and doesn’t require any particular software to open.
+
+And with a few tweaks, Sublime handles Markdown superbly.
+
+Organizing My Writing
+
+The fun starts with Sublime’s support for project files. I use A project file to pull related writing projects together and make it easy to navigate from file to files. Most of the content I’m writing at the moment is either for this blog, my Sublime Productivity ebook, or the Sublime Text Tips email newsletter.Although I keep them in different folders for version control, they’re all related, so I like to have ready access to them.
+
+I have my folders set up something like this:
+
+Dropbox
+|__Writing
+   |__Ebook
+   |__Blog
+   |__Newsletter
+   |__SublimeContent.sublime-project
+By combining these three writing projects into one Sublime project, I can use Goto Anything to jump from the blog post I’m writing to a chapter in my book to look something up or make a note about a new section to add. (Timely example: As I was drafting this paragraph, I realized that I’d made a mistake in an email I drafted for the newsletter. I opened the file, fixed it, and now I’m back, all within a few keystrokes.)
+
+I store all of my writing in Dropbox and include the folders in my project file using relative paths, which means I always enjoy the same writing environment whether I’m on my Windows 8 ThinkPad or my MacBook Air.
+
+I also use this prose-dedicated project file to override some of my code-friendly default settings, disabling line numbers and turning off the line-length ruler I use when I’m manually formatting code.
+
+Here’s my project file:
+
+{
+  "folders":
+  [
+    {
+      "path": "Leanpub/sublime-productivity",
+      "file_exclude_patterns": [".gitignore", "*.sublime*"]
+    },
+    {
+      "path": "SublimeTextTips"
+    }
+    {
+      "path": "SublimeTextTipsNewsletter"
+    }
+  ],
+  "settings":
+  {
+    "rulers": [],
+    "line_numbers": false
+  }
+}
+File Management
+
+Two plugins make it much simpler to work with files in my projects: AdvancedNewFile and SideBarEnhancements.
+
+AdvancedNewFile allows me to add new files and folders to a project from the keyboard without having to use a clunky Save As… dialog. Once the plugin is installed, a keyboard shortcut brings up a small toolbar, and I type the path and file name I want. The plugin creates the file and any folders I included in the path that don’t already exist. I recently discovered that AdvancedNewFile supports tab completion for folder names that already exist in the project, which only made me love it more.
+
+SideBarEnhancements deneuters Sublime’s side bar by adding a feature-packed right-click menu, including such standards as deleting and renaming files and opening folders in the OS file explorer. It also allows me to create custom commands, such as mapping an Open in Photoshop command for .png files.
+
+Writing
+
+When writing time rolls around, I lean heavily on the MarkdownEditing plugin. When I first installed this plugin and opened a Markdown file, I was a little put off by how intrusive it was. MarkdownEditing stomped all over many of my carefully considered settings. But I resisted the urge to panic and override its overrides and gave it a shot, and I quickly grew to like the new settings, which only apply when you’re editing a Markdown file.
+
+Among other things, this plugin:
+
+Increases the font size.
+Overrides the default theme with a gray-on-white theme that reminds me of my Kindle. The Markdown syntax highlighting is implemented all in gray, and it’s subtle but effective.
+Shifts the text into the central 50 percent of the screen and puts wide gutters down either side, which makes for a narrower column width and easier reading. The width of the text column is proportional to your screen width, so the text reflows if you move between smaller and larger screens.
+Wraps lines automatically to enforce a the column width of 50 percent of the screen. I was accustomed to manually wrapping paragraphs around 100 characters, but it was always a hassle. Markdown doesn’t support line breaks inside of tags, which makes it hard to maintain uniform line lengths. I have officially given up on manually wrapping lines.
+You can, of course, override these settings, but they are excellent for writing.
+
+In addition to its pleasing aesthetics, MarkdownEditing adds some handy refinements that make Markdown formatting easier:
+
+Automatic pairing of common Markdown formatting characters such as the backticks Markdown uses for inline code samples. Type an opening backtick and the plugin closes the tag with a second backtick and positions the cursor between the pair, ready for you to insert your code.
+Convenient shortcuts for applying bolding and italics to existing text.
+Several helpful snippets and shortcuts for formatting image tags and links. The syntax for links and images is my least favorite aspect of Markdown, although it certainly beats handcoding img and a elements in HTML. MarkdownEditing includes support for pasting the contents of the clipboard as a link, inserting image, footer and reference links, and wrapping links around existing text.
+The developer of MarkdownEditing hasn’t fully fleshed out the Windows and Linux shortcuts yet, but he takes pull requests, and I’ve been able to contribute a couple of enhancements.
+
+On longer blog posts, it’s sometimes nice to tidy up the page by hiding the parts I’m not working on at the moment. The SmartMarkdown plugin provides code folding for Markdown, allowing me to fold sections of the document by subheaders. Just position the cursor in the section header and hit Tab to collapse or expand the section.
+
+The WordCount plugin unobtrusively does what you’d expect. Once installed, it displays the document’s word count in Sublime’s status bar. The count updates in real time–no babysitting required.
+
+As a last step before I hit the publish button, I like to proofread my Markdown content as live HTML. The OmniMarkupPreviewer plugin converts the file I’m editing into HTML and loads it in a new tab in my default browser, making it easy to spot those incorrectly formatted bullet points or that reference link with no URL. This plugin also works with other popular markup formats such as MediaWiki markup.
+
+These plugins work together to give me a clean, minimalist writing environment where I can hide away distracting unfinished sections and quickly apply formatting to blocks of text.
+
+Blog Publishing
+
+For publishing my content, my favorite platform is scriptogr.am. With scriptogr.am, your blog articles live as text files in a Dropbox folder. When you’re ready to publish, you visit the scriptogr.am site and hit a sync button that pulls the latest changes from your Dropbox account and publishes them. If you’re not already committed to a WordPress blog, I’d highly recommend scriptogr.am. It’s free and allows you to use a custom domain name.
+
+Another blogging platform that I’ve experimented with is ruhoh, an open source project that allows you to publish your blog as static files. It’s a cool concept, especially if you’re a command line geek. Ruhoh comes with a command line tool that does everything from creating a new blog to creating new posts and compiling your blog into static HTML files. You write your blog posts in Markdown, and all of the formatting is handled by a collection of Ruby scripts and YAML configuration files. To publish your blog, you execute a ruhoh command to compile the HTML, then use FTP or rsync to deploy the files to your server. The out-of-the-box templates are pretty bare bones, but the engine is flexible and hackable, even for a Ruby n00b like me.
+
+As nice as scriptogr.am and ruhoh are, it’s hard to beat WordPress when it comes to quickly building feature-rich blogs. I like WordPress for its extensibility, but the WordPress WYSIWIG text editor is clunky to use and often generates quirky markup that is a pain to troubleshoot.
+
+For WordPress sites, including this blog, I’ve found that the best workflow is to write the blog post as a Markdown formatted text file, then convert it to HTML and paste it into the WordPress source code editor.
+
+The Markdown to Clipboard plugin makes the HTML conversion a one-step process. I just highlight the text I want to convert, right-click it and select Copy Markdown as HTML. I used this approach it to format this article, and it worked flawlessly.
+
+This workflow would be a pain if a portion of the Markdown doesn’t generate cleanly, as you’d have to modify the HTML after the fact. I haven’t had an issue yet, but if I do, I’ll probably just format the offending portion of my document by hand with HTML, which is considered valid in Markdown.
+
+P.S. Do you love using Sublime to get more done? Sign up for the free Sublime Text Tips newsletter to get more tips every week. As a bonus, I’ll send you a 12-page guide to Sublime’s advanced editing features so you can start using Sublime more effectively–today.

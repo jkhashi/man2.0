@@ -1,0 +1,111 @@
+Example Uses Of The Linux Cat Command
+
+Introduction
+The cat command in Linux allows you to concatenate files and display the output to the standard output, in most cases this is a screen.
+
+One of the most common uses of cat is to display a file to the screen and also to create a file on the fly and allow basic editing straight at the terminal.
+
+How To Create A File Using Cat
+To create a file using the cat command enter the following in the terminal window:
+
+cat > <nameoffile>
+
+Obviously, you need to replace <nameoffile> with the name of the file you wish to create.
+
+When you create a file in this manner the cursor will be left on a new line and you can start typing.
+
+This is a good way to start off a text file or to quickly create a test data file such as a comma delimited file or pipe delimited file.
+
+To finish editing the file press CTRL and D.
+
+You can test that the process worked by typing the ls command:
+
+ls -lt
+
+This lists all the files in the current folder and you should see your new file and the size should be greater than zero.
+
+How To Display A File Using Cat
+The cat command can be used to display a file to the screen as well. All you need to do is eliminate the greater than symbol as follows:
+
+cat <nameoffile>
+
+If the file is very long then it will scroll up the screen very quickly. 
+
+To view the file page by page use the more command:
+
+cat <nameoffile> | more
+
+Alternatively, you can use the less command as well:
+
+cat <nameoffile> | less
+
+To test this out type in the following command:
+
+cat /etc/passwd | more
+
+Of course, you could just forget about cat altogether and type the following:
+
+less /etc/passwd
+
+How To Show Line Numbers
+For all the non-empty lines in a file you can use the following command:
+
+cat -b <nameoffile> 
+
+If there are lines with no characters at all they won't be numbered. If you want to show numbers for all the lines regardless as to whether they are blank, type the following command:
+
+cat -n <nameoffile>
+
+How To Show The End Of Each Line
+Sometimes when parsing data files programmers might come across an issue because there are hidden characters at the end of lines that they weren't expecting such as spaces. This prevents their parsers from working correctly.
+
+This is just one reason to show an end of line character so that you can see if there are blank characters.
+
+To show the dollar as an end of line character enter the following command:
+
+cat -E <nameoffile>
+
+As an example look at the following line of text
+
+the cat sat on the mat
+
+ When you run this with the cat -E command you will receive the following output:
+
+the cat sat on the mat$
+
+Reducing Blank Lines
+When you are showing the contents of a file using the cat command you probably don't want to see when there are loads of consecutive blank lines.
+
+The following command shows how to reduce the output so that repeating blank lines are omitted.
+
+To clarify this won't hide blank lines entirely but if you have 4 blank lines in a row it will only show 1 blank line.
+
+cat -s <nameoffile>
+
+How To Show Tabs
+If you are displaying a file that has tab delimiters you won't ordinarily see the tabs.
+
+The following command shows ^I instead of the tab which makes it easy to see them assuming your file doesn't contain ^I in it anyway.
+
+cat -T <nameoffile>
+
+Concatenate Multiple Files
+The whole point of cat is concatenation so you might wish to know how to show multiple files at once:
+
+You can concatenate multiple files to the screen with the following command:
+
+cat <nameoffile1> <nameoffile2>
+
+If you want to concatenate the files and create a new file use the following command:
+
+cat <nameoffile1> <nameoffile2> > <newfile>
+
+Showing Files In Reverse Order
+You can show a file in reverse order by using the following command:
+
+tac <nameoffile>
+
+Ok, so technically this isn't the cat command, it is the tac command but it essentially does the same thing but in reverse.
+
+Summary
+That is pretty much it for the cat command. It is useful for creating files on the fly and for displaying the output from files and of course, you can use it to join multiple files together.

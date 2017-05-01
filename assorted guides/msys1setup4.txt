@@ -1,0 +1,33 @@
+MinGW/MSYS development environment
+Part 4: Building Qt
+. Index .. Base system .. Local packages .. GTK+ .. Qt ..	Tools .. Projects .. Home .
+This section describes how to compile the Qt library.
+
+Content
+
+Building Qt 4
+Building Qt 5
+Building Qt 4
+Qt 4 is a framework for application development.
+
+Website:http://qt-project.org/
+Download: qt-everywhere-opensource-src-4.8.6.zip
+Downlaod and build the Qt library using the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://download.qt-project.org/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.zip && \
+cd ${LOCALBUILDDIR} && \
+unzip ${LOCALSOURCEDIR}/qt-everywhere-opensource-src-4.8.6.zip && \
+cd qt-everywhere-opensource-src-4.8.6 && \
+./configure.exe -prefix $LOCALDESTDIR/qt4 -release -opensource -nomake demos -nomake examples && \
+mingw32-make
+Press y to accept the license.
+
+Install it:
+
+mingw32-make install
+Qt builds can take a very long time.
+
+<< part 3 - Building GTK+
+Index
+part 5 - Building extra tools >>

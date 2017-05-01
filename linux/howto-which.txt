@@ -1,0 +1,104 @@
+Example Uses Of The Linux Which Command
+
+Introduction
+The Linux which command is used to find the location of a program. In this guide, I will show you how to use the which command and how to get the most out of it by explaining all of the available switches.
+
+How To Find The Location Of A Program
+In theory, all programs should run from the /usr/bin folder but in reality, this is not the case. The sure fire way of finding out where a program is located is by using the which command.
+
+The simplest form of the command is as follows:
+
+which <programname>
+
+For example to find the location of the Firefox web browser use the following command:
+
+which firefox
+
+The output will be something like this:
+
+/usr/bin/firefox
+
+You can specify multiple programs in the same command. For example:
+
+which firefox gimp banshee
+
+This will return the following results:
+
+/usr/bin/firefox
+
+/usr/bin/gimp
+
+/usr/bin/banshee
+
+Some programs are located in more than one folder. By default however which will just display one.
+
+For example run the following command:
+
+which less
+
+This will find the location of the less command and the output will be as follows:
+
+/usr/bin/less
+
+This doesn't really show the whole picture however because the less command is available in more than one place.
+
+You can get the which command to show all the places a program is installed using the following switch:
+
+which -a <programname>
+
+You can run this against the less command as follows:
+
+which -a less
+
+The output from the above command will be as follows:
+
+/usr/bin/less
+
+/bin/less
+
+So does that mean less is really installed in two places? Actually no.
+
+Run the following ls command:
+
+ls -lt /usr/bin/less
+
+At the end of the output you will see the following:
+
+/usr/bin/less -> /bin/less
+
+When you see the -> at the end of the ls command you know it is a symbolic link and that it really just points to the location of the real program.
+
+Now run the following ls command:
+
+ls -lt /bin/less
+
+This time the output at the end of the line is simply as follows:
+
+/bin/less
+
+This means that this is the real program.
+
+It is possibly somewhat surprising therefore that the which command outputs /usr/bin/less when you search for the less command.
+
+A command that I find more useful than which is the whereis command as this can be used to locate the binaries for the program, the source code for the program and the manual pages for the program.
+
+Summary
+So why would you use the which command?
+
+Imagine that you know a program has been installed but for some reason, it won't run. It is highly likely it is because the folder the program has been installed to isn't in the path.
+
+By using the which command you can locate where the program is and either navigate to the folder the program is to run it or add the path to the program to the path command.
+
+Other Useful Search Tools
+Whilst you are reading about the which command it is worth noting there are other commands which are useful for finding files.
+
+You can use the find command to find files on your file system or alternatively you can use the locate command.
+
+Linux Essential Commands
+Modern Linux distributions have made the requirement to use the terminal less of an issue but there are some commands that you just need to know.
+
+This guide provides a list of the essential commands required for navigating your file system.
+
+Using the guide you will be able to find out which folder you are in, how to navigate to different folders, list the files in folders, get back to your home folder, create a new folder, create files, rename and move files and copy files.
+
+You will also find out how to delete files and also find out what symbolic links are and how you would use them, including specifying the difference between hard and soft links.

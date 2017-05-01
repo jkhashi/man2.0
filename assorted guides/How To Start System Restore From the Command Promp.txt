@@ -1,0 +1,38 @@
+How To Start System Restore From the Command Prompt
+
+System Restore is a great utility to help "roll back" Windows to an earlier state, undoing any system changes that may have caused an issue.
+
+Sometimes, however, a problem is so bad that your computer won't start normally, meaning you can't run System Restore from inside Windows. Since System Restore is a such a great tool to use to fix problems just like this, it seems you're in a bit of a catch-22.
+
+Fortunately, even if all you can do is start in Safe Mode and access Command Prompt, you can start the System Restore utility by executing a simple command. Even if you're just looking for a quick way to start System Restore from the Run box, this knowledge might come in handy.
+
+Time Required: It'll take you less than a minute to execute the System Restore command, and, in total, probably less than 30 minutes for the whole process to complete.
+
+How To Start System Restore From the Command Prompt
+The System Restore command is the same in all versions of Windows, so these easy instructions apply equally to Windows 10, Windows 8, Windows 7, Windows Vista, and Windows XP:
+
+Open Command Prompt, if it's not already open.
+
+Note: As I mentioned earlier, you're more than welcome to use another command line tool, like the Run box, to execute this command. In Windows 10 and Windows 8, open Run from the Start Menu or Power User Menu. In Windows 7 and Windows Vista, click on the Start button. In Windows XP and earlier, click on Start and then Run. 
+Type the following command in the text box or Command Prompt window:
+
+rstrui.exe
+
+...and then press the Enter key or press the OK button, depending on where you executed the System Restore command from.
+
+Tip: At least in some versions of Windows, you don't need to add the .EXE suffix to the end of the command. 
+The System Restore wizard will open immediately. Follow the instructions on the screen to complete the System Restore.
+
+Tip: If you need help, see my How to Use System Restore in Windows tutorial for a complete walkthrough. Obviously, the first parts of those steps, where I explain how to open System Restore, won't apply to you since it's already running, but the rest should be identical.
+Be Cautious of Fake rstrui.exe Files
+As I said already, the System Restore tool is called rstrui.exe. This tool is included with a Windows installation and is located at C:\Windows\System32\rstrui.exe.
+
+If you find another file on your computer that's called rstrui.exe, it's more than likely a malicious program that's trying to trick you into thinking it's the System Restore utility provided by Windows. Such a scenario may take place if the computer has a virus.
+
+Do not use any program that's pretending to be System Restore. Even if it looks like the real thing, it's probably going to demand that you pay to restore your files or prompt you that you have to purchase something else in order to even open the program.
+
+If you're digging around folders on your computer to find the System Restore program (which you shouldn't have to do), and end up seeing more than one rstrui.exe file, always use the one at the \System32\ location I just mentioned.
+
+Since there shouldn't be random files named rstrui.exe masquerading as the System Restore utility, it'd also be wise to make sure your antivirus software is updated. Also, see these free on-demand virus scanners if you're looking for a quick way to run a scan.
+
+Note: Again, you shouldn't really be peaking around in folders looking for the System Restore utility because you can just open it normally and quickly through the rstrui.exe command, Control Panel, or Start menu depending on your version of Windows.

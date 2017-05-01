@@ -1,0 +1,29 @@
+How to quickly test URLs embedded in your code and text files
+
+Why does it always happen at the worst possible time?
+
+Several months ago I wrote a blog post about my experience self-publishing and marketing Sublime Productivity.
+
+A few hours after publishing it, one of my coworkers pinged me on HipChat: My post was on the front page of Hacker News!
+
+I logged in to Google Analytics, and I was getting thousands of hits on the post.
+
+Then I got an email: “Hey, the link to your book’s page is broken.”
+
+Gah! Dozens of visitors were clicking my link and getting nothing but a 404.
+
+It’s really easy to make mistakes when you’re copying and pasting URLs. You grab the wrong one but don’t notice. You miss the last couple of characters when you select the text.
+
+It’s always a good idea to test every URL you use, whether it’s a GitHub repo link in a code comment or a link in a Markdown file.
+
+But copying and pasting links back into your browser is such a pain…
+
+The Clickable URLs plugin addresses this issue by turning URLs into hyperlinks that open in the browser of your choice.
+
+It even includes a handy Open All URLs command that you can use to quickly test every link in that blog post you’re writing …
+
+Clickable URLs is available in Package Control for both Sublime Text 2 and 3.
+
+To get more tips like this one delivered straight to your inbox, join the Sublime Text Tips newsletter:
+
+http://sublimetexttips.com/newsletter

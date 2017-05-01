@@ -1,0 +1,246 @@
+Example Uses Of The Linux ps Command
+
+Introduction
+The ps command produces a list of the currently running processes on your computer.
+This guide will show you the more common uses of the ps command so that you can get the most out of it. 
+
+The ps command is commonly used in conjunction with the grep command and the more or less commands.
+
+These additional commands help to filter and paginate the output from ps which can often be quite long.
+
+How To Use The ps Command
+On its own the ps command shows the running processes by the user running it within a terminal window. 
+
+To invoke ps simply type the following:
+
+ps
+
+The output will show rows of data containing the following information:
+
+PID
+TTY
+Time
+Command
+The PID is the process ID which identifies the running process. The TTY is the terminal type. 
+
+On its own the ps command is quite limited. You probably want to see all the running processes.
+
+To view all the running processes use either of the following commands:
+
+ps -A 
+
+ps -e
+
+To show all of the processes except for session leaders run the following command:
+
+ps -d
+
+So what is a session leader? When one process kicks off other processes it is the session leader of all the other processes. So imagine process A kicks off process B and process C. Process B kicks off process D and process C kicks off process E. When you list all processes except sessions leaders you will see B,C,D and E but not A.
+
+You can negate any of the selections that you have chosen by using the -N switch. For example if you want to see just the session leaders run the following command:
+
+ps -d -N
+
+Obviously the -N is not very sensible when used with the -e or -A switches as it will show nothing at all.
+
+If you want to see only the processes associated with this terminal run the following command:
+
+ps T
+
+If you want to see all the running processes using the following command:
+
+ps r
+
+Selecting Specific Processes Using The ps Command
+You can return specific processes using the ps command and there are various ways to change the selection criteria.
+
+For instance if you know the process id you can simply use the following command:
+
+ps -p <pid>
+
+You can select multiple processes by specifying multiple process IDs as follows:
+
+ps -p "1234 9778"
+
+You can also specify them using a comma separated list:
+
+ps -p 1234,9778
+
+The chances are that you won't know the process ID and it is easier to search by command. To do this use the following command:
+
+ps -C <command>
+
+For example to see if Chrome is running you can use the following command:
+
+ps -C chrome
+
+You might be surprised to see that this returns one process for each open tab.
+
+Other ways to filter results is by group. You can search by group name using the following syntax:
+
+ps -G <groupname>
+ps --Group <groupname>
+
+For example to find out all the processes being run by the accounts group type the following:
+
+ps -G "accounts"
+ps --Group "accounts"
+
+ 
+
+You can also search by group id instead of group name by using a lowercase g as follows:
+
+ps -g <groupid>
+ps --group <groupid>
+
+If you want to search by a list of session IDs use the following command:
+
+ps -s <sessionid>
+
+Alternatively use the following to search by terminal type.
+
+ps -t <sessionid>
+
+If you want to find all the processes run by a specific user try out the following command:
+
+ps U <userlist>
+
+For example to find all the processes ran by gary run the following:
+
+ps U "gary"
+
+Note that this shows the person whose credentials are used to run the command. For example if I am logged in as gary and run the above command it will show all the command run by me.
+
+If I log in as Tom and use sudo to run a command as me then the above command will show Tom's command as being run by gary and not tom.
+
+To limit the list to just the processes really run by gary use the following command:
+
+ps -U "gary"
+
+Formatting ps Command Output
+By default you get the same 4 columns when you use the ps command:
+
+PID
+TTY
+Time
+Command
+You can get a full listing by running the following command:
+
+ps -ef
+
+The -e as you know shows all the processes and the f or -f shows full details.
+
+The columns returned are as follows:
+
+User ID
+PID
+PPID
+C
+STime
+TTY
+Time
+Command
+The User ID is the person who ran the command. The PID is the process ID of the command the command. The PPID is the parent process that kicked off the command.
+
+The C column shows the number of children a process has. The STime is the start time for the process. The TTY is the terminal, the time is the amount of time it took to run and command is the command that was run.
+
+You can get even more columns by using the following command:
+
+ps -eF
+
+This returns the following columns:
+
+UID
+PID
+PPID
+C
+SZ
+RSS
+PSR
+STime
+TTY
+Time
+Command
+The extra columns are SZ, RSS and PSR. SZ is the size of the process, RSS is the real memory size and PSR is the processor the command is assigned to.
+
+You can specify a user defined format using the following switch:
+
+ps -e --format <format>
+
+The formats available are as follows:
+
+%cpu - cpu utilisation
+%mem - memory percentage utilisation
+args - The command with all its arguments
+c - processor utilisation
+cmd - The command
+comm - The command name only
+cp - CPU Usage
+cputime - CPU Time
+egid - Effective group id
+egroup - Effective group
+etime - Elapsed time
+euid - Effective user id
+euser - Effective user
+gid - Group id
+group - Group name
+pgid - Process group id
+pgrp - Process group
+ppid - Parent Process ID
+start - Time the process started
+sz - Size in physical pages
+thcount - Threads owned by the process
+time - Cumulative time
+uid - User Id
+uname - User name
+There are many more options but these are the most commonly used ones.
+
+To use the formats type the following:
+
+ ps -e --format="uid uname cmd time"
+
+You can mix and match the items as you wish them to be.
+
+Sorting Output
+To sort the output use the following notation:
+
+ps -ef --sort <sortcolumns>
+
+The choice of sort options are as follows:
+
+cmd - Executable name
+pcpu - CPU utilisation
+flags - Flags
+pgrp - Process group id
+cutime - Cumulative user time
+cstime - Cumulative system time
+utime - User time
+pid - Process ID
+ppid - Parent process ID
+size - Size
+uid - User ID
+user - User Name
+Again there are more options available but these are the most common ones.
+
+An example sort command is as follows:
+
+ps -ef --sort user,pid
+
+Using ps With grep, less and more commands
+As mentioned at the beginning it is common to use ps with the grep, less and more commands.
+
+The less and more commands will help you sift through the results one page at a time. To use these commands simply pipe the output from grep into them as follows:
+
+ps -ef | more
+ps -ef | less
+
+The grep command helps you filter the results from the ps command.
+
+For example:
+
+ps -ef | grep chrome 
+
+Summary
+The ps command is commonly used for listing processes within Linux. You can also use the top command to display running processes in a different manner.
+
+This article has covered the common switches but there are more available and more formatting and sort options.

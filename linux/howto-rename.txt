@@ -1,0 +1,144 @@
+How To Rename Files Using Linux
+
+Introduction
+This guide will show you how to rename files using a file manager and the Linux command line.
+
+Most Linux distributions have a default file manager as part of the desktop environment. A desktop environment is a collection of tools which enables users to perform common tasks without typing commands into a terminal window. 
+
+A desktop environment generally includes a window manager which is used to display graphical applications.
+
+It will also include some or all of the following:
+
+a panel (also known as a task bar) - generally used for a menu button, a system tray
+a menu
+a launch bar
+a dashboard
+widgets
+desktop icons
+tools such as file managers, notepads, calculators etc
+A file manager is used to control the creation, movement, and deletion of files. Windows users will be familiar with Windows Explorer which is a type of file manager.
+
+There are a number of different file managers such as Nautilus, Dolphin, Caja, PCManFM and Thunar.
+
+Nautilus is the default file manager in Ubuntu and distributions running the GNOME desktop environment such as Fedora and openSUSE.
+
+Dolphin is the default file manager for the KDE desktop environment used by Linux distributions such as Kubuntu and KaOS.
+
+Linux Mint has a lightweight version which utilizes the MATE desktop. The MATE desktop utilizes the Caja file manager.
+
+Lightweight distributions often use either the LXDE desktop environment which has the PCManFM file manager or XFCE which comes with the Thunar file manager.
+
+ 
+
+As it happens the names may change but the functionality for renaming files is virtually the same
+
+How To Rename A File Using A File Manager
+The file manager usually has an icon which looks like a filing cabinet. For example, if you are using Ubuntu it is the second icon on the launch bar.
+
+You can generally find the relevant file manager icon either in the launch bar on a panel, as part of the menu system or indeed as part of a quick launch bar.
+
+A file manager generally has a list of places in the left panel such as the home folder, the desktop, other devices and the recycle bin.
+
+In the right panel is a list of files and folders for the selected place in the left panel. You can drill down through the folders by double clicking on them and you can move back up through the folders using the arrows on the toolbar.
+
+Renaming a file or folder is virtually the same no matter which distribution, which desktop environment and indeed which file manager you are using.
+
+Right, click on the file or folder you wish to delete and choose "Rename". Alternatively, many file managers allow you to left click on a file or folder and press F2 to perform the same action.
+
+The interface for renaming a file differs slightly depending on the file manager. For example Nautilus, Thunar and PCManFM displays a small window to enter the new filename whereas Dolphin and Caja let you simply type the new name over the old one.
+
+How To Rename Files Using The Linux Command Line
+You might not be surprised to find out that the command for renaming files is actually renamed. In this guide, you will learn how to rename the complete file, how to rename part of the file, how to rename the file pointed to by symbolic links and how to get confirmation that the rename command worked.
+
+How To Rename A File
+
+The syntax for renaming a file isn't as obvious as you would think it is. The following example shows how to rename a file:
+
+rename expression replacement file
+
+You might think that the rename command would be as simple as saying rename oldfile newfile but it isn't quite as simple as that and as we go through I will explain why.
+
+Imagine you have a file called testfile and you want to rename it to testfile2. The command you would use is as follows:
+
+rename testfile testfile2 testfile
+
+So what is happening here? The expression is the bit of text or indeed regular expression that you are looking for in a filename.
+
+The replacement is the text you wish to replace the expression with and the file is the file or files you want to perform the rename on.
+
+Why does it work like this you might ask?
+
+Imagine that you had a folder of dog pictures but you accidentally called them cat pictures as follows:
+
+catsittingdown
+barkingcat
+postmanattackedbycat
+Now if the command was as simple as rename oldfile newfile then you would have to rename each file individually.
+
+With the Linux rename command you can rename all the files at once as follows:
+
+rename cat dog *
+
+The above files will be renamed as follows:
+
+dogsittingdown
+barkingdog
+postmanattackedbydog
+The above command basically looked through all the files (denoted by the asterisk wildcard metacharacter) and wherever it found the word cat it replaced it with a dog.
+
+Rename The Physical File Pointed To By Symbolic Links
+
+A symbolic link acts as a pointer to a file similar to a desktop shortcut. The symbolic link doesn't contain any data except for the path to the location of the file it is pointing at.
+
+You can create a symbolic link using the following command:
+
+ln -s
+
+For example, imagine you have a file called barkingdog in your dog pictures folder and you wanted to create a symbolic link to the file in a different folder called dogtraining with the name howtostopdogbarking.
+
+You could do that using the following command:
+
+ln -s ~/pictures/dogpictures/barkingdog ~/pictures/dogtraining/howtostopdogbarking
+
+You can tell which files are symbolic links by running the ls -lt command.
+
+ls -lt howtostopdogbarking
+
+The output will show something like howtostopdogbarking -> /home/pictures/dogpics/barkingdog.
+
+Now I don't know how many of you know how to stop a dog barking but the advice by many trainers is to teach the dog to speak first and then once you have that mastered you can get it to shush when you don't want it to bark.That is the theory anyway.
+
+With this knowledge in hand, you might want to rename the barkingdog picture to be speakingdog.
+
+You could rename the picture directly in the dogpics folder by running the following command:
+
+rename barking speaking /home/pictures/dogpics/barkingdog
+
+Alternatively, you could also rename the barking dog picture by specifying the name of the symbolic link and by using the following switch:
+
+rename -s barking speaking /home/pictures/dogtraining/howtostopdogbarking
+
+How To Get Confirmation That The Rename Command Has Worked
+
+The main issue with the rename command is that it doesn't tell you what it has done. What you think might have worked may not have and so you have to go and check for yourself using the ls command.
+
+However, if you use the following switch the rename command will tell you exactly what has been renamed:
+
+rename -v cat dog *
+
+The output will be along the lines of this:
+
+barkingcat -> barkingdog
+catsittingdown -> dogsittingdown
+postmanattackedbycat -> postmanattackedbydog
+This command helps to confirm that what you wanted to happen really did happen.
+
+Another Way To Rename Files
+If you prefer the simpler syntax of renaming files then try the mv command as follows:
+
+mv oldfilename newfilename
+
+Summary
+When learning about using the Linux command line you need to know about permissions, how to create users and groups, how to create directories, how to copy files, how to move and rename files and all about links.
+
+This linked article gives an overview of 12 commands you need to know about when learning to use the Linux command line.

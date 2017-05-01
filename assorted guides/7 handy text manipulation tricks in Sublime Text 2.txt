@@ -1,0 +1,53 @@
+7 handy text manipulation tricks in Sublime Text 2
+
+Note: Get this free download and see how to improve your productivity with Sublime Text (plus free email tips).
+
+One of my favorite things about using Sublime Text 2 is that it rarely leaves me pining for other text editors. Sublime incorporates most of the must-have features I’ve come to expect from an editor.
+
+Text manipulation in Sublime is no exception. Here are 7 of my favorite Sublime features that take the tedium out of coding.
+
+Note: I’m using my MacBook today, so the keyboard shortcuts are the OS X friendly versions. The same commands are available for Windows and Linux, but the bindings will likely be a little different. Hunt through the menus to find the bindings for your specific platform.
+
+Joining lines
+I’ve probably wasted more hours of my life than I care to admit deleting extraneous white spaces when merging two lines of indented code. When I learned how to join lines in Vim and Notepad++, I couldn’t believe I’d been pounding Backspace unnecessarily.
+
+Sublime Text 2 employs theCommand j shortcut to join the line below your cursor to the one you’re currently editing.
+
+Swapping lines
+Another common line operation is swapping the position of two lines, or moving a block up or down in the file. Copy and paste is one option, but if you’ll only be moving the lines a short distance, it’s quicker to hit Control Command Up or Control Command Down. This works on the current line with no highlighting required, or you can highlight multiple lines to shift an entire code block.
+
+Duplicating and deleting lines
+Deleting and copying entire lines without highlighting is simple. Use Control Shift k to delete the current line. Shift Control d duplicates the current line and places the copy below the cursor.
+
+Wrapping paragraphs
+I like to keep my lines fairly short, so I have a ruler set at column 100. This is great for manually wrapping lines, but sometimes when I’m writing blog posts, I’ll edit a paragraph and find that my original wrapping is no longer suitable. Sublime makes it painless to fix this. Just select a block of text and hit Command Option q, and Sublime will rewrap the entire paragraph to fit within the ruler.
+
+Toggling comments
+Sublime gracefully handles comments in a variety of languages. To comment out a single line of code, position the cursor on the line and hit Command /. In languages that have line-level comments, such as JavaScript, this will use a line comment; in languages that only support block comments, such as HTML or XML, it wraps the line with block comments. The same shortcut can comment out multiple selected lines as well.
+
+For languages that support block comments, the Option Command / shortcut will wrap block comments around a selection.
+
+Dealing with capitalization
+Removing or adding capitalization manually is tedious. Sublime supports several features for dealing with capitalization chores, available under the Edit > Convert Case menu.
+
+The Swap Case option inverts the casing of all selected text, while Title Case capitalizes the first letter of each word.
+
+Upper, which is also mapped to Command k, Command u, capitalizes all selected letters, while Lower, mapped to Command k, Command l, does the opposite.
+
+Reordering lines
+In the past, I’ve occasionally found myself copying lines of text into a spreadsheet program to sort them. Sublime has this covered, though, with several simple sorting algorithms.
+
+To perform a simple alpha sort, select the lines to be sorted and hit F5. This option ignores capitalization. Hitting Control F5 will sort lines starting with capital letters first, then alphabetize lines starting with lowercase letters.
+
+The Permute Lines menu options provide a few more ways to sort, including Reverse, which sorts in reverse alpha order, starting with lowercase letters, Unique, which removes duplicated lines, and Shuffle, which sorta kinda randomizes the text.
+
+Connor - March 29, 2016
+A while late, but:
+Place a cursor on (or highlight) all the lines you want to comment out by Ctrl-LeftClicking each line, then hit Control-/
+
+This should comment out all the lines you now have your multi-cursor on.
+
+To get rid of the multi-cursors, double-click on a new line.
+
+Vim User - December 15, 2014
+For Vim you use Shift+J to join line the same way sublime text does.

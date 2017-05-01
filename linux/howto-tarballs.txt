@@ -1,0 +1,60 @@
+What Are Linux Tarballs And How Can You Use Them
+
+According to Wikipedia, a tarball is a computer file format that can combine multiple files into a single file called "tarball", usually compressed.
+
+So how does that help us and what can we use them for?
+
+In the past tar files were created for storing data to tapes and the term tar stands for tape archive. Whilst it can still be used for this purpose the concept of a tar file is simply a way to group lots of files together in one archive.
+
+What Are The Benefits Of Using A Tar File?
+You can group a large number of files into one tar file
+The tar command is available on most Linux systems and can therefore be moved around and extracted without compatibility issues
+The tar file maintains the access times for the files
+The tar file maintains the permissions for the files
+The tar file incorporates symbolic links
+You can write tar files to raw devices such as tape, DVDs, USB drives
+Reasons For Creating Tar Files
+Tar files when compressed make good backups and can be copied to DVDs, external hard drives, tapes and other media devices and well as network locations. By using a tar file for this purpose you can extract all the files within an archive back to their original places should you need to.
+
+Tar files can also be used to distribute software or other collaborated content. An application is made up of dozens of different programs and libraries as well as other supporting content such as images, configuration files, readme files and make files.
+
+A tar file helps to keep this structure together for distribution purposes.
+
+Downside Of Using Tar Files
+Wikipedia lists a number of limitations for using tar files which include but are not limited to:
+
+Operating system support. Tar files are widely adopted across UNIX and Linux platforms but third party tools are required for opening them within Windows
+Tarbombs - Basically these tar files are designed to expand and place files in multiple directories all across your filesystem. This is a problem when receiving tarballs rather than when using your own. Like most things in computing, trusted resources are the key.
+It is harder to locate and extract individual files from a tar file
+When compressed with gzip you have to decompress the entire file whereas with the standard zip file you can view the contents of the archive whilst compressed and extract individual files.
+A tar file can have two identical files with the same location which could cause one to overwrite the other when extracted
+How To Create A Tar File
+To create a tar file you use the following syntax:
+
+tar -cf tarfiletocreate listoffiles
+
+For example:
+
+tar -cf garybackup ./Music/* ./Pictures/* ./Videos/*
+
+This creates a tar file called garybackup with all the files in my music, pictures and videos folder. The resulting file is completely uncompressed and takes up the same size as the original folders.
+
+This isn't great in terms of copying over a network or writing to DVDs because it will take up more bandwidth, more disks and will be slower to copy.
+
+You can use the gzip command in conjunction with the tar command to create a compressed tar file.
+
+In essence, a zipped tar file is a tarball.
+
+How To List The Files In A Tar File
+To get a list of the contents of a tar file uses the following syntax:
+
+tar -tvf tarfilename
+
+For example:
+
+tar -tvf garybackup
+
+How To Extract A Tar File
+To extract all the files from a tar file using the following syntax:
+
+tar -xf tarfilename

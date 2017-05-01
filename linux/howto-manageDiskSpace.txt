@@ -1,0 +1,127 @@
+How To Find How Much Disk Space A File Or Folder Uses In Linux
+
+Introduction
+This guide will show you how to find out the amount of disk space a file or folder is taking up using the Linux command line.
+
+Find Out The File Sizes Of All Files And Folders
+The du command summarises the disk usage of each file. 
+
+In its simplest form you can simply run the following command:
+
+du
+
+This will scroll through all of the files and folders within the present working directory. For each file that is displayed a file size will be shown alongside it and at the bottom the total file size will be displayed.
+
+To find out how much space is used on the whole drive you can start at the root folder by using the following command:
+
+du /
+
+You may need to use sudo along with the du command to elevate your permissions as follows:
+
+sudo du /
+
+The main issue with the above command is that it will only list the file size of the sub folders and not the files within them.
+
+To get a complete listing use one of the following commands:
+
+du -a
+
+du --all
+
+You can get the output to scroll in pages by using the more command or the less command as follows:
+
+du | more
+
+du | less
+
+Find Out The File Size Of Individual Files And Folders
+If you just want to find out the disk usage used by a single file you can specify the file name along with the du command as follows.
+
+du /path/to/file
+
+For example
+
+du image.png
+
+The output will be something like this:
+
+36 image.png
+
+If you enter a foldername along with the du command you get a list of all files in the folder.
+
+88 Steam/logs
+
+92 Steam
+
+The above shows that the Steam folder has a logs folder which has a size of 88 and the total for the Steam folder is 92.
+
+It doesn't list the files in the logs folder. To get the list of files you would need to use the following command:
+
+du -a Steam
+
+The results are now as follows:
+
+84 Steam/logs/bootstrap_log.txt
+
+88 Steam/logs
+
+92 Steam
+
+Change The Output Of The File Size
+By default the file sizes are listed as kilobytes. You can change the block-size to other values as follows:
+
+du -BM <filename>
+
+For example I have a file called "zorin.iso" which by default is 1630535680 in size.
+
+du -BM zorin.iso
+
+The above command outputs the size as 1556M.
+
+You can also use K or G as follows:
+
+du -BK zorin.iso
+
+du -BG zorin.iso
+
+In kilobytes the zorin.iso file is listed as 159232K.
+
+In gigabytes the zorin.iso file is listed as 2G
+
+There are in fact 8 possible settings which are as follows:
+
+K - Kilobytes
+M - Megabytes
+G - Gigabytes
+T - Terabytes
+P - Petabytes
+E - Exabytes
+Z - Zetabytes
+Y - Yottabyte
+If you are getting a list of files trying to get the correct display size is difficult. For example a file of 100 bytes needs to be displayed as bytes but a file which is 16 gigabytes would be better shown in gigabytes.
+
+To get the appropriate file size based on the file being displayed use one of the following commands:
+
+du -h <filename>
+
+du --human-readble <filename>
+
+Summarise The Output
+You can get the du command to show the total size of the files and folders by using the following commands:
+
+du -c
+
+du --total
+
+You can also eliminate most of the other output such as the listing of files and folders by using the following commands:
+
+du -s
+
+du --summarize
+
+Summary
+You can find out more about the du command by running the man command in the terminal as follows:
+
+man du
+
+Another command you may wish to read about is the df command which reports file system and disk space usage. 

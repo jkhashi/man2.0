@@ -1,0 +1,54 @@
+Interactive Shell Service
+Project developers can access an Interactive Shell if they have been granted shell access for the project. The Interactive Shell provides a command line interface that can be used to manage the following:
+Project web content
+Developer web content
+Project uploads
+Features
+The Interactive Shell supports the following features:
+SSH shell access to project content; access to data for other users and projects not provided
+Comprehensive set to command line tools
+4 hour shell life - shells are automatically terminated after 4 hours.
+Password or SSH keys authentication
+The Interactive Shell does not support the following features:
+Cron service
+Management
+Project members must be granted shell access by a project administrator. Click the lock icon to unlock the project menu, then click the gear icon next to "Files". Select "Release Technician" and on that page check off anyone that you want to grant access.
+Access
+Interactive Shell sessions persist for 4 hours once created. Authorized developers that have been granted shell access for a project can create/connect to an Interactive Shell with:
+ssh -t USER@shell.sourceforge.net create
+NOTE: Be sure to substitute your SourceForge.net login username for USER
+If you do not have an active Interactive Shell session a help page can be viewed with:
+ssh USER@shell.sourceforge.net
+File access paths will match what is available via our File Management service
+PuTTY client
+For those using the PuTTY SSH client, set the following settings for the PuTTY session:
+Note: In Windows Vista or Windows 7, it may be necessary to run PuTTY in Windows XP compatibility mode.
+Location	Option	Value
+Session	Host Name	shell.sourceforge.net
+Session	Connection Type	SSH
+Connection > SSH	Remote command	create
+Connection > Data	Auto-login username	USER
+Open the session and provide your password at the prompt.
+Note: If you get disconnected after shell creation, in Connection > SSH > TTY uncheck the box for "Don't allocate a pseudo-terminal"
+SSH Key Authentication
+If a user has set up SSH keys, they can be used to authenticate to an Interactive Shell session. Please see the following for more information on setting up SSH keys:
+SSH keys
+Use the '-i' option to pass your private key file to the ssh command:
+ssh -i PATH-TO-PRIV-KEY -t USER@shell.sourceforge.net create
+SSH key fingerprints
+Shell commands
+Interactive Shell provides a small set of Interactive Shell specific command line tools. These include:
+sf-help - Prints an Interactive Shell help page.
+timeleft - Show the time left (of the 4 hour window) before the current shell expires.
+adminrepo - For managing classic CVS/SVN repositories; see adminrepo --help for more information
+shutdown - Initiate the immediate termination of an Interactive Shell session.
+Accessing your files with other tools
+You can access most of your files at any time, regardless of whether you have an Interactive Shell created or not, by using the web.sourceforge.net server. This includes your project and developer web files, your home files, and your download files. It does not include any git/svn/mercurial SCM files that are only mounted when you create an Interactive Shell.
+For files not accessible via web.sourceforge.net, you can use scp or rsync using your normal shell.sourceforge.net access. Only SFTP access requires an alternate means of accessing your shell's files, should you want to use that.
+To use sftp to access your files, either use the web.sourceforge.net method, or run the sf-help command in your Interactive Shell and it will tell you an alternate access method that requires the use of a port number and an alternate hostname. In the following example replace USER with your SourceForge.net username, and PORT and HOST with the port number and hostname you obtained from sf-help:
+sftp -o Port=PORT USER@HOST
+A couple of examples:
+sftp -o Port=22002 joe@shell2.sourceforge.net
+sftp -o Port=24007 joe@shell4.sourceforge.net
+Important Safety Tip
+Please be mindful of the symbolic links deployed in various SourceForge.net systems. Before attempting the following commands to write any data it would be wise to Backup your data first.

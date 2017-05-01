@@ -1,0 +1,73 @@
+How To Find Linux Commands And Programs Using Whereis
+
+Have you ever tried to find the location of a command, program or application but didn't know where to look?
+
+Of course you could the find command to attempt to locate it as follows:
+
+find / -name firefox
+
+This will return a list of potential results and generally you can find the location of the program in this manner.
+
+Another command you can use is the locate command. For example:
+
+locate firefox
+
+However the best method for finding programs is the whereis command.
+
+According to the man pages:
+
+whereis locates the binary, source, and manual files for the specified command names. The supplied names are first stripped of leading path-name components and any (single) trailing extension of the form .ext (for example: .c) Prefixes of s. resulting from use of source code control are also dealt with. Whereis then attempts to locate the specified desired program in the standard Linux places, and in the places specified by $PATH and $MANPATH.
+
+In essence therefore the whereis command can find the source code, manuals and the location of a program.
+
+Let's try it with Firefox:
+
+whereis firefox
+
+The output from the above command is as follows:
+
+firefox: /usr/bin/firefox /usr/lib64/firefox /usr/share/man/man1/firefox.1.gz
+
+If you just want to find the location of the program you can use the switch -b as follows:
+
+whereis -b firefox
+
+This returns the following result:
+
+firefox: /usr/bin/firefox /usr/lib64/firefox
+
+Alternatively if you just want to know the location of the manuals you can use the -m switch.
+
+whereis -m firefox
+
+The result for the above command is as follows:
+
+firefox: /usr/share/man/man1/firefox.1.gz
+
+Finally you can limit the search to just the source code by using the -s switch.
+
+There are other switches available for the whereis command including -u which looks for unusual files.
+
+The manual says the following about the -u switch:
+
+a command is said to be unusual if it does not have just one entry of each explicitly requested type. Thus 'whereis -m -u *' asks for those files in the current directory which have no documentation file, or more than one.
+
+Essentially if you have more than one manual located on your system or the program you are running appears in more than one place it will be returned.
+
+If you have a vague notion as to the location of a program or command and you want to search a specific set of directories you can use the -B switch to search for binaries in a specified list.
+
+For example:
+
+whereis -b -B /usr/bin -f firefox
+
+The above command has a few parts to it. First of all there is the -b switch which means we are looking for the binaries only (the programs themselves). The -B switch is used to provide a list of places to search for the binaries and the list of folders is terminated by the -f switch. Therefore in the command above the only directory searched is /usr/bin. Finally the firefox after the -f tells whereis what it is looking for.
+
+An alternative to the -B switch is -M which searches a specific set of folders for manuals.
+
+The command line for the -M switch would be as follows:
+
+whereis -m -M /usr/share/man/man1 -f firefox
+
+The logic is the same for the -M as it was for -B. The -m tells whereis to look for manuals, the -M tells whereis that a list of folders is coming in which it should look for manuals. The -f terminates the list of files and firefox is the program that the whereis command is going to look for manuals for.
+
+Finally the -S switch can be used to list a set of folders to search for the source code.

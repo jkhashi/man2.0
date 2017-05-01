@@ -1,0 +1,134 @@
+Example Uses Of The Linux Curl Command
+
+Introduction
+In this guide, you will be shown how to use the curl command to download files and webpages. If you want to know what curl is and when you should use it over wget read this page.
+
+The curl command can be used to transfer files using a number of different formats including http, https, ftp and even smb.
+
+This guide will show you how to use the command and will introduce you to a number of the key switches and features.
+
+Basic curl Command Usage
+The curl command can be used to download files from the internet but in its basic form, you can download the web page content straight to the terminal window.
+
+For example, enter the following command into a terminal window:
+
+curl http://linux.about.com/cs/linux101/g/curl.htm
+
+The output will scroll up in the terminal window and it will show you the code for the linked webpage.
+
+Obviously, the page scrolls too fast to read and so if you wish to slow it down you should use either the less command or the more command.
+
+curl http://linux.about.com/cs/linux101/g/curl.htm | more
+
+Output The Contents Of curl To A File
+The problem with the basic curl command usage is that the text scrolls very fast and if you are downloading a file such as an ISO image then you don't want this going to the standard output.
+
+To save the content to a file all you have to do is specify the minus o (-o) switch as follows:
+
+curl -o <filenametocreate> <URL>
+
+Therefore to download the page linked to in the basic command usage section all you have to do is enter the following command:
+
+curl -o curl.htm http://linux.about.com/cs/linux101/g/curl.htm
+
+After the file has downloaded you can open it in an editor or its default program determined by the file type.
+
+You can simplify this further by using the minus O switch (-O) as follows:
+
+curl -O http://linux.about.com/cs/linux101/g/curl.htm
+
+This will use the filename portion of the URL and make it the filename that the URL is saved to. In the above instance the file will be called curl.htm.
+
+Run The Curl Command In The Background
+By default, the curl command shows a progress bar telling you how long there is left and how much data has been transferred.
+
+If you just want the command to run so that you can get on with other things then the first thing you need to do is run it in silent mode and then you need to run it as a background command.
+
+To run a command silently use the following command:
+
+curl -s -O <URL>
+
+To get the command to run in the background you then need to use the ampersand (&) as follows:
+
+curl -s -O <URL> &
+
+Downloading Multiple URLs With Curl
+You can download from multiple URLS using a single curl command. 
+
+In its simplest form you can download multiple URLs as follows:
+
+curl -O http://www.mysite.com/page1.html -O http://www.mysite.com/page2.html
+
+Imagine though you have a folder with 100 images all called image1.jpg, image2.jpg, image3.jpg etc. You wouldn't want to have to type in all of these URLs and you don't have to.
+
+You can use square brackets to supply a range. For example, to get files 1 to 100 you can specify the following:
+
+curl -O http://www.mysite.com/images/image[1-100].jpg
+
+You can also use curly brackets to specify multiple sites with similar formats.
+
+For example imagine you want to download www.google.com and www.bing.com. You can simply use the following command:
+
+curl -O http://www.{google,bing}.com
+
+Displaying Progress
+By default the curl command returns the following information as it downloads a URL:
+
+Total %
+Total bytes
+Received/Transferred %
+Received/Transferred bytes
+Average download speed
+Average upload speed
+Total time
+Time spent
+Time left
+Current speed
+If you would prefer a simple progress bar which simply specify the minus hash (-#) switch as follows:
+
+curl -# -O <URL>
+
+Handling Redirects
+Imagine you have specified a URL as part of the curl command and think you have the right address to download a large file only to come back later to find that all you have is a webpage stating "this page has been redirected to www.blah.com". That would be annoying wouldn't it.
+
+The curl command is clever in that it can follow redirects. All you have to do is use the minus L switch (-L) as follows:
+
+curl -OL <URL> 
+
+Reduce The Download Rate
+If you are downloading a large file and you have a poor internet connection then you might annoy the family if they are trying to do stuff on the internet as well.
+
+Fortunately, you can reduce the download rate with the curl command so that whilst it will take longer to download the file you can keep everybody happy.
+
+curl -O --limit-rate 1m <URL>
+
+The rate can be specified in kilobytes (k or K), megabytes (m or m) or gigabytes (g or G).
+
+Download Files From An FTP Server
+The curl command can handle more than just HTTP file transfers. It can handle FTP, GOPHER, SMB, HTTPS and many other formats.
+
+To download files from an FTP server use the following command:
+
+curl -u user:password -o <URL>
+
+If you specify the name of a file as part of the URL then it will download the file but if you specify the name of a folder it will return a folder listing.
+
+You can also use curl to upload files to an ftp server by using the following command:
+
+curl -u user:password -T <filename(s)> <URL>
+
+The filenames and <URL> can use the same pattern matching as for downloading multiple HTTP files.
+
+Passing Form Data To A Form
+You can use curl to fill in an online form and submit the data as if you had filled it in online. Many popular services such as Google block this sort of usage.
+
+Imagine there is a form with a name and email address. You can submit this information as follows:
+
+curl -d name=john email=john@mail.com www.mysite.com/formpage.php
+
+There are various ways of transferring form information. The above command uses basic text but if you want to use multi encoding which allows image transfer then you will need to use the minus F switch (-F).
+
+Summary
+The curl command has lots of different authentication methods and you can use it to access FTP sites, send emails, connect to SAMBA addresses, upload and download files and many other things.
+
+To get more information about curl read the manual page.

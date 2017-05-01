@@ -1,0 +1,299 @@
+Example Uses Of The Linux grep Command
+
+Introduction
+The Linux grep command is used as a method for filtering input.
+
+GREP stands for Global Regular Expression Printer and therefore in order to use it effectively, you should have some knowledge about regular expressions.
+
+In this article, I am going to show you a number of examples which will help you understand the grep command.
+
+01
+of 09
+How To Search For A String In A File Using GREP
+The Linux grep Command
+ The Linux grep Command.
+Imagine you have a text file called books with the following children's book titles:
+
+Robin Hood
+Little Red Riding Hood
+Peter Pan
+Goldilocks And The Three Bears
+Snow White And The Seven Dwarfs
+Pinnochio
+The Cat In The Hat
+The Three Little Pigs
+The Gruffalo
+Charlie And The Chocolate Factory
+To find all the books with the word "The" in the title you would use the following syntax:
+
+grep The books
+
+The following results will be returned:
+
+Goldilocks And The Three Bears
+Snow White And The Seven Dwarfs
+The Cat In The Hat
+The Three Little Pigs
+The Gruffalo
+Charlie And The Chocolate Factory
+In each case, the word "The" will be highlighted.
+
+Note that the search is case sensitive so if one of the titles had "the" instead of "The" then it would not have been returned.
+
+To ignore the case you can add the following switch:
+
+grep the books --ignore-case
+
+You can also use the -i switch as follows:
+
+grep -i the books
+
+02
+of 09
+Search For A String In A File Using Wildcards
+The grep command is very powerful. You can use a multitude of pattern matching techniques to filter results.
+
+In this example, I will show you how to search for a string in a file using wildcards.
+
+Imagine you have a file called places with the following Scottish place names:
+
+aberdeen
+
+aberystwyth
+
+aberlour
+
+inverurie
+
+inverness
+
+newburgh
+
+new deer
+
+new galloway
+
+glasgow
+
+edinburgh
+
+If you want to find all the places with inver in the name use the following syntax:
+
+grep inver* places
+
+The asterisk (*) wildcard stands for 0 or many. Therefore if you have a place called inver or a place called inverness then both would be returned.
+
+Another wildcard you can use is the period (.). You can use this to match a single letter.
+
+grep inver.r places
+
+The above command would find places called inverurie and inverary but wouldn't find invereerie because there can only be one wildcard between the two r's as denoted by the single period.
+
+The period wildcard is useful but it can cause problems if you have one as part of the text you are searching.
+
+For example look at this list of domain names
+
+linux.about.com
+pcsupport.about.com
+mp3.about.com
+minecraft.about.com
+androidgames.about.com
+netforbeginners.about.com
+everydaylinuxuser.com
+google.co.uk
+google.au
+direct.gov.uk
+To find all the about.coms you could just search using the following syntax:
+
+grep *about* domainnames
+
+The above command would fall down if the list contained the following name in it:
+
+everydaylinuxuser.com/about.html
+You could, therefore, try the following syntax:
+
+grep *about.com domainnames
+
+This would work ok unless there was a domain with the following name:
+
+aboutycom.com
+
+To really search for the term about.com you would need to escape the dot as follows:
+
+grep *about\.com domainnames
+
+The final wildcard to show you is the question mark which stands for zero or one character.
+
+For example:
+
+grep ?ber placenames
+
+The above command would return aberdeen, aberystwyth or even berwick.
+
+03
+of 09
+Search For Strings At The Beginning And End Of Line Using grep
+The carat (^) and the dollar ($) symbol allow you to search for patterns at the beginning and end of lines.
+
+Imagine you have a file called football with the following team names:
+
+Blackpool
+Liverpool
+Manchester City
+Leicester City
+Manchester United
+Newcastle United
+FC United Of Manchester
+If you wanted to find all the teams that began with Manchester you would use the following syntax:
+
+grep ^Manchester teams
+
+The above command would return Manchester City and Manchester United but not FC United Of Manchester.
+
+Alternatively you can find all the teams ending with United using the following syntax:
+
+grep United$ teams
+
+The above command would return Manchester United and Newcastle United but not FC United Of Manchester.
+
+04
+of 09
+Counting The Number Of Matches Using grep
+If you don't want to return the actual lines that match a pattern using grep but you just want to know how many there are you can use the following syntax:
+
+grep -c pattern inputfile
+
+If the pattern was matched twice then the number 2 would be returned.
+
+05
+of 09
+Finding All The Terms That Don't Match using grep
+Imagine you have a list of place names with the countries listed as follows:
+
+aberdeen scotland
+glasgow scotland
+liverpool england
+colwyn bay
+london england
+You may have noticed that colwyn bay has no country associated with it.
+
+To search for all the places with a country you could use the following syntax:
+
+grep land$ places
+
+The results returns would be all the places except for colwyn bay.
+
+This obviously only works for places which end in land (hardly scientific). 
+
+You can invert the select using the following syntax:
+
+grep -v land$ places
+
+This would find all the places that didn't end with land.
+
+06
+of 09
+How To Find Empty Lines In Files Using grep
+Imagine you have an input file which is used by a third party application which stops reading the file when it finds an empty line as follows:
+
+aberdeen scotland
+inverness scotland
+liverpool england
+ 
+colwyn bay wales
+When the application gets to the line after liverpool it will stop reading meaning colwyn bay is missed entirely.
+
+You can use grep to search for blank lines with the following syntax:
+
+grep ^$ places
+
+Unfortunately this isn't particularly useful because it just returns the blank lines.
+
+You could of course get a count of the number of blank lines as a check to see if the file is valid as follows:
+
+grep -c ^$ places
+
+It would however be more useful to know the line numbers that have a blank line so that you can replace them. You can do that with the following command:
+
+grep -n ^$ places
+
+07
+of 09
+How To Search For Strings Of Uppercase Or Lowercase Characters Using grep
+ Using grep you can determine which lines in a file have uppercase characters using the following syntax:
+
+grep '[A-Z]' filename
+
+The square brackets [] let you determine the range of characters. In the above example it matches any character which is between A and Z.
+
+Therefore to match lowercase characters you can use the following syntax:
+
+grep '[a-z]' filename
+
+If you want to match only letters and not numerics or other symbols you can use the following syntax:
+
+grep '[a-zA-Z]' filename
+
+You can do the same with numbers as follows:
+
+grep '[0-9]' filename
+
+08
+of 09
+Looking For Repeating Patterns Using grep
+You can use curly brackets {} to search for a repeating pattern.
+
+Imagine you have a file with phone numbers as follows:
+
+055-1234
+055-4567
+555-1545
+444-0167
+444-0854
+4549-2234
+x44-1234
+You know the first part of the number needs to be three digits and you want to find the lines that do not match this pattern.
+
+From the previous example you know that [0-9] returns all numbers in a file.
+
+In this instance we want the lines that start with three numbers followed by a hyphen (-). You can do that with the following syntax:
+
+grep "^[0-9][0-9][0-9]-" numbers
+
+As we know from previous examples the carat (^) means that the line must begin with the following pattern.
+
+The [0-9] will search for any number between 0 and 9. As this is included three times it matches 3 numbers. Finally there is a hyphen to denote that a hyphen must succeed the three numbers.
+
+By using the curly brackets you can make the search smaller as follows:
+
+grep "^[0-9]\{3\}-" numbers
+
+The slash escapes the { bracket so that it works as part of the regular expression but in essence what this is saying is [0-9]{3} which means any number between 0 and 9 three times.
+
+The curly brackets can also be used as follows:
+
+{5,10}
+
+{5,}
+
+The {5,10} means that the character being searched for must be repeated at least 5 times but no more than 10 whereas the {5,} means that the character must be repeated at least 5 times but it can be more than that.
+
+09
+of 09
+Using The Output From Other Commands Using grep
+ Thus far we have looked at pattern matching within individual files but grep can use the output from other commands as the input for pattern matching.
+
+A great example of this is using the ps command which lists active processes.
+
+For example run the following command:
+
+ps -ef
+
+All of the running processes on your system will be displayed.
+
+You can use grep to search for a particular running process as follows:
+
+ps -ef | grep firefox
+
+Summary
+The grep command is a fundamental Linux command and it is one that is well worth learning as it will make your life much easier when searching for files and processes when using the terminal.

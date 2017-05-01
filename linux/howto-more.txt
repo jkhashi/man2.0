@@ -1,0 +1,15 @@
+Example uses of the command "more"
+
+The command more allows you to quickly view a text file or any section of it. It comes with all major Linux distributions and does not require any set-up or installation.
+
+The program more does not require the whole file to be loaded in memory to view parts of it. Therefore it starts up faster on large files than editors.
+
+It is similar to the more advanced program less, but does not provide all the navigation options and does not scroll back as efficiently.
+
+To get started, simply type "more file-name" at a command prompt (terminal), where file-name would be the name of the file you want to inspect. This will show the beginning of the file, displaying as many lines as the screen can hold. For example
+
+more table1
+will display the top of file "table1".
+Once the program is started up on a particular file, you can use the space bar to scroll forward one page at a time, or the "b" key to move back one page. Pressing the "=" key will display the current line number in the file.
+
+To search for a word, number, or sequence of characters, type in "/" followed by the search string or regular expression.

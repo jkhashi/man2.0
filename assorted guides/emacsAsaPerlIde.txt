@@ -1,0 +1,734 @@
+Emacs as a Perl IDE
+
+This is a text form of a talk/demo given at the San Francisco Perl Mongers on February 28th, 2006. I was talking about using Emacs as a perl IDE, with some emphasis on what can be done with the perlnow.el package that I wrote.
+Table of contents:
+Emacs first!
+Perl now!
+   supports many languages
+   Tomorrow's crap, today
+   Emacs Jargon
+
+   creating new code
+   syntax checks
+   running code
+   creating and running tests
+the kill-ring
+   a "clipboard" of many pages
+
+dired 
+   the first file manager
+vc.el
+   version control inside emacs
+
+cperl-mode
+   perlnow niceties
+
+   perlnow tricks
+
+Customizing emacs with perl
+   shelling out
+   integrating perltidy
+           Babel 66
+              the many languages problem
+           Crazy Dreams
+              the future of emacs and perl (?)
+           closing quotes
+ 
+Gnu Emacs is a very old software project:
+
+  o pre-dates unix
+
+  o version 21 and counting
+
+    (and the FSF ain't all that fast about
+    doing major releases).
+
+  o there are a lot of "firsts" that
+    can be cited for the emacs world:
+
+    Emacs: the first IDE.
+
+    Emacs: the first windowing system
+    (though not graphical).
+
+    Emacs: the first free software
+    (aka open source) project
+
+             ... and so on.
+
+    (Emacs invented television.)
+
+ 
+A claim of emacs fans: emacs supports
+the widest range of languages of any IDE.
+
+     Here "support" largely means
+     syntax-coloring and indentation
+     rules.
+
+The basic thing that *I* expect from
+an IDE is definitely supported by emacs:
+the integration of error listings and
+navigation features, so you can jump
+directly to the source of the next problem.
+
+ 
+Emacs culture, and the great war with "vi",
+makes an interesting study even if you're
+not into learning to use emacs.
+
+  There's a pattern in technical
+  religious wars: you try to tell
+  someone about some cool feature,
+  and they respond "oh, you don't
+  *need* that crap", but then a
+  few years later after the
+  feature has been cloned, they        First they laugh at you,
+  all start going "look, we have       then they imitate you,
+  that crap now too!"                  then they laugh at you again
+                                       (and then you don't win).
+Emacs: tomorrow's crap, today.
+
+ 
+Since there are a lot of ideas that were
+invented for emacs and then ignored and
+reinvented later, it may seem like nothing
+is called by it's right name:
+
+  FAMILIAR:           EMACS JARGON:
+
+  windows             frames
+
+  subwindows          windows
+  ("panes" in MS;
+   "frames" on the
+   web, as David
+   pointed  out)
+
+
+  cut                 kill
+  paste               yank
+  copy                copy-as-kill
+
+  clipboard           kill-ring
+
+
+  ???                 yank-pop
+
+
+      Is there any analog of yank-pop?
+
+                   (In KDE, says Josh)
+
+ 
+The "kill-ring" is
+essentially a stack.
+
+When you "kill" a block of text, it gets
+pushed on to the top of the stack, and
+doing a "yank" pops it off, and if you
+like you can continue doing "yank-pop"
+commands, cycling through the kill-ring.
+
+This kind of notion evidently
+offends Steve Jobs' sense of
+minimalism, hence we're all stuck
+with "clipboards" that apparently
+have very *tiny* clips that can only
+hold one page at a time.  And if you
+try and shove a second page on top
+the first page evaporates.
+
+But that, of course, is an
+easy-to-use logical metaphor...     (A complaint
+                                    I've borrowed
+   Unlike this absurdly             from Ted Nelson.)
+   incomprehensible emacs
+   stuff.
+
+And in addition to the kill-ring
+there are also "registers":
+
+Myself, I use a custom keystroke
+macro in dired that stashes the
+directory and filename in registers
+"p" and "n", so they can be used
+again easily, in for example an
+emacs sub-shell window.
+
+   So: there are more nooks to stash
+   things inside of emacs than
+   just a single-page clipboard.
+
+   And that alone means there's some
+   advantage to doing everything                        ("Small things can
+   inside of the emacs if you can.                        can make big
+                                                          differences" has
+       Small things that add up:                          been one of my
+                                                          slogans, lately.)
+       If you get away from the "do one
+       thing and do it well" doctrine,
+       you find benefits like this: it
+       helps for the pieces to be able
+       to talk to each other easily.        Divide and conquer,
+                                            integrate and rule!
+
+                                            (or something)
+ 
+dired: the first file manager
+                                                I've always pronounced
+The layout is intuitively obvious... if         this "DIRE-ed", but a
+you've been doing "ls -la" all your life.       friend of mine says
+                                                "DEAR-ed".  I don't know
+Some features:                                  which is standard.
+
+  o  Rename an open file?
+     Emacs tracks the name change:
+     (if you save again later it
+     goes to the right place).
+
+  o  "!" runs a shell command on the
+     current file, suggesting a guess
+     based on the extension,
+     e.g. "*.tar.gz" gets:
+
+         gunzip -qc * | tar xvf -
+
+  o  Wide variety of built-in commands,
+     way beyond the typical file manager:
+     e.g. you can create symlinks (S) or
+     relative symlinks (Y).
+
+And this is all text: you can copy
+it, mail it to someone, etc.
+
+But it's not *dead* text: it's an
+active list that you can run                 (Another of my
+commands on with a few keystrokes.            slogans:
+                                              "More active lists!".)
+
+ 
+Version control integration:
+
+  The included vc.el package does basic
+  CVS and RCS quite well.
+
+  Central feature is one command that
+  does the next logical action on the file
+  ("C-x v v"):                                 (Note they original
+                                               author on this
+      register the file                        package is Eric
+      check in                                 S. Raymond, but many
+      check out...                             other's have worked
+                                               on it since then, so
+  vc.el has other commands to view the log     if you're an ESR
+  of change messages, do diffs against         hater you have an
+  previous versions, and so on.                out.)
+
+  One thing that really
+  impressed me about
+  vc.el is how                (In contrast, command-line
+  absolutely painless it       RCS has a stale interface
+  makes keeping files          that does the wrong thing
+  under RCS control.           by default. Need to learn
+                               the meaning of obscure
+  If at any moment you         flags: -u, -l...)
+  decide you want to put
+  a file you're editing
+  under version control,
+  you just hit "C-x v v".
+
+                     If there's no RCS            (And if there is
+                     subdirectory yet, it         a CVS, it knows it
+  There are *no*     creates one.                 should use cvs
+  setup hassles.                                  instead.)
+
+
+                          For the newer version control
+                          systems I think it's an open
+                          question whether we'll use
+                          dedicated *.el packages for each
+                          system (e.g. I used to use p4.el
+                          with perforce) or if they'll
+                          succeed in extending vc.el to
+                          cover them all.
+
+          The list of version control systems supported by
+          vc.el continues to expand (subversion, arch, git, bazaar...):
+
+          gnu.org:version control systems
+
+
+ 
+At last, perl:
+
+  The default perl mode for GNU emacs
+  is still perl-mode, but it also ships
+  with a new one that has better
+  (though still not perfect)
+  comprehension of the syntax:
+
+     cperl-mode
+                 (written by
+                  Ilya Zakharevich,
+                  an old perl-porter).
+
+  Has a number of *very* odd features
+  (e.g. a "hairy mode" that tries to fill in
+  closing braces and such at the moment you
+  type an open brace).
+
+  Simple feature that I like: you can run "perldoc -f"
+  on the keyword under the cursor.  If you
+  bind this to a key you can review the docs
+  for any given function instantly, the moment
+  you wonder about it...
+
+               ("what does 'stat' return again?).
+
+        emacswiki: cperl-mode
+
+ 
+perlnow - elisp glue for perl tasks
+
+  A very slight package really,
+  but "small things => big differences"
+
+  Uses a new project called "template.el",
+  not the emacs-standard "tempo.el".
+
+  (I think tempo is the wrong way around:
+  it's not tokens embedded in text, but
+  rather strings embedded in code; and the     (Note: I've gotten a
+  code is elisp: overall this is unlikely      nibble from someone with
+  to appeal to perl people.)                   commit privileges about
+                                               including perlnow in GNU
+                                               emacs, though I suspect I
+                                               may need to add support
+                                               for tempo.el first.  But
+                                               I'm not dropping support
+                                               for template.el.)
+Anyway, perlnow helps out with
+three major classes of common perl
+programming tasks:
+
+  (1) initial code creation
+  (2) syntax checking / running code / running the debugger
+  (3) creating/running tests
+
+ 
+perlnow: initial code creation
+
+  Say you have an idea for:
+
+    a script.
+    a module.
+    an OOP module.
+    a CPAN package.
+    a test script
+    a script using a module.
+
+      o while looking at the
+        module source
+
+      o while looking at a module
+        man page.
+
+Using perlnow, you typically will hit just a
+few keystrokes, answer a question or two
+about names and locations, and then you'll
+get kicked into a new file buffer using the
+appropriate template for what you want to do.
+
+Note: a "small thing" about perlnow: you have
+separate commands to create a procedural
+module or an object-oriented module, and these
+use separate templates even though both types
+of files have the same file extension
+("*.pm").
+
+Emacs often uses the file extension to
+guess what it should do: sometimes it
+helps to provide additional hints.
+
+ 
+perlnow: syntax checking / running code / running the debugger
+
+  A key feature with perlnow is that you
+  have different run strings associated
+  with each file buffer.
+
+  perlnow tries to guess a good runstring,
+  but also let's you modify the string on
+  the fly -- e.g. you can add command line
+  args and redirects.
+
+
+  When you do a "check" or a "run" command,
+  you'll see error messages and output appear
+  in another emacs window, and you can             You can also mouse
+  hit the "next-error" command (usually            around and click on
+  control x back-apostrophe) to immediately        an error message,
+  jump to the file and line number where           (if you're the sort
+  the error occurred.                               that fondles rodents).
+
+Note: this utilizes the standard emacs
+"compile" facility, perlnow just tries to
+feed a more appropriate run string than         Last I looked,
+emacs "compile" would use.                      compile guessed
+                                                "make -k" for
+It's worth noting that the emacs                perl code:        But they'll
+compile/next-error cycle can be                 completely        definitely
+very useful given *any* command                 useless.          fix this
+that spits out file names and                                     at some
+line numbers in an appropriate way.                               point...
+
+  For example, I'm a fan of the
+  emacs "grep" and "grep-find"
+  commands (which do what you'd
+  expect).
+
+
+ 
+perlnow: running the perl debugger
+
+When you use perlnow to jump into the emacs
+front-end to the perl debugger, you
+run it using the runstring that's
+associated with this buffer.
+
+If you did this with a raw "M-x perldb",
+the default is just to run perldb the last       Note to elisp programmers:
+way you ran it, even if that makes no            "buffer local variables"
+sense for the current buffer.                    are your friend.  Don't
+                                                 hesitate to use them,
+                                                 despite the (mild)
+   By the way: the perldb is                     discouragement in the
+   pretty cool, and it's even cooler             elisp docs.
+   with a front-end like emacs,
+   which shows the code in one
+   window and the control panel
+   in another.
+
+       The code buffer is always live:
+       when you find a problem, you can
+       fix it instantly (though you
+       need to restart the debugger
+       with an "R" to get it to read
+       the change).
+
+   Some perldb commands: Use "s" or "n"
+   to step through the code
+   ("s" goes down into sub calls,
+   "n" treats them as one step),
+   and "x" to do dumps of variables.
+   "b" sets a breakpoint somewhere
+   in the code, and "c" let's you
+   chug away to that point.
+
+   A half-hour (hell, maybe ten minutes)
+   of playing around with the debugger
+   and you'll know all (well, most) you
+   need to know about it.
+
+   Do it sometime when you're *not*
+   actually worrying about a bug, though.
+
+ 
+perlnow: creating/running tests
+
+One of the nice touches about perlnow:
+you can jump straight from some code to
+editing a *.t file to test the code.
+
+It tries to find an existing test file
+and edit that, but if not it will create
+a new one in an intelligent place, using
+the standard template.
+
+There's a range of different places
+it hunts for an appropriate test file,
+using a few different possible naming
+conventions.  (Both need to be expanded,
+though...)
+
+You can specify a policy that determines
+where it will try to create *.t files,
+and what they'll be called.
+
+   Some common practices are not yet supported:
+
+   o  Multiple test files with a numbered prefix.
+   o  Separate parallel tree of test files
+
+The existing system works well
+(despite that bug in the demo...)
+*if* you're willing to confine               That bug popped up
+yourself to a convention such as             because I was using a
+putting each test in a nearby "t"            large font, and hence a
+directory, and using a related               small number of lines.
+basename, (e.g. "Modular-Stuff.t"            I don't usually run
+for "Modular::Stuff").                       like that, so I'd never
+                                             hit it before.
+
+(Also: I have a funny mental
+block on "prove".  One of these
+days, I'll get to it... maybe
+it should be integrated into
+perlnow...)
+
+ 
+There are a bunch of little niceties built into
+perlnow (of varying degrees of silliness)...
+
+For example, if you're looking at a module
+and you hit the "new script" command, you'll
+get a "use" line inserted that points at
+the module you were looking at.
+
+This also works (mostly) if you're looking
+at the man page for a module.
+
+A little touch that I personally like a lot:
+if the module you were looking at is not in
+your @INC, the new script will have an
+appropriate FindBin/use lib incantation so
+that the script can find the module.
+
+ 
+Copying a runstring to another buffer:
+
+This is a little trick that I use a lot...
+
+   o  Issue the perlnow command to edit the runstring.
+   o  Kill the line ("cut"), then interrupt the edit.
+   o  Switch to a different code buffer.
+   o  Edit the runstring there and paste in the runstring from
+      the kill-ring.
+
+This way you can clone the runstring that
+perlnow guessed for one file and move it to
+another manually: sometimes *you* know that
+you want to test the module in front of you
+by running a particular script, but there's no
+way perlnow could know that unless you tell it.
+
+ 
+Customizing emacs with perl.
+
+  o  EPL/sepia
+
+  There's a newish, fancy approach to
+  customizing emacs in perl called "EPL".  This
+  let's your emacs and perl talk to each other
+  through interprocess communication: Emacs::Lisp
+
+  There's an attempt at doing some perl IDE-like stuff
+  called Sepia
+
+
+  In my last few attempts at playing with these,
+  I've run into too many installation hassles
+  and given up.
+
+                      That was one of the
+                      motivations for doing
+                      perlnow.el as "pure" elisp.
+
+                      It's also one of the
+                      reasons I've been dreaming     (We'll see if
+                      of "Oyster"... see              I still feel
+                      Crazy Dreams below.             the need after
+                                                      switching to
+                                                      a more modern
+                                                      linux distro.)
+
+  o  shelling out
+
+  There's still some mileage in the
+  old-fashioned method of just calling perl
+  in a new process and grabbing the returned
+  information.
+
+  An example follows...
+
+ 
+Given a perl script like so:
+
+   #!/usr/bin/perl -w
+   # scramble_case - doom@kzsu.stanford.edu
+   use Text::Capitalize 0.3 qw(scramble_case);
+   while(<>){
+      print scramble_case($_);
+   }
+
+And with this entry in my ~/.emacs:
+
+   (defun doom-run-scramble_case-region (start end)
+     (interactive "r")
+     (let ( (command "scramble_case") )
+       (shell-command-on-region start end command nil t "*error*")
+       ))
+   (global-set-key "\M-o\M-s" 'doom-run-scramble_case-region)
+
+
+Then, with an "Alt-o Alt-s":
+
+   I can take a sample of text like this sentence,
+   and transform it into something like...
+
+   i CaN tAKe a SampLe of teXT LIKe This SEnTenCE,
+   And tRAnSfOrm IT inTo SOMEThINg lIKE...
+
+
+
+
+ 
+Someone on the SF perl mongers list was asking about
+"support for perltidy", but it's actually not that
+difficult to support any sort of text manipulation
+script from within emacs.  Here's another .emacs example:
+
+ ;; From: http://www.perlmonks.org/index.pl?node_id=380724
+ ;;
+ ;; Put this in your ~/.emacs file, select the region you
+ ;; want to clean up and type C-xt or M-x perltidy-region.
+
+ (global-set-key "\C-xt" 'perltidy-region)
+ (defun perltidy-region ()
+   "Run the perltidy parser on the current region."
+   (interactive)
+   (let ((start (mark))
+         (end   (point))
+         (shell-command-default-error-buffer "perltidy-errors")
+         (command "perltidy"))
+         (shell-command-on-region
+             start
+             end
+             command
+             t t
+             shell-command-default-error-buffer)))
+
+
+ 
+Babel-66: the many languages conundrum
+
+
+  The language wars are a familiar feature of the landscape.
+  The subject of IDEs lands us in the heart of this battleground.
+
+  o  Everyone wants to use their
+     favorite IDE for every language
+     that they work in.
+
+  o  Everyone wants their IDE to be
+     customizable in their favorite
+     language.
+
+  But we all use different languages.
+
+  The IDE must appeal to many cultures,
+  but also must have a culture of it's own.
+
+
+
+Possible resolutions:
+
+Write a bunch of IDEs one for
+each favorite language, (which
+also supports every other
+language).
+
+Write an IDE in one primary
+language, but allow multiple
+different secondary
+customization languages.
+
+Variant: Write library routines
+in one or more languages, build
+an IDE by gluing them together
+using a "primary" language.
+
+Customization: one primary,
+multiple secondaries, which may
+or may not be in the glue language.
+
+       emacswiki:the multiple extension language problem
+
+  I submit that there is no
+  rigorously correct solution...
+  all we can do is try to be
+  reasonable.
+
+
+
+
+ 
+Crazy dreams
+
+  o  Oyster: a perl-centric linux distro
+
+     There are too many setup annoyances that
+     get in the way of creating the ultimate
+     perl-hacking box.  Maybe it could be done          (I dislike messing
+     just once, instead of over-and-over?               with linux system
+                                                        administration, but I
+                                                        might dislike it less
+     (Imagine having an entire CPAN snapshot            if I could at least
+     installed by default...  Well okay, maybe          pass on the results
+     just a CPAN subset would be advisable.             of my work to other
+     Still, a modern installation needs much more       people.)
+     than the standard library.)
+
+
+
+  o  Re-write emacs in perl
+
+     Perl people, as is their wont, have
+     been re-implementing editor functionality
+     in perl code (e.g. Conway's Text::Autoformat).
+
+     Rather than extending emacs, maybe it's
+     time to re-write it in another language?     (Argh, yet
+                                                   *another*
+                                                   emacs fork?)
+
+        Padre
+
+        Perl::Editor
+
+
+  o  Port elisp to Parrot
+
+     Elisp is *not* that complicated a language,
+     porting it to Parrot should be easy:
+     then you could have an emacs clone running
+     on a different, newer runtime engine.
+
+     (Possible complication: some parts of emacs
+     were re-written in C code for speed.)
+
+     Maybe a Parrot emacs would be
+        (1) faster
+        (2) poly-threaded
+        (3) customizable in other Parrot languages.
+     (Or maybe not)
+
+ 
+ The good Randal:                        The evil twin:
+
+
+ "Given that I use the kitchen           "If you can't program careful
+ sink of programming languages           enough to not need a debugger,
+ (Perl), it only makes sense             then either slow down your rate
+ that I use the kitchen sink of          of coding, or pick a different
+ editors (Emacs)."                       profession. Please."
+
+      -- Randal L. Schwartz                 -- Randal L. Schwartz
+
+         [1]                                   [2]
+
+
+[1] As quoted on perlmonks by "santonegro"
+
+[2] On perlmonks, December 28, 2000

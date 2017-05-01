@@ -1,0 +1,412 @@
+MinGW/MSYS development environment
+Part 3: Building GTK+
+. Index .. Base system .. Local packages .. GTK+ .. Qt ..	Tools .. Projects .. Home .
+This section describes how to compile the GTK+ library and necessary dependencies.
+
+Content
+
+Building libiconv
+Building gettext
+Building icu
+Building libffi
+Building glib
+Building pkg-config
+Building freetype
+Building harfbuzz
+Building freetype (pass two)
+Building expat
+Building libxml2
+Building fontconfig
+Building pixman
+Building cairo
+Building pango
+Building atk
+Building gdk-pixbuf
+Building gtk2
+Building gtkglext
+Building libiconv
+libiconv is a text encoding library
+
+Website: http://www.gnu.org/software/libiconv
+Download: libiconv-1.14.tar.gz
+Patch: libiconv-1.14-iconv-fix-inline.patch
+cd ${LOCALSOURCEDIR} && \
+wget -c http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz && \
+wget -c http://ingar.satgnu.net/devenv/mingw32/files/patches/libiconv-1.14-iconv-fix-inline.patch && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/libiconv-1.14.tar.gz && \
+cd libiconv-1.14 && \
+patch -Np0 -i ${LOCALSOURCEDIR}/libiconv-1.14-iconv-fix-inline.patch && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building gettext
+gettext is a tool for localizing and translating programs
+
+Website: http://www.gnu.org/software/gettext
+Dowload: gettext-0.19.4.tar.gz
+Build and install the gettext runtime by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://ftp.gnu.org/pub/gnu/gettext/gettext-0.19.4.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/gettext-0.19.4.tar.gz && \
+mv gettext-0.19.4 gettext-0.19.4-runtime && \
+cd gettext-0.19.4-runtime && \
+cat gettext-tools/woe32dll/gettextlib-exports.c | grep -v rpl_opt > gettext-tools/woe32dll/gettextlib-exports.c.new && \
+mv gettext-tools/woe32dll/gettextlib-exports.c.new gettext-tools/woe32dll/gettextlib-exports.c && \
+CFLAGS="-mms-bitfields -mthreads -O2" ./configure --prefix=${LOCALDESTDIR} --enable-threads=win32 --enable-relocatable && \
+cd gettext-runtime && \
+make && \
+make install
+Build and install the gettext tools by executing the following commands:
+
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/gettext-0.19.4.tar.gz && \
+mv gettext-0.19.4 gettext-0.19.4-static && \
+cd gettext-0.19.4-static && \
+CFLAGS="-mms-bitfields -mthreads -O2" ./configure --prefix=${LOCALDESTDIR} --enable-threads=win32 --enable-relocatable --disable-shared && \
+make && \
+install gettext-tools/src/msgfmt.exe ${LOCALDESTDIR}/bin && \
+install gettext-tools/src/msgmerge.exe ${LOCALDESTDIR}/bin && \
+install gettext-tools/src/xgettext.exe ${LOCALDESTDIR}/bin
+References:
+
+http://savannah.gnu.org/bugs/?27138
+http://kemovitra.blogspot.com/2009/06/mingw-building-gettext-for-windows.html
+Building ICU
+ICU are the International Components for Unicode.
+
+Website: ICU home page
+Download: icu4c-57_1-src.tgz
+Build and install ICU by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz && \
+cd ${LOCALBUILDDIR} && \
+tar zxf ${LOCALSOURCEDIR}/icu4c-57_1-src.tgz && \
+mv icu icu4c-57_1 && \
+cd icu4c-57_1 && \
+cd source && \
+./configure --prefix=${LOCALDESTDIR}  && \
+make && \
+make install
+Building libffi
+libffi is a a portable foreign function interface library.
+
+Website: libffi home page
+Download: libffi-3.2.1.tar.gz
+The 64-bit build requires ./configure --build=x86_64-w64-mingw32 --prefix=${LOCALDESTDIR}
+Build and install libffi by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar zxf ${LOCALSOURCEDIR}/libffi-3.2.1.tar.gz && \
+cd libffi-3.2.1 && \
+sed -e '/^includesdir/ s/$(libdir).*$/$(includedir)/' \
+    -i include/Makefile.in &&
+sed -e '/^includedir/ s/=.*$/=@includedir@/' \
+    -e 's/^Cflags: -I${includedir}/Cflags:/' \
+    -i libffi.pc.in        &&
+./configure --prefix=${LOCALDESTDIR}  && \
+make && \
+make install
+References:
+
+BLFS libffi build instructions
+Building glib
+glib is a low-level core library that forms the basis of GTK+
+
+Download: glib-2.48.1.tar.xz
+The 64-bit build requires ./configure --build=x86_64-w64-mingw32 --prefix=${LOCALDESTDIR} --with-pcre=internal --enable-debug=no --disable-gtk-doc
+Build and install glib by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://ftp.gnome.org/pub/gnome/sources/glib/2.48/glib-2.48.1.tar.xz && \
+cd ${LOCALBUILDDIR} && \
+tar xJf ${LOCALSOURCEDIR}/glib-2.48.1.tar.xz && \
+cd glib-2.48.1 && \
+./configure --prefix=${LOCALDESTDIR} --with-pcre=internal --enable-debug=no --disable-gtk-doc && \
+make && \
+make install
+Building pkg-config
+pkg-config is a helper tool used when compiling applications and libraries.
+
+Website: pkg-config home page
+Download: pkg-config-0.29.1.tar.gz
+This build will replace the static binary we installed earlier.
+
+Build and install pkg-config by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c --no-check-certificate http://pkgconfig.freedesktop.org/releases/pkg-config-0.29.1.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/pkg-config-0.29.1.tar.gz && \
+cd pkg-config-0.29.1 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building freetype
+Freetype is a library for rendering TrueType fonts.
+
+Website: freetype home page
+Download: freetype-2.6.5.tar.bz2
+Build and install freetype by executing the following commands:
+
+cd ${LOCALSOURCEDIR}  && \
+wget -c http://download.savannah.gnu.org/releases/freetype/freetype-2.6.5.tar.bz2 && \
+wget -c http://ingar.satgnu.net/devenv/mingw32/files/patches/freetype-2.6.5-config.patch && \
+wget -c http://ingar.satgnu.net/devenv/mingw32/files/patches/freetype-2.6.5-config-harfbuzz.patch && \
+cd ${LOCALBUILDDIR} && \
+tar xjf ${LOCALSOURCEDIR}/freetype-2.6.5.tar.bz2 && \
+cd freetype-2.6.5 && \
+patch -Np0 -i ${LOCALSOURCEDIR}/freetype-2.6.5-config.patch && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Command explanation:
+
+patch -Np1 -i ${LOCALSOURCEDIR}/freetype-2.6.5-config.patch
+Enables the FT_CONFIG_OPTION_SUBPIXEL_RENDERING, FT_CONFIG_OPTION_SYSTEM_ZLIB and FT_CONFIG_OPTION_USE_PNG options.
+Building harfbuzz
+Harfbuzz is een OpenType text shaping engine.
+
+Website: Harfbuzz home page
+Download: harfbuzz-1.2.7.tar.bz2
+Build and install libffi by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c --no-check-certificate http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.7.tar.bz2 && \
+cd ${LOCALBUILDDIR} && \
+tar jxf ${LOCALSOURCEDIR}/harfbuzz-1.2.7.tar.bz2
+
+cd harfbuzz-1.2.7 && \
+./configure --prefix=${LOCALDESTDIR} --with-gobject && \
+make && \
+make install
+Command explanation:
+
+tar jxf ${LOCALSOURCEDIR}/harfbuzz-1.2.7.tar.bz2
+The tar command returns a non-zero exit code, this interrupts the command sequence.
+Building freetype (pass two)
+At this point you need to build freetype a second time, to work around a circular dependency between harfbuzz and freetype.
+
+cd ${LOCALBUILDDIR} && \
+mv freetype-2.6.5 freetype-2.6.5-without-harfbuzz && \
+tar xjf ${LOCALSOURCEDIR}/freetype-2.6.5.tar.bz2 && \
+cd freetype-2.6.5 && \
+patch -Np0 -i ${LOCALSOURCEDIR}/freetype-2.6.5-config.patch && \
+patch -Np0 -i ${LOCALSOURCEDIR}/freetype-2.6.5-config-harfbuzz.patch && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building expat
+expat is an XML parsing library
+
+Website: http://expat.sourceforge.net/
+Download: expat-2.2.0.tar.bz2
+Build and install expat by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://downloads.sourceforge.net/project/expat/expat/2.2.0/expat-2.2.0.tar.bz2 && \
+cd ${LOCALBUILDDIR} && \
+tar xjf ${LOCALSOURCEDIR}/expat-2.2.0.tar.bz2 && \
+cd expat-2.2.0 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building libxml2
+libxml2 is an XML parsing library
+
+Website: http://xmlsoft.org/
+Download: libxml2-2.9.4.tar.gz
+Build and install libxml2 by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c ftp://xmlsoft.org/libxml2/libxml2-2.9.4.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/libxml2-2.9.4.tar.gz && \
+cd libxml2-2.9.4 && \
+./configure --prefix=${LOCALDESTDIR} --with-zlib=${LOCALDESTDIR} --without-python && \
+make && \
+make install
+Configuration options:
+
+--without-python
+libxml2 fails to build if it finds python in your PATH. Add this configure option to disable python detection.
+Building fontconfig
+fontconfig is a library for font customization and configuration
+
+Website: http://www.freedesktop.org/wiki/Software/fontconfig
+Download: fontconfig-2.12.0.tar.gz
+Build and install fontconfig by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c --no-check-certificate http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.0.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/fontconfig-2.12.0.tar.gz && \
+cd fontconfig-2.12.0 && \
+./configure --prefix=${LOCALDESTDIR} --enable-libxml2 --disable-docs && \
+make && \
+make install
+Building pixman
+pixman is a low-level pixel manipulation library
+
+Website: http://cairographics.org
+Download: pixman-0.34.0.tar.gz
+Build and install pixman by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget --no-check-certificate -c http://cairographics.org/releases/pixman-0.34.0.tar.gz && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/pixman-0.34.0.tar.gz && \
+cd pixman-0.34.0 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building cairo
+cairo is a 2d graphics library
+
+Website: http://cairographics.org
+Download: cairo-1.14.6.tar.xz
+Build and install cairo by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget --no-check-certificate -c http://cairographics.org/releases/cairo-1.14.6.tar.xz && \
+cd ${LOCALBUILDDIR} && \
+tar xJf ${LOCALSOURCEDIR}/cairo-1.14.6.tar.xz && \
+cd cairo-1.14.6 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building pango
+pango is a text rendering library
+
+Download: pango-1.40.1.tar.xz
+Build and install pango by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://ftp.gnome.org/pub/gnome/sources/pango/1.40/pango-1.40.1.tar.xz && \
+cd ${LOCALBUILDDIR} && \
+tar xJf ${LOCALSOURCEDIR}/pango-1.40.1.tar.xz && \
+cd pango-1.40.1 && \
+./configure --prefix=${LOCALDESTDIR} --with-included-modules=yes \
+--disable-debug --disable-gtk-doc && \
+make && \
+make install
+Configuration options:
+
+--with-included-modules=yes
+This options causes pango modules to be staticly linked into the main library.
+Building atk
+atk is the gnome accessibility toolkit
+
+Download: atk-2.20.0.tar.xz
+Build and install atk by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://ftp.gnome.org/pub/gnome/sources/atk/2.20/atk-2.20.0.tar.xz && \
+cd ${LOCALBUILDDIR} && \
+tar xJf ${LOCALSOURCEDIR}/atk-2.20.0.tar.xz && \
+cd atk-2.20.0 && \
+./configure --prefix=${LOCALDESTDIR} && \
+make && \
+make install
+Building gdk-pixbuf
+GdkPixBuf provides pixel buffer and rendering functions
+
+Download: gdk-pixbuf-2.34.0.tar.xz
+Build and install GdkPixBuf by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.34/gdk-pixbuf-2.34.0.tar.xz && \
+cd ${LOCALBUILDDIR} && \
+tar xJf ${LOCALSOURCEDIR}/gdk-pixbuf-2.34.0.tar.xz && \
+cd gdk-pixbuf-2.34.0 && \
+./configure --prefix=${LOCALDESTDIR} --with-included-loaders=yes \
+--without-libjasper --disable-debug && \
+make && \
+make install
+Configuration options::
+
+--with-included-loaders=yes
+This option causes the gdk image loaders to be staticly linked into the gdk-pixbuf library
+--without-libjasper
+disable JPEG2000 support
+Building gtk2
+gtk2 is an application framework library
+
+Website: http://www.gtk.org/
+Download: gtk+-2.24.30.tar.xz
+The 32-bit build will fail around gtk-update-icon-cache unless you run the msys shell as administrator.
+Build and install gtk2 by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.30.tar.xz && \
+cd ${LOCALBUILDDIR} && \
+tar xJf ${LOCALSOURCEDIR}/gtk+-2.24.30.tar.xz && \
+cd gtk+-2.24.30 && \
+./configure --prefix=${LOCALDESTDIR} --with-gdktarget=win32 \
+--with-included-immodules=ime --disable-debug --disable-gtk-doc && \
+rm gtk/gtk.def && \
+make && \
+make install
+Configuration options:
+
+--with-included-immodules=ime
+This options causes the ime input module to be staticly linked into the main library.
+Command explanation:
+
+rm gtk/gtk.def
+The 64-bit build fails if this file is not removed.
+ 
+At this point, you should test your gtk installation. The pixbuf-demo demonstrates image capabilities.
+
+cd demos
+./pixbuf-demo
+You should see a window with rotating icons.
+
+The gtk-demo demonstrates gtk2 widgets:
+
+cd gtk-demo
+gtk-demo
+References:
+
+http://library.gnome.org/devel/gtk/unstable/gtk-building.html
+http://www.mail-archive.com/gtk-list@gnome.org/msg27503.html
+http://pkgs.fedoraproject.org/cgit/mingw-gtk3.git/commit/?id=82ccf489f4763e375805d848351ac3f8fd
+Building gtkglext
+gtkglext is an opengl extension for gtk2
+
+Website: http://projects.gnome.org/gtkglext/
+Download: gtkglext-1.2.0.tar.gz
+Patch: gtkglext-1.2.0-gtk-2.20.patch
+gtkglext does not build without patching, the patch provided is from the arch linux gtkglext package.
+
+Build and install gtkglext by executing the following commands:
+
+cd ${LOCALSOURCEDIR} && \
+wget -c http://downloads.sourceforge.net/gtkglext/gtkglext-1.2.0.tar.gz && \
+wget -c http://ingar.satgnu.net/devenv/mingw32/files/patches/gtkglext-1.2.0-gtk-2.20.patch && \
+cd ${LOCALBUILDDIR} && \
+tar xzf ${LOCALSOURCEDIR}/gtkglext-1.2.0.tar.gz && \
+cd gtkglext-1.2.0 && \
+patch -Np1 -i ${LOCALSOURCEDIR}/gtkglext-1.2.0-gtk-2.20.patch && \
+cat configure | sed 's/pangox/pangowin32/' > configure.new && \
+mv configure.new configure && \
+./configure --prefix=${LOCALDESTDIR} --with-gdktarget=win32 --enable-debug=no && \
+make && \
+make install
+Command explanation:
+
+cat configure | sed 's/pangox/pangowin32/' > configure.new && mv configure.new configure
+These commands correct the configure script so it links binaries with the pango win32 library instead of the pango X11 libraries.
+Build and install the wglinfo program:
+
+cd examples
+make wglinfo.exe
+install wglinfo.exe ${LOCALDESTDIR}/bin
+<< part 2 - Building local packages
+Index
+part 4 - Building Qt >>

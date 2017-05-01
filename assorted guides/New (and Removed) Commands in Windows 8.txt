@@ -1,0 +1,82 @@
+New (and Removed) Commands in Windows 8
+
+A number of commands were added, removed, and altered from Windows 7 to Windows 8. This is no surprise, as changes in the Command Prompt are very common from one version of Windows to the next.
+
+For the most part, the availability of new commands in Windows 8 is due directly to new features available in the operating system. Naturally, most of the commands missing from Windows 8 are due to retired features, and most of the command changes due to changes in the way Windows 8 functions over Windows 7.
+
+Read on for details on all of the Command Prompt changes in Windows 8 or see my Command Availability Across Microsoft Operating Systems for a one-page table showing all commands from MS-DOS through Windows 8. Full descriptions are available in my List of Command Prompt Commands.
+
+I keep a strictly Windows 8 list as well: Windows 8 Command Prompt Commands.
+
+New Commands in Windows 8
+Seven new Command Prompt commands exist in Windows 8 that did not in Windows 7:
+
+Checknetisolation
+
+The checknetisolation command is a developer tool that can be used to test and troubleshoot the network capabilities of a Windows Store app from the Command Prompt.
+
+Fondue
+
+The fondue command is no doubt one of the more memorable new commands in Windows 8. It stands for Features on Demand User Experience Tool and it's used to install any of the several optional Windows 8 features directly from the command line.
+
+Licensingdiag
+
+The licensingdiag command is actually a pretty handy tool. You define an XML and a CAB file to create and Windows 8 will generate both, full of information about your Windows 8 installation, specifically product activation and registration related data.
+
+The most reasonable use for licensingdiag is to provide valuable activation troubleshooting information to Microsoft or some other support person.
+
+Pwlauncher
+
+The pwlauncher command is a command-line tool that can enable, disable, or show the current status of your Windows To Go startup options.
+
+Recimg
+
+The recimg command lets you create a custom recovery image and set it as the default image when using the Refresh Your PC recovery option.
+
+Register-cimprovider
+
+The register-cimprovider command does just that - it registers CIM (Common Information Model) providers in Windows 8 from the command line.
+
+Tpmvscmgr
+
+The tpmvscmgr command is a full TPM virtual smart card tool, allowing both the creation and removal of smart cards.
+
+Removed Commands in Windows 8
+A number of commands were removed from Windows 7 to Windows 8 for various reasons.
+
+The at command is no longer available in Windows 8, replaced by the schtasks command, a much more robust command line task scheduling tool which has been available alongside the at command since Windows XP.
+
+The diantz command was removed in Windows 8 no doubt due to the fact that it was exactly the same as the makecab command, which is still present in Windows 8.
+
+The mount, nfsadmin, rcp, rpcinfo, rsh, showmount, and umount commands all existed in Windows 7 but were removed in Windows 8. My only guess is that Services for UNIX (SFU) was completely discontinued in Windows 8 or at very least is unavailable in the consumer versions.
+
+Both the shadow command and rdpsign command were also removed beginning in Windows 8. Both commands are involved with Remote Desktop and I've yet to figure out why they were removed.
+
+If you have any more details on the removed commands in Windows 8 that I mentioned above, please let me know and I'd be happy to update this page.
+
+Changes to Commands in Windows 8
+Several popular Command Prompt commands received some tweaks from Windows 7 to Windows 8:
+
+Format
+
+The format command has had a /p option since Windows Vista which acts as a basic data sanitization tool, performing a write zero on each sector of the drive as often as you specify (e.g. format /p:8 for eight full write-zero passes).
+
+In fact, the /p option is assumed unless you perform a "quick format" using the /q option.
+
+In Windows 8, however, the functionality of the /p switch has changed in an important way. In Windows 8, any number specified is in addition to a given single write zero pass. Furthermore, each additional pass overwrites with a random number. So while format /p:2 in Windows 7 would overwrite the entire drive with zeroes twice, the same command executed in Windows 8 will overwrite the entire drive with zeroes once, then again with a random number, then again with a different random number, for a total of three passes.
+
+No doubt this change in function is designed to provide a bit more security when using the format command to sanitize a drive. See How To Wipe a Hard Drive, Free Data Destruction Software, and Free File Shredder Software for more discussion on this topic.
+
+Netstat
+
+The netstat command gained two new switches over the same command in Windows 7: -x and -y.
+
+The -x option is used to to display the NetworkDirect connections, listeners, and shared endpoints while -y will show the TCP connection template alongside the local address, foreign address, and state.
+
+Shutdown
+
+The shutdown command features two new switches over shutdown in Windows 7.
+
+The first, /o, can be used with /r (shutdown and restart) to end the current Windows session and display the Advanced Startup Options menu. This change makes sense due to the fact that, unlike in older versions of Windows, the diagnostic features in Windows 8 are accessible without first restarting the computer.
+
+The second new switch, /hybrid, performs a shutdown and then prepares the computer for Fast Startup, a feature introduced in Windows 8.
