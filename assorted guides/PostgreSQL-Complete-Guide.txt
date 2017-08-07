@@ -1,0 +1,116 @@
+Command Line Interface
+1.) Review the help file
+Get into the product home directory at the command line. Windows users don't prefix the pgc command with ./ as shown in the below examples. 
+Now run the help command to see that things are as expected 
+
+   $ ./pgc help
+
+      Usage: pgc command [component1 component2 ...]
+
+      Available commands:
+        help       - Show this help file
+        info       - Display OS or component information
+        list       - Display installed & available components 
+        status     - Display status of installed server components 
+        start      - Start server components
+        stop       - Stop server components
+        enable     - Enable a server component
+        disable    - Disable a server component from starting automatically
+        update     - Retrieve new list of available components
+        upgrade    - Upgrade installed components to newer (compatible) versions
+        install    - Install a component  
+
+
+2.) Demonstrate the pgc command line environment.
+The info command lists information about the OS or a component 
+   $ ./pgc info
+
+      User & Host: denisl  localhost  127.0.0.1
+               Os: Mac OS X 10.11.2 x64
+         Hardware: 16 GB, 8 x Intel Core i7-2820QM @ 2.30GHz
+
+
+   $ ./pgc info pg95
+
+        Project: pg (http://postgresql.org)
+      Component: pg95  9.5.x (linux64, osx64, win64)
+            Doc: http://www.postgresql.org/docs/9.5/
+       RelNotes: http://www.postgresql.org/docs/9.5/static/release-9-5.html
+
+The list command displays installed and available components. It confirms that only the core
+Postgres server component, in this case pg95, is installed and enabled by default. 
+   $ ./pgc list
+
+        Component     Version       Port    Status      
+        ------------  ------------  ------  ------------
+        pg95          9.5.x         5432    Installed   
+        pgstudio2     2.0.x         8765    NotInstalled
+        java8         8u60                  NotInstalled
+
+The status command confirms whether server components are listening on their assigned ports. 
+     
+   $ ./pgc status
+
+       pg95-9.5.x      (Stopped on port 5432)
+
+The start command will start up postgres 
+     
+   $ ./pgc start
+
+       pg95 starting...
+
+Running the status command displays information about installed server components. 
+     
+   $ ./pgc status
+
+       pg95-9.5.x      (Running on port 5432)
+Now lets use the stop command to shutdown the server components. 
+     
+   $ ./pgc stop
+
+       pg95 stopping...
+
+3.) Install additional components
+Use the install command to provision additional components such as pgstudio2. 
+Notice that the java8 dependency of pgstudio2 also installs for you. 
+   $ ./pgc install pgstudio2
+
+        Computing dependencies for ['pgstudio2']
+          ['java8', 'pgstudio2']
+
+        Get:1 java8-8u60-osx64
+          Downloading...
+          Unpacking java8-8u60-osx64.tar.bz2
+          java8 Installed
+
+        Get:2 pgstudio2-2.0.x
+          Unpacking pgstudio2-2.0.x.tar.bz2
+          pgstudio1 Installed
+
+
+   $ ./pgc list
+
+        Component     Version       Port    Status      
+        ------------  ------------  ------  ------------
+        pg95          9.5.x         5432    Installed   
+        pgstudio2     2.0.x         8765    Installed
+        java8         8u60                  Installed
+
+We now run the status command to confirm that both the Postgres & pgStudio servers are installed. 
+   $ ./pgc status
+
+        pg95-9.5.x       (Stopped on port 5432)
+        pgstudio2-2.0.x  (Stopped on port 8765)
+
+The start command starts up all servers that are enabled. 
+   $ ./pgc start
+
+       pg95 starting...
+       pgstudio2 starting...
+
+Running the status command displays information about installed server components. 
+     
+   $ ./pgc status
+
+       pg95-9.5.x      (Running on port 5432)
+       pgstudio2-2.0.x (Running on port 8765)
